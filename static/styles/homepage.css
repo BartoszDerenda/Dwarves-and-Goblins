@@ -1,0 +1,35 @@
+#button {
+    font-family: 'AvaraBold', serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.7em;
+    padding: 1.5vh 2.5vw 1.5vh 2.5vw;
+    color: #e8e2e1;
+    text-decoration: none;
+
+    z-index: 1;
+
+    background-color: #423f3e;
+    border-radius: 40px;
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 1);
+
+    transition: 0.2s ease-in; /* vendorless fallback */
+    -o-transition: 0.2s ease-in; /* opera */
+    -ms-transition: 0.2s ease-in; /* IE 10 */
+    -moz-transition: 0.2s ease-in; /* Firefox */
+    -webkit-transition: 0.2s ease-in; /*safari and chrome */
+}
+
+#button:hover {
+    background-color: #e8e2e1;
+    color: #423f3e;
+}
+
+#main-box-narrow {
+    padding: 15vh 20vw 10vh 20vw;
+    overflow: auto;
+
+    background-color: #3b1b19;
+    height: 100vh;
+    width: 75vw;
+}

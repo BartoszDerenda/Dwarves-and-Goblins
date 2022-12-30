@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+    font-family: 'AvaraBold', serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #e8e2e1;
+}
+
+body {
+    margin: 0;
+    background-color: #502525;
+}
+
+@font-face {
+    font-family: "AvaraBold";
+    src: url("/static/fonts/avara-webfont.woff") format("woff")
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+
+    text-align: center;
+}
+
+#main-box {
+    padding: 10vh 5vw 10vh 5vw;
+    overflow: auto;
+
+    background-color: #3b1b19;
+    height: 100%;
+    width: 75vw;
+}

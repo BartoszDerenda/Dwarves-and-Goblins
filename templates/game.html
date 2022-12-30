@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/styles/game.css" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<div id="fixed">Days left: {{ game.days }}</div>
+<div class="center">
+    <div id="main-box">
+        <div class="hero">
+            <table class="character_table">
+                <tr>
+                    <th><img class="hero_portrait" src="{{ game.hero['dwarf1'].hero_portrait }}" alt="dwarf1"/>
+                    <br>
+                    <h2>{{ game.hero['dwarf1'].hero_name }}</h2></th>
+                </tr>
+            </table>
+            <table class="stats_table"><form method="POST" action="{{ url_for('game') }}">
+                    <tr>
+                        <td></td>
+                        <td>Base attributes</td>
+                        <td>Multiplier</td>
+                        <td>Bonus attributes</td>
+                        <td>Total</td>
+                        <td><input type="submit" name="train" class="confirm_button" value="Train"></td>
+                    </tr>
+                    <tr>
+                        <th>Strength</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].strength }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].str_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].str_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].str_total }}</td>
+                        <td><input type="number" name="str_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Intelligence</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].intelligence }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].int_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].int_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].int_total }}</td>
+                        <td><input type="number" name="int_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Agility</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].agility }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].agi_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].agi_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].agi_total }}</td>
+                        <td><input type="number" name="agi_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Willpower</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].willpower }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].will_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].will_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].will_total }}</td>
+                        <td><input type="number" name="will_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Endurance</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].endurance }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].end_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].end_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].end_total }}</td>
+                        <td><input type="number" name="end_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Charisma</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].charisma }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].char_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].char_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].char_total }}</td>
+                        <td><input type="number" name="char_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Luck</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].luck }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].lck_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].lck_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].lck_total }}</td>
+                        <td><input type="number" name="lck_increase" class="input_stats" value="0"></td>
+                    </tr>
+                    <tr>
+                        <th>Speed</th>
+                        <td class="stats-cell">{{ game.hero['dwarf1'].speed }}</td>
+                        <td class="stats-cell">x{{ game.hero['dwarf1'].spd_mul }}</td>
+                        <td class="stats-cell">+{{ game.hero['dwarf1'].spd_bonus }}</td>
+                        <td class="stats-cell-total">{{ game.hero['dwarf1'].spd_total }}</td>
+                        <td><input type="number" name="spd_increase" class="input_stats" value="0"></td>
+                    </tr>
+            </form></table>
+            <table class="equipment_table"><form method="POST" action="{{ url_for('game') }}">
+                <tr>
+                    <td><h3>Equipment</h3></td>
+                    <td><input type="submit" name="equipment" class="confirm_button" value="Unequip"></td>
+                    <td><input type="submit" name="equipment" class="confirm_button" value="Equip"></td>
+                </tr>
+                <tr>
+                    <td>Weapon</td>
+                    <td>{{ game.hero['dwarf1'].equipment['weapon'].item_name }}</td>
+                    <td>
+                        <select name="weapon">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'weapon' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Headpiece</td>
+                    <td>{{ game.hero['dwarf1'].equipment['headpiece'].item_name }}</td>
+                    <td>
+                        <select name="headpiece">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'headpiece' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Shoulders</td>
+                    <td>{{ game.hero['dwarf1'].equipment['shoulders'].item_name }}</td>
+                    <td>
+                        <select name="shoulders">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'shoulders' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Chest</td>
+                    <td>{{ game.hero['dwarf1'].equipment['chest'].item_name }}</td>
+                    <td>
+                        <select name="chest">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'chest' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gloves</td>
+                    <td>{{ game.hero['dwarf1'].equipment['gloves'].item_name }}</td>
+                    <td>
+                        <select name="gloves">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'gloves' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pants</td>
+                    <td>{{ game.hero['dwarf1'].equipment['pants'].item_name }}</td>
+                    <td>
+                        <select name="pants">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'pants' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Boots</td>
+                    <td>{{ game.hero['dwarf1'].equipment['boots'].item_name }}</td>
+                    <td>
+                        <select name="boots">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'boots' %}
+                                <option class="eq_option" name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>artefact</td>
+                    <td>{{ game.hero['dwarf1'].equipment['artefact'].item_name }}</td>
+                    <td>
+                        <select name="artefact">
+                            {% for key, item in game.backpack.items() %}
+                                {% if item.item_slot == 'artefact' %}
+                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </form></table>
+        </div>
+
+        <div class="divider"></div>
+
+    </div>
+</div>
+{% endblock %}
