@@ -19,12 +19,14 @@ def game():
         if request.form.get('game_start', False) == 'Rock and Stone!':
 
             game = Game()
-            update_equipment()
-            update_stats()
-            for dwarf in game.hero:
-                print(dwarf)
+            update_equipment('dwarf1')
+            update_equipment('dwarf2')
+            update_equipment('dwarf3')
+            update_stats('dwarf1')
+            update_stats('dwarf2')
+            update_stats('dwarf3')
 
-        elif request.form.get('train', False) == 'Train':
+        elif request.form.get('train dwarf1', False) == 'Train':
 
             strength = int(request.form.get("str_increase"))
             intelligence = int(request.form.get("int_increase"))
@@ -48,102 +50,228 @@ def game():
             game.hero['dwarf1'].luck += luck
             game.hero['dwarf1'].speed += speed
 
-            update_stats()
+            update_stats('dwarf1')
 
             game.days -= temp_days
 
-        elif request.form.get('equipment', False) == 'Equip':
+        elif request.form.get('train dwarf2', False) == 'Train':
+
+            strength = int(request.form.get("str_increase"))
+            intelligence = int(request.form.get("int_increase"))
+            agility = int(request.form.get("agi_increase"))
+            willpower = int(request.form.get("will_increase"))
+            endurance = int(request.form.get("end_increase"))
+            charisma = int(request.form.get("char_increase"))
+            luck = int(request.form.get("lck_increase"))
+            speed = int(request.form.get("spd_increase"))
+            temp_days = strength*2 + intelligence*2 + agility + willpower + endurance*2 + charisma + luck + speed*2
+
+            if game.days - temp_days <= 0:
+                return render_template('game.html', game=game)
+
+            game.hero['dwarf2'].strength += strength
+            game.hero['dwarf2'].intelligence += intelligence
+            game.hero['dwarf2'].agility += agility
+            game.hero['dwarf2'].willpower += willpower
+            game.hero['dwarf2'].endurance += endurance
+            game.hero['dwarf2'].charisma += charisma
+            game.hero['dwarf2'].luck += luck
+            game.hero['dwarf2'].speed += speed
+
+            update_stats('dwarf2')
+
+            game.days -= temp_days
+
+        elif request.form.get('train dwarf3', False) == 'Train':
+
+            strength = int(request.form.get("str_increase"))
+            intelligence = int(request.form.get("int_increase"))
+            agility = int(request.form.get("agi_increase"))
+            willpower = int(request.form.get("will_increase"))
+            endurance = int(request.form.get("end_increase"))
+            charisma = int(request.form.get("char_increase"))
+            luck = int(request.form.get("lck_increase"))
+            speed = int(request.form.get("spd_increase"))
+            temp_days = strength*2 + intelligence*2 + agility + willpower + endurance*2 + charisma + luck + speed*2
+
+            if game.days - temp_days <= 0:
+                return render_template('game.html', game=game)
+
+            game.hero['dwarf3'].strength += strength
+            game.hero['dwarf3'].intelligence += intelligence
+            game.hero['dwarf3'].agility += agility
+            game.hero['dwarf3'].willpower += willpower
+            game.hero['dwarf3'].endurance += endurance
+            game.hero['dwarf3'].charisma += charisma
+            game.hero['dwarf3'].luck += luck
+            game.hero['dwarf3'].speed += speed
+
+            update_stats('dwarf3')
+
+            game.days -= temp_days
+
+
+        elif request.form.get('equipment dwarf1', False) == 'Equip':
             if request.form.get("weapon") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
             if request.form.get("headpiece") is not None:
-                update_unequipment()
-                game.hero['dwarf1'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})     # equipment update {'slot': value}
+                update_unequipment('dwarf1')
+                game.hero['dwarf1'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
                 print(request.form.get("headpiece"))
             if request.form.get("shoulders") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
             if request.form.get("chest") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
             if request.form.get("gloves") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
             if request.form.get("pants") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
             if request.form.get("boots") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
             if request.form.get("artefact") is not None:
-                update_unequipment()
+                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
 
-            update_equipment()
-            update_stats()
+            update_equipment('dwarf1')
+            update_stats('dwarf1')
+
+        elif request.form.get('equipment dwarf2', False) == 'Equip':
+            if request.form.get("weapon") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
+            if request.form.get("headpiece") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
+                print(request.form.get("headpiece"))
+            if request.form.get("shoulders") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
+            if request.form.get("chest") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
+            if request.form.get("gloves") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
+            if request.form.get("pants") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
+            if request.form.get("boots") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
+            if request.form.get("artefact") is not None:
+                update_unequipment('dwarf2')
+                game.hero['dwarf2'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
+
+            update_equipment('dwarf2')
+            update_stats('dwarf2')
+
+        elif request.form.get('equipment dwarf3', False) == 'Equip':
+            if request.form.get("weapon") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
+            if request.form.get("headpiece") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
+                print(request.form.get("headpiece"))
+            if request.form.get("shoulders") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
+            if request.form.get("chest") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
+            if request.form.get("gloves") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
+            if request.form.get("pants") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
+            if request.form.get("boots") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
+            if request.form.get("artefact") is not None:
+                update_unequipment('dwarf3')
+                game.hero['dwarf3'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
+
+            update_equipment('dwarf3')
+            update_stats('dwarf3')
 
 
-        elif request.form.get('equipment', False) == 'Unequip':
+        elif request.form.get('equipment dwarf1', False) == 'Unequip':
             #for key, value in dwarf1.equipment.items():
                     #backpack.append(value)
             game.hero['dwarf1'].equipment.clear()
 
-            update_stats()
+            update_stats('dwarf1')
             # for item in dwarf1.equipment.keys():
                # backpack.append(dwarf1.equipment.pop(item))
+
+        elif request.form.get('equipment dwarf2', False) == 'Unequip':
+            game.hero['dwarf2'].equipment.clear()
+            update_stats('dwarf2')
+
+        elif request.form.get('equipment dwarf3', False) == 'Unequip':
+            game.hero['dwarf3'].equipment.clear()
+            update_stats('dwarf3')
 
 
     return render_template('game.html', game=game)
 
-def update_equipment():
-    for item_slot, item_name in game.hero['dwarf1'].equipment.items():
+def update_equipment(dwarf):
+    for item_slot, item_name in game.hero[dwarf].equipment.items():
         if item_name is not None:
-            game.hero['dwarf1'].str_mul += game.hero['dwarf1'].equipment[item_slot].str_mul
-            game.hero['dwarf1'].str_bonus += game.hero['dwarf1'].equipment[item_slot].str_bonus
-            game.hero['dwarf1'].int_mul += game.hero['dwarf1'].equipment[item_slot].int_mul
-            game.hero['dwarf1'].int_bonus += game.hero['dwarf1'].equipment[item_slot].int_bonus
-            game.hero['dwarf1'].agi_mul += game.hero['dwarf1'].equipment[item_slot].agi_mul
-            game.hero['dwarf1'].agi_bonus += game.hero['dwarf1'].equipment[item_slot].agi_bonus
-            game.hero['dwarf1'].will_mul += game.hero['dwarf1'].equipment[item_slot].will_mul
-            game.hero['dwarf1'].will_bonus += game.hero['dwarf1'].equipment[item_slot].will_bonus
-            game.hero['dwarf1'].end_mul += game.hero['dwarf1'].equipment[item_slot].end_mul
-            game.hero['dwarf1'].end_bonus += game.hero['dwarf1'].equipment[item_slot].end_bonus
-            game.hero['dwarf1'].char_mul += game.hero['dwarf1'].equipment[item_slot].char_mul
-            game.hero['dwarf1'].char_bonus += game.hero['dwarf1'].equipment[item_slot].char_bonus
-            game.hero['dwarf1'].lck_mul += game.hero['dwarf1'].equipment[item_slot].lck_mul
-            game.hero['dwarf1'].lck_bonus += game.hero['dwarf1'].equipment[item_slot].lck_bonus
-            game.hero['dwarf1'].spd_mul += game.hero['dwarf1'].equipment[item_slot].spd_mul
-            game.hero['dwarf1'].spd_bonus += game.hero['dwarf1'].equipment[item_slot].spd_bonus
+            game.hero[dwarf].str_mul += game.hero[dwarf].equipment[item_slot].str_mul
+            game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[item_slot].str_bonus
+            game.hero[dwarf].int_mul += game.hero[dwarf].equipment[item_slot].int_mul
+            game.hero[dwarf].int_bonus += game.hero[dwarf].equipment[item_slot].int_bonus
+            game.hero[dwarf].agi_mul += game.hero[dwarf].equipment[item_slot].agi_mul
+            game.hero[dwarf].agi_bonus += game.hero[dwarf].equipment[item_slot].agi_bonus
+            game.hero[dwarf].will_mul += game.hero[dwarf].equipment[item_slot].will_mul
+            game.hero[dwarf].will_bonus += game.hero[dwarf].equipment[item_slot].will_bonus
+            game.hero[dwarf].end_mul += game.hero[dwarf].equipment[item_slot].end_mul
+            game.hero[dwarf].end_bonus += game.hero[dwarf].equipment[item_slot].end_bonus
+            game.hero[dwarf].char_mul += game.hero[dwarf].equipment[item_slot].char_mul
+            game.hero[dwarf].char_bonus += game.hero[dwarf].equipment[item_slot].char_bonus
+            game.hero[dwarf].lck_mul += game.hero[dwarf].equipment[item_slot].lck_mul
+            game.hero[dwarf].lck_bonus += game.hero[dwarf].equipment[item_slot].lck_bonus
+            game.hero[dwarf].spd_mul += game.hero[dwarf].equipment[item_slot].spd_mul
+            game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[item_slot].spd_bonus
 
-def update_unequipment():
-    for item_slot, item_name in game.hero['dwarf1'].equipment.items():
+def update_unequipment(dwarf):
+    for item_slot, item_name in game.hero[dwarf].equipment.items():
         if item_name is not None:
-            game.hero['dwarf1'].str_mul -= game.hero['dwarf1'].equipment[item_slot].str_mul
-            game.hero['dwarf1'].str_bonus -= game.hero['dwarf1'].equipment[item_slot].str_bonus
-            game.hero['dwarf1'].int_mul -= game.hero['dwarf1'].equipment[item_slot].int_mul
-            game.hero['dwarf1'].int_bonus -= game.hero['dwarf1'].equipment[item_slot].int_bonus
-            game.hero['dwarf1'].agi_mul -= game.hero['dwarf1'].equipment[item_slot].agi_mul
-            game.hero['dwarf1'].agi_bonus -= game.hero['dwarf1'].equipment[item_slot].agi_bonus
-            game.hero['dwarf1'].will_mul -= game.hero['dwarf1'].equipment[item_slot].will_mul
-            game.hero['dwarf1'].will_bonus -= game.hero['dwarf1'].equipment[item_slot].will_bonus
-            game.hero['dwarf1'].end_mul -= game.hero['dwarf1'].equipment[item_slot].end_mul
-            game.hero['dwarf1'].end_bonus -= game.hero['dwarf1'].equipment[item_slot].end_bonus
-            game.hero['dwarf1'].char_mul -= game.hero['dwarf1'].equipment[item_slot].char_mul
-            game.hero['dwarf1'].char_bonus -= game.hero['dwarf1'].equipment[item_slot].char_bonus
-            game.hero['dwarf1'].lck_mul -= game.hero['dwarf1'].equipment[item_slot].lck_mul
-            game.hero['dwarf1'].lck_bonus -= game.hero['dwarf1'].equipment[item_slot].lck_bonus
-            game.hero['dwarf1'].spd_mul -= game.hero['dwarf1'].equipment[item_slot].spd_mul
-            game.hero['dwarf1'].spd_bonus -= game.hero['dwarf1'].equipment[item_slot].spd_bonus
-def update_stats():
+            game.hero[dwarf].str_mul = 1.0
+            game.hero[dwarf].str_bonus = 0
+            game.hero[dwarf].int_mul = 1.0
+            game.hero[dwarf].int_bonus = 0
+            game.hero[dwarf].agi_mul = 1.0
+            game.hero[dwarf].agi_bonus = 0
+            game.hero[dwarf].will_mul = 1.0
+            game.hero[dwarf].will_bonus = 0
+            game.hero[dwarf].end_mul = 1.0
+            game.hero[dwarf].end_bonus = 0
+            game.hero[dwarf].char_mul = 1.0
+            game.hero[dwarf].char_bonus = 0
+            game.hero[dwarf].lck_mul = 1.0
+            game.hero[dwarf].lck_bonus = 0
+            game.hero[dwarf].spd_mul = 1.0
+            game.hero[dwarf].spd_bonus = 0
 
-    game.hero['dwarf1'].str_total = round(game.hero['dwarf1'].strength * game.hero['dwarf1'].str_mul + game.hero['dwarf1'].str_bonus)
-    game.hero['dwarf1'].int_total = round(game.hero['dwarf1'].intelligence * game.hero['dwarf1'].int_mul + game.hero['dwarf1'].int_bonus)
-    game.hero['dwarf1'].agi_total = round(game.hero['dwarf1'].agility * game.hero['dwarf1'].agi_mul + game.hero['dwarf1'].agi_bonus)
-    game.hero['dwarf1'].will_total = round(game.hero['dwarf1'].willpower * game.hero['dwarf1'].will_mul + game.hero['dwarf1'].will_bonus)
-    game.hero['dwarf1'].end_total = round(game.hero['dwarf1'].endurance * game.hero['dwarf1'].end_mul + game.hero['dwarf1'].end_bonus)
-    game.hero['dwarf1'].char_total = round(game.hero['dwarf1'].charisma * game.hero['dwarf1'].char_mul + game.hero['dwarf1'].char_bonus)
-    game.hero['dwarf1'].lck_total = round(game.hero['dwarf1'].luck * game.hero['dwarf1'].lck_mul + game.hero['dwarf1'].lck_bonus)
-    game.hero['dwarf1'].spd_total = round(game.hero['dwarf1'].speed * game.hero['dwarf1'].spd_mul + game.hero['dwarf1'].spd_bonus)
+def update_stats(dwarf):
+
+    game.hero[dwarf].str_total = round(game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
+    game.hero[dwarf].int_total = round(game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
+    game.hero[dwarf].agi_total = round(game.hero[dwarf].agility * game.hero[dwarf].agi_mul + game.hero[dwarf].agi_bonus)
+    game.hero[dwarf].will_total = round(game.hero[dwarf].willpower * game.hero[dwarf].will_mul + game.hero[dwarf].will_bonus)
+    game.hero[dwarf].end_total = round(game.hero[dwarf].endurance * game.hero[dwarf].end_mul + game.hero[dwarf].end_bonus)
+    game.hero[dwarf].char_total = round(game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
+    game.hero[dwarf].lck_total = round(game.hero[dwarf].luck * game.hero[dwarf].lck_mul + game.hero[dwarf].lck_bonus)
+    game.hero[dwarf].spd_total = round(game.hero[dwarf].speed * game.hero[dwarf].spd_mul + game.hero[dwarf].spd_bonus)
 
 # Base hero class - for generating both dwarves and goblins
 class Hero:
