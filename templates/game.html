@@ -7,6 +7,7 @@
 <div id="fixed">Days left: {{ game.days }}</div>
 <div class="center">
     <div id="main-box">
+    {% for dwarf in game.hero %}
         <div class="hero">
             <table class="character_table">
                 <tr>
@@ -187,7 +188,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>artefact</td>
+                    <td>Artefact</td>
                     <td>{{ game.hero['dwarf1'].equipment['artefact'].item_name }}</td>
                     <td>
                         <select name="artefact">
@@ -203,6 +204,7 @@
         </div>
 
         <div class="divider"></div>
+    {% endfor %}
 
     </div>
 </div>
