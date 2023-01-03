@@ -19,6 +19,20 @@ img {
     max-width: 50%;
 }
 
+.adventure {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    width: 100%;
+    height: 20%;
+}
+
+.adventure_button {
+    width: 200px;
+    background-color: #3b1b19;
+}
+
 .hero {
     display: flex;
     flex-direction: column;
@@ -30,12 +44,12 @@ img {
     height: 100%;
 }
 
-.stats_table, .character_table {
+.stats, .character {
     width: 50%;
     height: 50%;
 }
 
-.equipment_table {
+.equipment {
     width: 50%;
     height: 100%;
 }
