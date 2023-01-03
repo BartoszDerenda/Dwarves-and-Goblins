@@ -25,6 +25,10 @@ def game():
             update_stats('dwarf1')
             update_stats('dwarf2')
             update_stats('dwarf3')
+            item_list = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jacket": item_3,
+                         "Leather Pants": item_4, "Leather Gloves": item_5, "Leather Boots": item_6}
+            game.backpack = item_list
+
 
         elif request.form.get('train dwarf1', False) == 'Train':
 
@@ -113,110 +117,94 @@ def game():
 
         elif request.form.get('equipment dwarf1', False) == 'Equip':
             if request.form.get("weapon") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
             if request.form.get("headpiece") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
-                print(request.form.get("headpiece"))
             if request.form.get("shoulders") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
             if request.form.get("chest") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
             if request.form.get("gloves") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
             if request.form.get("pants") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
             if request.form.get("boots") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
             if request.form.get("artefact") is not None:
-                update_unequipment('dwarf1')
                 game.hero['dwarf1'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
 
+            update_unequipment('dwarf1')
             update_equipment('dwarf1')
             update_stats('dwarf1')
 
         elif request.form.get('equipment dwarf2', False) == 'Equip':
             if request.form.get("weapon") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
             if request.form.get("headpiece") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
-                print(request.form.get("headpiece"))
             if request.form.get("shoulders") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
             if request.form.get("chest") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
             if request.form.get("gloves") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
             if request.form.get("pants") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
             if request.form.get("boots") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
             if request.form.get("artefact") is not None:
-                update_unequipment('dwarf2')
                 game.hero['dwarf2'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
 
+            update_unequipment('dwarf2')
             update_equipment('dwarf2')
             update_stats('dwarf2')
 
         elif request.form.get('equipment dwarf3', False) == 'Equip':
             if request.form.get("weapon") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'weapon': game.backpack.pop(request.form.get("weapon"))})
             if request.form.get("headpiece") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'headpiece': game.backpack.pop(request.form.get("headpiece"))})
-                print(request.form.get("headpiece"))
             if request.form.get("shoulders") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'shoulders': game.backpack.pop(request.form.get("shoulders"))})
             if request.form.get("chest") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'chest': game.backpack.pop(request.form.get("chest"))})
             if request.form.get("gloves") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'gloves': game.backpack.pop(request.form.get("gloves"))})
             if request.form.get("pants") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'pants': game.backpack.pop(request.form.get("pants"))})
             if request.form.get("boots") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'boots': game.backpack.pop(request.form.get("boots"))})
             if request.form.get("artefact") is not None:
-                update_unequipment('dwarf3')
                 game.hero['dwarf3'].equipment.update({'artefact': game.backpack.pop(request.form.get("artefact"))})
 
+            update_unequipment('dwarf3')
             update_equipment('dwarf3')
             update_stats('dwarf3')
 
 
         elif request.form.get('equipment dwarf1', False) == 'Unequip':
-            #for key, value in dwarf1.equipment.items():
-                    #backpack.append(value)
-            game.hero['dwarf1'].equipment.clear()
+            for key, value in game.hero['dwarf1'].equipment.items():
+                    game.backpack.update({key: value})
+                    print(game.backpack.update({key: value}))
+            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
 
+            update_unequipment('dwarf1')
             update_stats('dwarf1')
-            # for item in dwarf1.equipment.keys():
-               # backpack.append(dwarf1.equipment.pop(item))
 
         elif request.form.get('equipment dwarf2', False) == 'Unequip':
-            game.hero['dwarf2'].equipment.clear()
+            for key, value in game.hero['dwarf2'].equipment.items():
+                    game.hero['dwarf2'].equipment.update({key: value})
+            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+
+            update_unequipment('dwarf2')
             update_stats('dwarf2')
 
         elif request.form.get('equipment dwarf3', False) == 'Unequip':
-            game.hero['dwarf3'].equipment.clear()
+            for key, value in game.hero['dwarf3'].equipment.items():
+                    game.hero['dwarf3'].equipment.update({key: value})
+            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+
+            update_unequipment('dwarf3')
             update_stats('dwarf3')
 
 
@@ -243,27 +231,24 @@ def update_equipment(dwarf):
             game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[item_slot].spd_bonus
 
 def update_unequipment(dwarf):
-    for item_slot, item_name in game.hero[dwarf].equipment.items():
-        if item_name is not None:
-            game.hero[dwarf].str_mul = 1.0
-            game.hero[dwarf].str_bonus = 0
-            game.hero[dwarf].int_mul = 1.0
-            game.hero[dwarf].int_bonus = 0
-            game.hero[dwarf].agi_mul = 1.0
-            game.hero[dwarf].agi_bonus = 0
-            game.hero[dwarf].will_mul = 1.0
-            game.hero[dwarf].will_bonus = 0
-            game.hero[dwarf].end_mul = 1.0
-            game.hero[dwarf].end_bonus = 0
-            game.hero[dwarf].char_mul = 1.0
-            game.hero[dwarf].char_bonus = 0
-            game.hero[dwarf].lck_mul = 1.0
-            game.hero[dwarf].lck_bonus = 0
-            game.hero[dwarf].spd_mul = 1.0
-            game.hero[dwarf].spd_bonus = 0
+        game.hero[dwarf].str_mul = 1.0
+        game.hero[dwarf].str_bonus = 0
+        game.hero[dwarf].int_mul = 1.0
+        game.hero[dwarf].int_bonus = 0
+        game.hero[dwarf].agi_mul = 1.0
+        game.hero[dwarf].agi_bonus = 0
+        game.hero[dwarf].will_mul = 1.0
+        game.hero[dwarf].will_bonus = 0
+        game.hero[dwarf].end_mul = 1.0
+        game.hero[dwarf].end_bonus = 0
+        game.hero[dwarf].char_mul = 1.0
+        game.hero[dwarf].char_bonus = 0
+        game.hero[dwarf].lck_mul = 1.0
+        game.hero[dwarf].lck_bonus = 0
+        game.hero[dwarf].spd_mul = 1.0
+        game.hero[dwarf].spd_bonus = 0
 
 def update_stats(dwarf):
-
     game.hero[dwarf].str_total = round(game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
     game.hero[dwarf].int_total = round(game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
     game.hero[dwarf].agi_total = round(game.hero[dwarf].agility * game.hero[dwarf].agi_mul + game.hero[dwarf].agi_bonus)
@@ -272,6 +257,7 @@ def update_stats(dwarf):
     game.hero[dwarf].char_total = round(game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
     game.hero[dwarf].lck_total = round(game.hero[dwarf].luck * game.hero[dwarf].lck_mul + game.hero[dwarf].lck_bonus)
     game.hero[dwarf].spd_total = round(game.hero[dwarf].speed * game.hero[dwarf].spd_mul + game.hero[dwarf].spd_bonus)
+
 
 # Base hero class - for generating both dwarves and goblins
 class Hero:
@@ -700,8 +686,6 @@ item_27 = Item('Hardleather Boots', 'boots', "For that extra amount of protectio
 
 
 item_list_common = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10, item_11, item_12, item_13, item_14, item_15, item_16, item_17, item_18, item_19, item_20, item_21]
-item_list_test = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jacket": item_3, "Leather Pants": item_4, "Leather Gloves": item_5, "Leather Boots": item_6}
-item_list = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jacket": item_3, "Leather Pants": item_4, "Leather Gloves": item_5, "Leather Boots": item_6}
 item_list_rare = []
 item_list_epic = []
 item_list_legendary = []
@@ -711,8 +695,7 @@ class Game:
     def __init__(self):
         self.hero = {'dwarf1': Hero('dwarf'), 'dwarf2': Hero('dwarf'), 'dwarf3': Hero('dwarf')}
         self.enemy = {'goblin1': Hero('goblin'), 'goblin2': Hero('goblin'), 'goblin3': Hero('goblin')}
-        self.backpack = item_list_test
-        self.item_list = item_list
+        self.backpack = dict()
         self.days = 365
 
 
