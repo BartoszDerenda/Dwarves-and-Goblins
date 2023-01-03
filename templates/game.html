@@ -97,8 +97,8 @@
                     <td><input type="submit" name="equipment {{ dwarf }}" class="confirm_button" value="Equip"></td>
                 </tr>
                 <tr>
-                    <td>Weapon</td>
-                    <td>{{ game.hero[dwarf].equipment['weapon'].item_name }}</td>
+                    <td class="equipment_cell">Weapon</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['weapon'].item_name }}</td>
                     <td>
                         <select name="weapon">
                             {% for key, item in game.backpack.items() %}
@@ -110,8 +110,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Headpiece</td>
-                    <td>{{ game.hero[dwarf].equipment['headpiece'].item_name }}</td>
+                    <td class="equipment_cell">Headpiece</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['headpiece'].item_name }}</td>
                     <td>
                         <select name="headpiece">
                             {% for key, item in game.backpack.items() %}
@@ -123,8 +123,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Shoulders</td>
-                    <td>{{ game.hero[dwarf].equipment['shoulders'].item_name }}</td>
+                    <td class="equipment_cell">Shoulders</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['shoulders'].item_name }}</td>
                     <td>
                         <select name="shoulders">
                             {% for key, item in game.backpack.items() %}
@@ -136,8 +136,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Chest</td>
-                    <td>{{ game.hero[dwarf].equipment['chest'].item_name }}</td>
+                    <td class="equipment_cell">Chest</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['chest'].item_name }}</td>
                     <td>
                         <select name="chest">
                             {% for key, item in game.backpack.items() %}
@@ -149,8 +149,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Gloves</td>
-                    <td>{{ game.hero[dwarf].equipment['gloves'].item_name }}</td>
+                    <td class="equipment_cell">Gloves</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['gloves'].item_name }}</td>
                     <td>
                         <select name="gloves">
                             {% for key, item in game.backpack.items() %}
@@ -162,8 +162,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Pants</td>
-                    <td>{{ game.hero[dwarf].equipment['pants'].item_name }}</td>
+                    <td class="equipment_cell">Pants</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['pants'].item_name }}</td>
                     <td>
                         <select name="pants">
                             {% for key, item in game.backpack.items() %}
@@ -175,8 +175,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Boots</td>
-                    <td>{{ game.hero[dwarf].equipment['boots'].item_name }}</td>
+                    <td class="equipment_cell">Boots</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['boots'].item_name }}</td>
                     <td>
                         <select name="boots">
                             {% for key, item in game.backpack.items() %}
@@ -188,8 +188,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Artefact</td>
-                    <td>{{ game.hero[dwarf].equipment['artefact'].item_name }}</td>
+                    <td class="equipment_cell">Artefact</td>
+                    <td class="equipment_cell-current">{{ game.hero[dwarf].equipment['artefact'].item_name }}</td>
                     <td>
                         <select name="artefact">
                             {% for key, item in game.backpack.items() %}

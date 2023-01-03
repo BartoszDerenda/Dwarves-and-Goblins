@@ -69,11 +69,11 @@ tr {
     background-color: #650f0b;
 }
 
-.stats-cell {
+.stats-cell, .equipment_cell {
     background-color: #880c08;
 }
 
-.stats-cell-total {
+.stats-cell-total, .equipment_cell-current {
     background-color: #a80e0a
 }
 
