@@ -31,7 +31,7 @@ def game():
                               "Leather Whip": item_19, "Bronze Broadsword": item_20, "Oak Staff": item_21,
 
                               "Hardleather Helmet": item_22, "Hardleather Shoulderpads": item_23, "Hardleather Chestplate": item_24, "Hardleather Pants": item_25, "Hardleather Gloves": item_26, "Hardleather Boots": item_27}
-            game.backpack = [item_1]
+            game.backpack = []
 
 
         #   TRAIN
@@ -444,6 +444,24 @@ def game():
             game.backpack += spoils
 
 
+        #   TACTICS
+        #   Change the personality of your dwarf with one click of a button.
+        #
+        #   HTML form, string  ->  game.hero[dwarf].tactic
+        #
+        #   Takes the string from HTML form radio field and puts it directly into your dwarf.
+
+        elif request.form.get('tactics dwarf1', False) == 'Confirm':
+            game.hero['dwarf1'].tactic = request.form.get('tactic')
+
+        elif request.form.get('tactics dwarf2', False) == 'Confirm':
+            game.hero['dwarf2'].tactic = request.form.get('tactic')
+
+        elif request.form.get('tactics dwarf3', False) == 'Confirm':
+            game.hero['dwarf3'].tactic = request.form.get('tactic')
+
+
+
 
     return render_template('game.html', game=game)
 
@@ -452,21 +470,37 @@ def update_equipment(dwarf):
     # Updates multipliers and bonuses values based on current equipment
     for item_slot, item_name in game.hero[dwarf].equipment.items():
         if item_name is not None:
-            game.hero[dwarf].str_mul += game.hero[dwarf].equipment[item_slot].str_mul
+
+            rounded = game.hero[dwarf].str_mul + game.hero[dwarf].equipment[item_slot].str_mul
+            game.hero[dwarf].str_mul = round(rounded,2)
             game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[item_slot].str_bonus
-            game.hero[dwarf].int_mul += game.hero[dwarf].equipment[item_slot].int_mul
+
+            rounded = game.hero[dwarf].int_mul + game.hero[dwarf].equipment[item_slot].int_mul
+            game.hero[dwarf].int_mul = round(rounded, 2)
             game.hero[dwarf].int_bonus += game.hero[dwarf].equipment[item_slot].int_bonus
-            game.hero[dwarf].agi_mul += game.hero[dwarf].equipment[item_slot].agi_mul
+
+            rounded = game.hero[dwarf].agi_mul + game.hero[dwarf].equipment[item_slot].agi_mul
+            game.hero[dwarf].agi_mul = round(rounded, 2)
             game.hero[dwarf].agi_bonus += game.hero[dwarf].equipment[item_slot].agi_bonus
-            game.hero[dwarf].will_mul += game.hero[dwarf].equipment[item_slot].will_mul
+
+            rounded = game.hero[dwarf].will_mul + game.hero[dwarf].equipment[item_slot].will_mul
+            game.hero[dwarf].will_mul = round(rounded, 2)
             game.hero[dwarf].will_bonus += game.hero[dwarf].equipment[item_slot].will_bonus
-            game.hero[dwarf].end_mul += game.hero[dwarf].equipment[item_slot].end_mul
+
+            rounded = game.hero[dwarf].end_mul + game.hero[dwarf].equipment[item_slot].end_mul
+            game.hero[dwarf].end_mul = round(rounded, 2)
             game.hero[dwarf].end_bonus += game.hero[dwarf].equipment[item_slot].end_bonus
-            game.hero[dwarf].char_mul += game.hero[dwarf].equipment[item_slot].char_mul
+
+            rounded = game.hero[dwarf].char_mul + game.hero[dwarf].equipment[item_slot].char_mul
+            game.hero[dwarf].char_mul = round(rounded, 2)
             game.hero[dwarf].char_bonus += game.hero[dwarf].equipment[item_slot].char_bonus
-            game.hero[dwarf].lck_mul += game.hero[dwarf].equipment[item_slot].lck_mul
+
+            rounded = game.hero[dwarf].lck_mul + game.hero[dwarf].equipment[item_slot].lck_mul
+            game.hero[dwarf].lck_mul = round(rounded, 2)
             game.hero[dwarf].lck_bonus += game.hero[dwarf].equipment[item_slot].lck_bonus
-            game.hero[dwarf].spd_mul += game.hero[dwarf].equipment[item_slot].spd_mul
+
+            rounded = game.hero[dwarf].spd_mul + game.hero[dwarf].equipment[item_slot].spd_mul
+            game.hero[dwarf].spd_mul = round(rounded, 2)
             game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[item_slot].spd_bonus
 
 def stat_reset(dwarf):
