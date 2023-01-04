@@ -388,11 +388,11 @@ def game():
 
             if 1 <= odds <= 45:
                 spoils = random.choices(item_list_common, k = 3)
-            elif 46 <= odds <= 85:
+            elif 46 <= odds <= 75:
                 spoils = random.choices(item_list_common, k = 2) + random.choices(item_list_rare, k = 1)
-            elif 86 <= odds <= 95:
+            elif 76 <= odds <= 90:
                 spoils = random.choices(item_list_rare, k = 3)
-            elif 96 <= odds == 100:
+            elif 91 <= odds == 100:
                 spoils = random.choices(item_list_epic, k = 1)
 
             game.days -= temp_days
@@ -410,9 +410,9 @@ def game():
 
             if 1 <= odds <= 45:
                 spoils = random.choices(item_list_rare, k = 3)
-            elif 46 <= odds <= 85:
+            elif 46 <= odds <= 75:
                 spoils = random.choices(item_list_rare, k = 2) + random.choices(item_list_epic, k = 1)
-            elif 86 <= odds <= 95:
+            elif 76 <= odds <= 94:
                 spoils = random.choices(item_list_epic, k = 3)
             elif 96 <= odds == 100:
                 spoils = random.choices(item_list_legendary, k = 1)
@@ -431,9 +431,9 @@ def game():
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
-                spoils = random.choices(item_list_epic, k = 4)
+                spoils = random.choices(item_list_epic, k = 3)
             elif 46 <= odds <= 85:
-                spoils = random.choices(item_list_legendary, k = 1) + random.choices(item_list_epic, k = 2)
+                spoils = random.choices(item_list_epic, k = 2) + random.choices(item_list_legendary, k = 1)
             elif 86 <= odds <= 95:
                 spoils = random.choices(item_list_legendary, k = 2)
             elif 96 <= odds == 100:
@@ -450,15 +450,25 @@ def game():
         #   HTML form, string  ->  game.hero[dwarf].tactic
         #
         #   Takes the string from HTML form radio field and puts it directly into your dwarf.
+        #   If player sends an empty HTML form, tactic remains unchanged.
 
         elif request.form.get('tactics dwarf1', False) == 'Confirm':
-            game.hero['dwarf1'].tactic = request.form.get('tactic')
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                game.hero['dwarf1'].tactic = request.form.get('tactic')
 
         elif request.form.get('tactics dwarf2', False) == 'Confirm':
-            game.hero['dwarf2'].tactic = request.form.get('tactic')
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                game.hero['dwarf2'].tactic = request.form.get('tactic')
 
         elif request.form.get('tactics dwarf3', False) == 'Confirm':
-            game.hero['dwarf3'].tactic = request.form.get('tactic')
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                game.hero['dwarf3'].tactic = request.form.get('tactic')
 
 
 
@@ -549,12 +559,12 @@ class Hero:
             name = random.choice(dwarf_names)
             surname = random.choice(dwarf_surnames)
             name_surname = name + ' ' + surname
-            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1,9)) + '.jpg'
+            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1,22)) + '.jpg'
         else:
             name = random.choice(goblin_names)
             surname = random.choice(goblin_surnames)
             name_surname = name + ' ' + surname
-            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1,9)) + '.jpg'
+            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1,22)) + '.jpg'
 
         # Generating starter equipment (only for the player)
         starter_eq = eq_choice = None
