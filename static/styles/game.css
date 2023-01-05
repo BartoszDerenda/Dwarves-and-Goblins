@@ -164,6 +164,80 @@ tr {
     background-color: #a80e0a
 }
 
-.hero-portrait {
-    width: 50%;
+
+
+/* Word coloring */
+
+.Frenzy {
+    color: #fa0f0f;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.Focus {
+    color: #38acef;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.Balanced {
+    color: #49da0f;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.Overconfidence {
+    color: #fffb1a;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.common {
+    color: #32d207;
+    font-weight: bold;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.rare {
+    color: #1ca5ff;
+    font-weight: bold;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.epic {
+    color: #b800ff;
+    font-weight: bold;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.legendary {
+    color: #ff8000;
+    font-weight: bold;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.cursed {
+    color: #ff0000;
+    text-shadow: -3px 3px black, 3px 3px black, 3px 3px black, 3px -3px black;
+}
+
+.option_common {
+    color: #32d207;
+    font-weight: bold;
+}
+
+.option_rare {
+    color: #1ca5ff;
+    font-weight: bold;
+}
+
+.option_epic {
+    color: #b800ff;
+    font-weight: bold;
+}
+
+.option_legendary {
+    color: #ff8000;
+    font-weight: bold;
+}
+
+.option_cursed {
+    color: #ff0000;
+    font-weight: bold;
 }

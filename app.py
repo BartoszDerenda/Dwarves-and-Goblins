@@ -29,8 +29,22 @@ def game():
                               "Rusty Helmet": item_7, "Rusty Pauldrons": item_8, "Rusty Chainmail": item_9, "Rusty Tasset": item_10, "Rusty Gauntlets": item_11, "Rusty Greaves": item_12,
                               "Tattered Hood": item_13, "Tattered Epaulettes": item_14, "Tattered Robe": item_15, "Tattered Pants": item_16, "Tattered Gloves": item_17, "Tattered Shoes": item_18,
                               "Leather Whip": item_19, "Bronze Broadsword": item_20, "Oak Staff": item_21,
+                              "A Lucky Pebble": item_22,
 
-                              "Hardleather Helmet": item_22, "Hardleather Shoulderpads": item_23, "Hardleather Chestplate": item_24, "Hardleather Pants": item_25, "Hardleather Gloves": item_26, "Hardleather Boots": item_27}
+                              "Hardleather Helmet": item_101, "Hardleather Shoulderpads": item_102, "Hardleather Chest": item_103, "Hardleather Pants": item_104, "Hardleather Gloves": item_105, "Hardleather Boots": item_106,
+                              "Iron Helmet": item_107, "Iron Pauldrons": item_108, "Iron Cuirass": item_109, "Iron Legguards": item_110, "Iron Handguards": item_111, "Iron Greaves": item_112,
+                              "Silk Headwrap": item_113, "Silk Shoulderpads": item_114, "Silk Vesture": item_115, "Silk Kilt": item_116, "Silk Gloves": item_117, "Silk Slippers": item_118,
+                              "Flintlock Pistol": item_119, "Iron Mace": item_120, "Amethyst Focus": item_121,
+                              "Shiny Coin": item_121,
+
+                              "Dragonscale Helmet": item_201, "Dragonscale Shoulderguards": item_202, "Dragonscale Chainmail": item_203, "Dragonscale Reinforced Kilt": item_204, "Dragonscale Gauntlets": item_205, "Dragonscale Wyrm-riders": item_206,
+                              "Mithril Headguard": item_207, "Mithril Pauldrons": item_208, "Mithril Chestplate": item_209, "Mithril Legguards": item_210, "Mithril Gauntlets": item_211, "Mithril Greaves": item_212,
+                              "Ceremonial Tiara": item_213, "Ceremonial Epaluettes": item_214, "Ceremonial Robe": item_215, "Ceremonial Trousers": item_216, "Ceremonial Gloves": item_217, "Ceremonial Shoes": item_218,
+                              "Mageslayer Dagger": item_219, "Firebrand Sword": item_220, "Dragonwood Wand": item_221,
+
+                              "Crown of Will": item_301, "Heart of the Mountain": item_302,
+
+                              "???": item_404}
             game.backpack = []
 
 
@@ -173,7 +187,7 @@ def game():
             for key, value in game.hero['dwarf1'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             # Assigning items from the library to the equipment dictionary.
             if request.form.get("weapon") is not None:
@@ -238,7 +252,7 @@ def game():
             for key, value in game.hero['dwarf2'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             if request.form.get("weapon") is not None:
                 game.hero['dwarf2'].equipment.update({'weapon': weapon})
@@ -301,7 +315,7 @@ def game():
             for key, value in game.hero['dwarf3'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             if request.form.get("weapon") is not None:
                 game.hero['dwarf3'].equipment.update({'weapon': weapon})
@@ -346,7 +360,7 @@ def game():
             for key, value in game.hero['dwarf1'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             stat_reset('dwarf1')
             update_stats('dwarf1')
@@ -355,7 +369,7 @@ def game():
             for key, value in game.hero['dwarf2'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             stat_reset('dwarf2')
             update_stats('dwarf2')
@@ -364,7 +378,7 @@ def game():
             for key, value in game.hero['dwarf3'].equipment.items():
                 if value is not None:
                     game.backpack.append(value)
-            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
+            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artefact': None})
 
             stat_reset('dwarf3')
             update_stats('dwarf3')
@@ -380,20 +394,21 @@ def game():
         elif request.form.get('adventure', False) == 'Short venture':
 
             odds = random.randint(1, 100)
-            spoils = None
             temp_days = 14
 
             if game.days - temp_days <= 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
-                spoils = random.choices(item_list_common, k = 3)
+                spoils = random.choices(item_list_common, k = 6)
             elif 46 <= odds <= 75:
-                spoils = random.choices(item_list_common, k = 2) + random.choices(item_list_rare, k = 1)
+                spoils = random.choices(item_list_common, k = 4) + random.choices(item_list_rare, k = 2)
             elif 76 <= odds <= 90:
-                spoils = random.choices(item_list_rare, k = 3)
+                spoils = random.choices(item_list_rare, k = 5)
             elif 91 <= odds == 100:
-                spoils = random.choices(item_list_epic, k = 1)
+                spoils = random.choices(item_list_epic, k = 2) + random.choices(item_list_rare, k = 2)
+            else:
+                spoils = random.choices(item_list_common, k = 3) + random.choices(item_list_rare, k = 1)
 
             game.days -= temp_days
 
@@ -402,20 +417,21 @@ def game():
         elif request.form.get('adventure', False) == 'Risky adventure':
 
             odds = random.randint(1, 100)
-            spoils = None
             temp_days = 31
 
             if game.days - temp_days <= 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
-                spoils = random.choices(item_list_rare, k = 3)
+                spoils = random.choices(item_list_rare, k = 6)
             elif 46 <= odds <= 75:
-                spoils = random.choices(item_list_rare, k = 2) + random.choices(item_list_epic, k = 1)
-            elif 76 <= odds <= 94:
-                spoils = random.choices(item_list_epic, k = 3)
-            elif 96 <= odds == 100:
+                spoils = random.choices(item_list_rare, k = 4) + random.choices(item_list_epic, k = 2)
+            elif 76 <= odds <= 90:
+                spoils = random.choices(item_list_epic, k = 5)
+            elif 91 <= odds == 100:
                 spoils = random.choices(item_list_legendary, k = 1)
+            else:
+                spoils = random.choices(item_list_rare, k=4) + random.choices(item_list_epic, k=2)
 
             game.days -= temp_days
 
@@ -424,20 +440,21 @@ def game():
         elif request.form.get('adventure', False) == 'Legendary expedition':
 
             odds = random.randint(1, 100)
-            spoils = None
             temp_days = 90
 
             if game.days - temp_days <= 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
-                spoils = random.choices(item_list_epic, k = 3)
-            elif 46 <= odds <= 85:
-                spoils = random.choices(item_list_epic, k = 2) + random.choices(item_list_legendary, k = 1)
-            elif 86 <= odds <= 95:
+                spoils = random.choices(item_list_epic, k = 5)
+            elif 46 <= odds <= 75:
+                spoils = random.choices(item_list_epic, k = 7)
+            elif 76 <= odds <= 90:
+                spoils = random.choices(item_list_legendary, k = 1)
+            elif 91 <= odds == 100:
                 spoils = random.choices(item_list_legendary, k = 2)
-            elif 96 <= odds == 100:
-                spoils = random.choices(item_list_legendary, k = 3)
+            else:
+                spoils = random.choices(item_list_special, k = 1)
 
             game.days -= temp_days
 
@@ -621,7 +638,7 @@ class Hero:
                           'pants': None,
                           'boots': None,
                           'artefact': None}
-        self.tactic = random.choice(['Frenzy', 'Focus', 'Balance', 'Overconfidence'])
+        self.tactic = random.choice(['Frenzy', 'Focus', 'Balanced', 'Overconfidence'])
         self.special_list = []
 
         if starter_eq is not None:
@@ -631,10 +648,11 @@ class Hero:
 # Item class - for designing and creating items
 class Item:
 
-    def __init__(self, item_name, item_slot, description, str_mul, str_bonus, int_mul, int_bonus, agi_mul, agi_bonus, will_mul, will_bonus, end_mul, end_bonus, char_mul, char_bonus, lck_mul, luck_bonus, spd_mul, spd_bonus, special):
+    def __init__(self, item_name, item_slot, rarity, description, str_mul, str_bonus, int_mul, int_bonus, agi_mul, agi_bonus, will_mul, will_bonus, end_mul, end_bonus, char_mul, char_bonus, lck_mul, luck_bonus, spd_mul, spd_bonus, special):
 
         self.item_name = item_name
         self.item_slot = item_slot
+        self.rarity = rarity
         self.description = description
 
         self.str_mul = str_mul
@@ -659,323 +677,810 @@ class Item:
 
 # LIST OF ITEMS
 
-        # Common - Medium armor set
+            # Common - Medium armor set
 
-item_1 = Item('Leather Cap', 'headpiece', 'A trusty, sturdy leather cap. Even most valiant of dwarves look like dorks while wearing it.',
-              0.1, 2,   # Strength
+item_1 = Item('Leather Cap', 'headpiece', 'common', 'A trusty, sturdy leather cap. Even most valiant of dwarves look like dorks while wearing it.',
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
-item_2 = Item('Leather Shoulderpads', 'shoulders', "Will not save him from losing an arm but will certainly soften up the blow.",
-              0.1, 2,   # Strength
+item_2 = Item('Leather Shoulderpads', 'shoulders', 'common', "Will not save him from losing an arm but will certainly soften up the blow.",
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
-item_3 = Item('Leather Jacket', 'chest', "Dope :D",
-              0.1, 2,   # Strength
+item_3 = Item('Leather Jacket', 'chest', 'common', "Dope :D",
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
-item_4 = Item('Leather Pants', 'pants', "It took a lot of convincing for him to wear it...",
-              0.1, 2,   # Strength
+item_4 = Item('Leather Pants', 'pants', 'common', "It took a lot of convincing for him to wear it...",
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
-item_5 = Item('Leather Gloves', 'gloves', "Sturdy leather gloves - every dwarves' best friend.",
-              0.1, 2,   # Strength
+item_5 = Item('Leather Gloves', 'gloves', 'common', "Sturdy leather gloves - every dwarves' best friend.",
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
-item_6 = Item('Leather Boots', 'boots', "Solid, steel capped boots may win or lose you a battle.",
-              0.1, 2,   # Strength
+item_6 = Item('Leather Boots', 'boots', 'common', "Solid, steel capped boots may win or lose you a battle.",
+              0.0, 2,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.1, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.1, 0,   # Speed
               None)     # Enchantment
 
 
-        # Common - Heavy armor set
+            # Common - Heavy armor set
 
-item_7 = Item('Rusty Helmet', 'headpiece', 'Grandma always asked you to wear one while going into the mines.',
-              0.15, 4,   # Strength
+item_7 = Item('Rusty Helmet', 'headpiece', 'common', 'Grandma always asked you to wear one while going into the mines.',
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_8 = Item('Rusty Pauldrons', 'shoulders', 'These would look much more intimidating if not for the state they are in.',
-              0.15, 4,   # Strength
+item_8 = Item('Rusty Pauldrons', 'shoulders', 'common', 'These would look much more intimidating if not for the state they are in.',
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_9 = Item('Rusty Chainmail', 'chest', "Taking a spear to the chest will still hurt like hell but at least he won't bleed out.",
-              0.15, 4,   # Strength
+item_9 = Item('Rusty Chainmail', 'chest', 'common', "Taking a spear to the chest will still hurt like hell but at least he won't bleed out.",
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_10 = Item('Rusty Tasset', 'pants', "Noisy...",
-              0.15, 4,   # Strength
+item_10 = Item('Rusty Tasset', 'pants', 'common', "Noisy...",
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_11 = Item('Rusty Gauntlets', 'gloves', "For all those dirty disarming tricks that goblins are known for.",
-              0.15, 4,   # Strength
+item_11 = Item('Rusty Gauntlets', 'gloves', 'common', "For all those dirty disarming tricks that goblins are known for.",
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_12 = Item('Rusty Greaves', 'boots', "What's better than steel capped boots? Full-steel boots! Too bad these have rusty holes in them...",
-              0.15, 4,   # Strength
+item_12 = Item('Rusty Greaves', 'boots', 'common', "What's better than steel capped boots? Full-steel boots! Too bad these have rusty holes in them...",
+              0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
-              0.15, 4,   # Endurance
+              0.1, 2,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
 
-        # Common -  Light armor set
+            # Common -  Light armor set
 
-item_13 = Item('Tattered Hood', 'headpiece', "It reduces the vision a tad bit, but at least it makes it easier to focus.",
+item_13 = Item('Tattered Hood', 'headpiece', 'common', "It reduces the vision a tad bit, but at least it makes it easier to focus.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_14 = Item('Tattered Epaulettes', 'shoulders', "Makes you look noble - too bad they don't offer much protection.",
+item_14 = Item('Tattered Epaulettes', 'shoulders', 'common', "Makes you look noble - too bad they don't offer much protection.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_15 = Item('Tattered Robe', 'chest', "These must've looked magnificent before moths took a nest in them.",
+item_15 = Item('Tattered Robe', 'chest', 'common', "These must've looked magnificent before moths took a nest in them.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_16 = Item('Tattered Pants', 'pants', "Offer unprecedented freedom of movement.",
+item_16 = Item('Tattered Pants', 'pants', 'common', "Offer unprecedented freedom of movement.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_17 = Item('Tattered Gloves', 'gloves', "They give off a weird feeling of comfort.",
+item_17 = Item('Tattered Gloves', 'gloves', 'common', "They give off a weird feeling of comfort.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
-item_18 = Item('Tattered Shoes', 'boots', "Pretty airy.",
+item_18 = Item('Tattered Shoes', 'boots', 'common', "Pretty airy.",
               0.0, 0,   # Strength
-              0.1, 3,   # Intelligence
+              0.1, 0,   # Intelligence
               0.0, 0,   # Agility
-              0.1, 3,   # Willpower
+              0.1, 0,   # Willpower
               0.0, 0,   # Endurance
-              0.1, 2,   # Charisma
-              0.0, 0,   # Luck
+              0.0, 2,   # Charisma
+              0.0, 2,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
 
 
             # Common - Weapons
 
-item_19 = Item('Leather Whip', 'weapon', "Takes a bit of practice to use properly.",
-              0.1, 2,   # Strength
-              0.0, 0,   # Intelligence
-              0.2, 4,   # Agility
-              0.0, 0,   # Willpower
-              0.1, 2,   # Endurance
-              0.0, 0,   # Charisma
-              0.0, 0,   # Luck
-              0.2, 4,   # Speed
-              None)     # Enchantment
-
-item_20 = Item('Bronze Broadsword', 'weapon', "Every dwarf and their hogs know how to use one.",
-              0.2, 4,   # Strength
-              0.0, 0,   # Intelligence
-              0.2, 4,   # Agility
-              0.0, 0,   # Willpower
-              0.2, 4,   # Endurance
-              0.0, 0,   # Charisma
-              0.0, 0,   # Luck
-              0.0, 0,   # Speed
-              None)     # Enchantment
-
-item_21 = Item('Oak Staff', 'weapon', "Provides just as much support for spellcasting as for melee combat.",
+item_19 = Item('Leather Whip', 'weapon', 'common', "Takes a bit of practice to use properly.",
               0.0, 0,   # Strength
-              0.2, 4,   # Intelligence
-              0.0, 0,   # Agility
-              0.2, 4,   # Willpower
-              0.0, 0,   # Endurance
+              0.0, 0,   # Intelligence
+              0.1, 4,   # Agility
+              0.0, 0,   # Willpower
+              0.1, 4,   # Endurance
               0.0, 0,   # Charisma
-              0.2, 4,   # Luck
+              0.0, 0,   # Luck
+              0.1, 4,   # Speed
+              None)     # Enchantment
+
+item_20 = Item('Bronze Broadsword', 'weapon', 'common', "Every dwarf and their hogs know how to use one.",
+              0.1, 4,   # Strength
+              0.0, 0,   # Intelligence
+              0.0, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.1, 4,   # Endurance
+              0.0, 0,   # Charisma
+              0.1, 4,   # Luck
               0.0, 0,   # Speed
               None)     # Enchantment
+
+item_21 = Item('Oak Staff', 'weapon', 'common', "Provides just as much support for spellcasting as for melee combat.",
+              0.0, 0,   # Strength
+              0.1, 4,   # Intelligence
+              0.0, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.0, 0,   # Endurance
+              0.1, 4,   # Charisma
+              0.1, 4,   # Luck
+              0.0, 0,   # Speed
+              None)     # Enchantment
+
+            # Common - Artefact
+
+item_22 = Item('A Lucky Pebble', 'artefact', 'common', "His name is Steeve :D",
+               0.0, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.2, 4,  # Speed
+               None)    # Enchantment
+
 
 # RARE ITEMS
 
-        # Rare - Medium armor set
+            # Rare - Medium armor set
 
-item_22 = Item('Hardleather Helmet', 'headpiece', "Reinforced version of leather helmet, now with 30% extra sturdiness!",
-              0.2, 4,   # Strength
+item_101 = Item('Hardleather Helmet', 'headpiece', 'rare', "Reinforced version of leather helmet, now with 30% extra sturdiness!",
+              0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.2, 4,   # Agility
+              0.15, 0,   # Agility
               0.0, 0,   # Willpower
-              0.2, 4,   # Endurance
-              0.0, 0,   # Charisma
-              0.1, 2,   # Luck
-              0.1, 2,   # Speed
-              None)     # Enchantment
-
-item_23 = Item('Hardleather Shoulderpads', 'shoulders', "These may actually save him from losing an arm.",
-              0.1, 2,   # Strength
-              0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.15, 0,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.0, 4,   # Speed
               None)     # Enchantment
 
-item_24 = Item('Hardleather Chestplate', 'chest', "Light as leather, hard as bronze!",
-              0.1, 2,   # Strength
+item_102 = Item('Hardleather Shoulderpads', 'shoulders', 'rare', "These may actually save him from losing an arm.",
+              0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.15, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.15, 0,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.0, 4,   # Speed
               None)     # Enchantment
 
-item_25 = Item('Hardleather Pants', 'pants', "They limit his movement a bit but the protection they offer are well worth the trade.",
-              0.1, 2,   # Strength
+item_103 = Item('Hardleather Chest', 'chest', 'rare', "Light as leather, hard as bronze!",
+              0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.15, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.15, 0,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.0, 4,   # Speed
               None)     # Enchantment
 
-item_26 = Item('Hardleather Gloves', 'gloves', "Manly.",
-              0.1, 2,   # Strength
+item_104 = Item('Hardleather Pants', 'pants', 'rare', "They limit his movement a bit but the protection they offer are well worth the trade.",
+              0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.15, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.15, 0,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.0, 4,   # Speed
               None)     # Enchantment
 
-item_27 = Item('Hardleather Boots', 'boots', "For that extra amount of protection.",
-              0.1, 2,   # Strength
+item_105 = Item('Hardleather Gloves', 'gloves', 'rare', "Manly.",
+              0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.1, 2,   # Agility
-              0.1, 2,   # Willpower
-              0.0, 0,   # Endurance
+              0.15, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.15, 0,   # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
-              0.0, 2,   # Speed
+              0.0, 4,   # Speed
+              None)     # Enchantment
+
+item_106 = Item('Hardleather Boots', 'boots', 'rare', "For that extra amount of protection.",
+              0.0, 4,   # Strength
+              0.0, 0,   # Intelligence
+              0.15, 0,   # Agility
+              0.0, 0,   # Willpower
+              0.15, 0,   # Endurance
+              0.0, 0,   # Charisma
+              0.0, 0,   # Luck
+              0.0, 4,   # Speed
               None)     # Enchantment
 
 
-item_list_common = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10, item_11, item_12, item_13, item_14, item_15, item_16, item_17, item_18, item_19, item_20, item_21]
-item_list_rare = [item_22, item_23, item_24, item_25, item_26, item_27]
-item_list_epic = []
-item_list_legendary = []
+            # Rare - Heavy armor set
+
+item_107 = Item('Iron Helmet', 'headpiece', 'rare', "This is getting kinda heavy...",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_108 = Item('Iron Pauldrons', 'shoulders', 'rare', "Maybe if you polished them, they could blind the enemy.",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_109 = Item('Iron Cuirass', 'chest', 'rare', "Wouldn't recommend donning this one on a sunny day.",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_110 = Item('Iron Legguards', 'pants', 'rare', "Try kicking this you goblin bastards!",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_111 = Item('Iron Handguards', 'gloves', 'rare', "Why would you even need a weapon with a pair of these?",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_112 = Item('Iron Greaves', 'boots', 'rare', "We are going full-metal, aw yeah!",
+               0.15, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 0,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 4,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+
+            # Rare - Light armor set
+
+item_113 = Item('Silk Headwrap', 'headpiece', 'rare', "Softness of silk helps you concentrate on your manly thoughts.",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_114 = Item('Silk Shoulderpads', 'shoulders', 'rare', "These are just for show.",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_115 = Item('Silk Vesture', 'chestpiece', 'rare', "Might be mistaken for a bathrobe...",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_116 = Item('Silk Kilt', 'pants', 'rare', "No matter what others may say, it's a kilt alright, it's a kilt...",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_117 = Item('Silk Gloves', 'gloves', 'rare', "Silk's static inducing attributes have been thaumaturgically confirmed to enhance one's spellweaving abilities.",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_118 = Item('Silk Slippers', 'boots', 'rare', "...",
+               0.0, 0,  # Strength
+               0.15, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.4, 0,  # Charisma
+               0.4, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+
+            # Rare - Weapons
+
+item_119 = Item('Flintlock Pistol', 'weapon', 'rare', "Once you are out of ammo and gunpowder, it's sturdy handle fits right between goblin's eyes.",
+               0.0, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.15, 4,  # Charisma
+               0.15, 4,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_120 = Item('Iron Mace', 'weapon', 'rare', "They say it has been blessed by a hidden deity - for some reason holding it puts any dwarf in a mood for some goblin skull bashing.",
+               0.15, 4,  # Strength
+               0.0, 0,  # Intelligence
+               0.15, 4,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 4,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_121 = Item('Amethyst Focus', 'weapon', 'rare', "Every respecting spellcaster has an expensive focus through which they channel their spells.",
+               0.0, 0,  # Strength
+               0.15, 4,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 4,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+
+            # Rare - Trinkets
+
+item_122 = Item('Lucky Coin', 'artefact', 'rare', "Shiny coin. It's nice to the touch.",
+               0.0, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.15, 4,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+
+# EPIC ITEMS
+
+            # Epic - Medium armor set
+
+item_201 = Item('Dragonscale Helmet', 'headpiece', 'epic', "Gives a quite mean look.",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_202 = Item('Dragonscale Shoulderguards', 'shoulders', 'epic', "Hard as metal, light as leather.",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_203 = Item('Dragonscale Chainmail', 'chest', 'epic', "Fireproof but not waterproof!",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_204 = Item('Dragonscale Reinforced Kilt', 'pants', 'epic', "A much cooler cousin of Silk Kilt.",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_205 = Item('Dragonscale Gauntlets', 'gloves', 'epic', "They've got spikes in case you get disarmed.",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+item_206 = Item('Dragonscale Wyrm-riders', 'boots', 'epic', "You could pack a really mean kick with those...",
+               0.2, 6,  # Strength
+               0.0, 0,  # Intelligence
+               0.2, 6,  # Agility
+               0.0, 0,  # Willpower
+               0.15, 2,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.15, 4,  # Speed
+               None)  # Enchantment
+
+
+            # Epic - Heavy armor
+
+item_207 = Item('Mithril Headguard', 'headpiece', 'epic', "One of many symbols of dwarf race.",
+               0.2, 6,  # Strength
+               -0.1, -2,  # Intelligence
+               0.0, 0,  # Agility
+               0.15, 0,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_208 = Item('Mithril Pauldrons', 'shoulders', 'epic', "Looking good chief!",
+               0.2, 6,  # Strength
+               -0.15, -4,  # Intelligence
+               0.0, 0,  # Agility
+               0.25, 4,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_209 = Item('Mithril Chestplate', 'chest', 'epic', "Could deflect a fireball or two.",
+               0.2, 6,  # Strength
+               -0.15, -4,  # Intelligence
+               0.0, 0,  # Agility
+               0.25, 4,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_210 = Item('Mithril Legguards', 'pants', 'epic', "To guard your jewels from grabby mage's hands.",
+               0.2, 6,  # Strength
+               -0.15, -4,  # Intelligence
+               0.0, 0,  # Agility
+               0.25, 4,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_211 = Item('Mithril Gauntlets', 'gloves', 'epic', "Law enforcment uses these to arrest skilled magi.",
+               0.2, 6,  # Strength
+               -0.15, -4,  # Intelligence
+               0.0, 0,  # Agility
+               0.25, 4,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_212 = Item('Mithril Gauntlets', 'gloves', 'epic', "Law enforcment uses these to arrest skilled magi.",
+               0.2, 6,  # Strength
+               -0.15, -4,  # Intelligence
+               0.0, 0,  # Agility
+               0.25, 4,  # Willpower
+               0.2, 6,  # Endurance
+               0.0, 4,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+
+            # Epic - Light armor
+
+item_213 = Item('Ceremonial Tiara', 'headpiece', 'epic', "You look like a real princess :D",
+               0.0, 0,  # Strength
+               0.35, 10,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_214 = Item('Ceremonial Epaluettes', 'shoulders', 'epic', "They make you look bigger and more magnificent.",
+               0.0, 0,  # Strength
+               0.35, 10,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_215 = Item('Ceremonial Robe', 'chest', 'epic', "You feel like you could coronate a king in those.",
+               0.0, 0,  # Strength
+               0.35, 8,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_216 = Item('Ceremonial Trousers', 'pants', 'epic', "These might look silly but they are so comfortable...",
+               0.0, 0,  # Strength
+               0.35, 8,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_217 = Item('Ceremonial Gloves', 'gloves', 'epic', "They crackle with arcane energies...",
+               0.0, 0,  # Strength
+               0.35, 8,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+item_218 = Item('Ceremonial Shoes', 'gloves', 'epic', "The silver-lining helps you gather mana from the ground.",
+               0.0, 0,  # Strength
+               0.35, 8,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.25, 6,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               None)  # Enchantment
+
+
+            # Epic - weapons
+
+item_219 = Item('Mageslayer Dagger', 'weapon', 'epic', "A skilled fighter can deflect magic missiles with this blade. It was enchanted to home in into the mage's throats.",
+               0.0, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.15, 8,  # Agility
+               0.45, 18,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.15, 8,  # Luck
+               0.25, 10,  # Speed
+               "Mageslayer")  # Enchantment
+
+item_220 = Item('Firebrand Sword', 'weapon', 'epic', "A mageblade - forged out of meteorite, reinforced with dark iron. It can withstand a spell and a blade alike.",
+               0.35, 12,  # Strength
+               0.35, 12,  # Intelligence
+               0.15, 8,  # Agility
+               0.15, 8,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               "Firebrand")  # Enchantment
+
+item_221 = Item('Dragonwood Wand', 'weapon', 'epic', "Known by it's arcane conductivity, this wand let's you cast a barrage of spells in a blink of an eye!",
+               0.0, 0,  # Strength
+               0.45, 18,  # Intelligence
+               0.0, 0,  # Agility
+               0.0, 0,  # Willpower
+               0.0, 0,  # Endurance
+               0.0, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.35, 12,  # Speed
+               "Energize")  # Enchantment
+
+# LEGENDARY ITEMS
+
+item_301 = Item('Crown of Will', 'headpiece', 'legendary', "",
+               0.0, 0,  # Strength
+               0.0, 0,  # Intelligence
+               0.0, 0,  # Agility
+               3, 0,  # Willpower
+               0.0, 0,  # Endurance
+               5, 0,  # Charisma
+               0.0, 0,  # Luck
+               0.0, 0,  # Speed
+               "Dominion")  # Enchantment
+
+item_302 = Item('Heart of the Mountain', 'artefact', 'legendary', "",
+               0.5, 20,  # Strength
+               0.5, 20,  # Intelligence
+               0.5, 20,  # Agility
+               0.5, 20,  # Willpower
+               0.5, 20,  # Endurance
+               0.5, 20,  # Charisma
+               0.5, 20,  # Luck
+               0.5, 20,  # Speed
+               "Avatar of the Mountain")  # Enchantment
+
+
+
+            # Special items
+
+item_404 = Item('???', 'artefact', 'cursed', "",
+               -0.5, -20,  # Strength
+               -0.5, -20,  # Intelligence
+               -0.5, -20,  # Agility
+               -0.5, -20,  # Willpower
+               -0.5, -20,  # Endurance
+               -0.5, -20,  # Charisma
+               -0.5, -20,  # Luck
+               -0.5, -20,  # Speed
+               "Cursed")  # Enchantment
+
+
+item_list_common = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10, item_11, item_12, item_13, item_14, item_15, item_16, item_17, item_18, item_19, item_20, item_21, item_22]
+item_list_rare = [item_101, item_102, item_103, item_104, item_105, item_106, item_107, item_108, item_109, item_110, item_111, item_112, item_113, item_114, item_115, item_116, item_117, item_118, item_119, item_120, item_121, item_122]
+item_list_epic = [item_201, item_202, item_203, item_204, item_205, item_206, item_207, item_208, item_209, item_210, item_211, item_212, item_213, item_214, item_215, item_216, item_217, item_218, item_219, item_220, item_221]
+item_list_legendary = [item_301, item_302]
+item_list_special = [item_404]
 
 class Game:
 

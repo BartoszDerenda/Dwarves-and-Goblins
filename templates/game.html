@@ -8,14 +8,14 @@
 <div class="center">
     <div id="main-box">
     {% for dwarf in game.hero %}
-        <div class="hero">
+        <div id="{{ dwarf }}" class="hero">
             <div class="character_info">
                 <img class="hero_portrait" src="{{ game.hero[dwarf].hero_portrait }}" alt="dwarf1"/>
                 <br>
                 <h2>{{ game.hero[dwarf].hero_name }}</h2>
-                Current tactic: <h3>{{ game.hero[dwarf].tactic }}</h3>
+                Current tactic: <h2 class="{{ game.hero[dwarf].tactic }}">{{ game.hero[dwarf].tactic }}</h2>
             </div>
-            <form class="stats" method="POST" action="{{ url_for('game') }}">
+            <form class="stats" method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
                 <table>
                     <tr>
                         <td></td>
@@ -26,73 +26,72 @@
                         <td><input type="submit" name="train {{ dwarf }}" class="confirm-button" value="Train"></td>
                     </tr>
                     <tr>
-                        <th class="on-hover-element"><label for="strength">Strength</label></th>
-                        <td class="pop-up">Strength training costs two days per point.</td>
+                        <th><label for="strength_{{ dwarf }}">Strength</label></th>
                         <td class="stats-cell"><label for="strength">{{ game.hero[dwarf].strength }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].str_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].str_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].str_total }}</td>
-                        <td><input type="number" id="strength" name="str_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="strength_{{ dwarf }}" name="str_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="intelligence">Intelligence</label></th>
+                        <th><label for="intelligence_{{ dwarf }}">Intelligence</label></th>
                         <td class="stats-cell"><label for="intelligence">{{ game.hero[dwarf].intelligence }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].int_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].int_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].int_total }}</td>
-                        <td><input type="number" id="intelligence" name="int_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="intelligence_{{ dwarf }}" name="int_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="agility">Agility</label></th>
+                        <th><label for="agility_{{ dwarf }}">Agility</label></th>
                         <td class="stats-cell"><label for="agility">{{ game.hero[dwarf].agility }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].agi_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].agi_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].agi_total }}</td>
-                        <td><input type="number" id="agility" name="agi_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="agility_{{ dwarf }}" name="agi_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="willpower">Willpower</label></th>
+                        <th><label for="willpower_{{ dwarf }}">Willpower</label></th>
                         <td class="stats-cell"><label for="willpower">{{ game.hero[dwarf].willpower }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].will_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].will_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].will_total }}</td>
-                        <td><input type="number" id="willpower" name="will_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="willpower_{{ dwarf }}" name="will_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="endurance">Endurance</label></th>
+                        <th><label for="endurance_{{ dwarf }}">Endurance</label></th>
                         <td class="stats-cell"><label for="endurance">{{ game.hero[dwarf].endurance }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].end_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].end_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].end_total }}</td>
-                        <td><input type="number" id="endurance" name="end_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="endurance_{{ dwarf }}" name="end_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="charisma">Charisma</label></th>
+                        <th><label for="charisma_{{ dwarf }}">Charisma</label></th>
                         <td class="stats-cell"><label for="charisma">{{ game.hero[dwarf].charisma }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].char_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].char_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].char_total }}</td>
-                        <td><input type="number" id="charisma" name="char_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="charisma_{{ dwarf }}" name="char_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="luck">Luck</label></th>
+                        <th><label for="luck_{{ dwarf }}">Luck</label></th>
                         <td class="stats-cell"><label for="luck">{{ game.hero[dwarf].luck }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].lck_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].lck_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].lck_total }}</td>
-                        <td><input type="number" id="luck" name="lck_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="luck_{{ dwarf }}" name="lck_increase" class="input-stats" value="0"></td>
                     </tr>
                     <tr>
-                        <th><label for="speed">Speed</label></th>
+                        <th><label for="speed_{{ dwarf }}">Speed</label></th>
                         <td class="stats-cell"><label for="speed">{{ game.hero[dwarf].speed }}</label></td>
                         <td class="stats-cell">x{{ game.hero[dwarf].spd_mul }}</td>
                         <td class="stats-cell">+{{ game.hero[dwarf].spd_bonus }}</td>
                         <td class="stats-cell-total">{{ game.hero[dwarf].spd_total }}</td>
-                        <td><input type="number" id="speed" name="spd_increase" class="input-stats" value="0"></td>
+                        <td><input type="number" id="speed_{{ dwarf }}" name="spd_increase" class="input-stats" value="0"></td>
                     </tr>
                 </table>
                 </form>
-                <form class="equipment" method="POST" action="{{ url_for('game') }}"><table>
+                <form class="equipment" method="POST" action="{{ url_for('game') }}#{{ dwarf }}"><table>
                 <tr>
                     <td><h3>Equipment</h3></td>
                     <td><input type="submit" name="equipment {{ dwarf }}" class="confirm-button" value="Unequip"></td>
@@ -100,12 +99,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Weapon</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['weapon'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['weapon'].rarity }}">{{ game.hero[dwarf].equipment['weapon'].item_name }}</td>
                     <td>
                         <select name="weapon">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'weapon' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -113,12 +113,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Headpiece</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['headpiece'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['headpiece'].rarity }}">{{ game.hero[dwarf].equipment['headpiece'].item_name }}</td>
                     <td>
                         <select name="headpiece">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'headpiece' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -126,12 +127,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Shoulders</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['shoulders'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['shoulders'].rarity }}">{{ game.hero[dwarf].equipment['shoulders'].item_name }}</td>
                     <td>
                         <select name="shoulders">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'shoulders' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -139,12 +141,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Chest</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['chest'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['chest'].rarity }}">{{ game.hero[dwarf].equipment['chest'].item_name }}</td>
                     <td>
                         <select name="chest">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'chest' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -152,12 +155,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Pants</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['pants'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['pants'].rarity }}">{{ game.hero[dwarf].equipment['pants'].item_name }}</td>
                     <td>
                         <select name="pants">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'pants' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -165,12 +169,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Gloves</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['gloves'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['gloves'].rarity }}">{{ game.hero[dwarf].equipment['gloves'].item_name }}</td>
                     <td>
                         <select name="gloves">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'gloves' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -178,12 +183,13 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Boots</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['boots'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['boots'].rarity }}">{{ game.hero[dwarf].equipment['boots'].item_name }}</td>
                     <td>
                         <select name="boots">
+                        <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'boots' %}
-                                <option class="eq_option" name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
@@ -191,25 +197,26 @@
                 </tr>
                 <tr>
                     <td class="equipment-cell">Artefact</td>
-                    <td class="equipment-cell-current">{{ game.hero[dwarf].equipment['artefact'].item_name }}</td>
+                    <td class="equipment-cell-current {{ game.hero[dwarf].equipment['artefact'].rarity }}">{{ game.hero[dwarf].equipment['artefact'].item_name }}</td>
                     <td>
                         <select name="artefact">
+                            <option> </option>
                             {% for item in game.backpack %}
                                 {% if item.item_slot == 'artefact' %}
-                                <option name="{{ item.item_name }}">{{ item.item_name }}</option>
+                                <option class="option_{{ item.rarity }}" name="{{ item.item_name }}">{{ item.item_name }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
                     </td>
                 </tr>
             </table></form>
-            <form class="tactics" method="POST" action="{{ url_for('game') }}"><table>
+            <form class="tactics" method="POST" action="{{ url_for('game') }}#{{ dwarf }}"><table>
                 <tr>
                     <td><h3>Tactics</h3></td>
-                    <td class="tactic-cell"><input type="radio" id="frenzy" name="tactic" value="Frenzy"><label for="frenzy">Frenzy</label></td>
-                    <td class="tactic-cell"><input type="radio" id="focus" name="tactic" value="Focus"><label for="focus">Focus</label></td>
-                    <td class="tactic-cell"><input type="radio" id="balanced" name="tactic" value="Balanced"><label for="balanced">Balanced</label></td>
-                    <td class="tactic-cell"><input type="radio" id="overconfidence" name="tactic" value="Overconfidence"><label for="overconfidence">Overconfidence</label></td>
+                    <td class="tactic-cell"><input type="radio" id="frenzy_{{ dwarf }}" name="tactic" value="Frenzy"><label for="frenzy_{{ dwarf }}">Frenzy</label></td>
+                    <td class="tactic-cell"><input type="radio" id="focus_{{ dwarf }}" name="tactic" value="Focus"><label for="focus_{{ dwarf }}">Focus</label></td>
+                    <td class="tactic-cell"><input type="radio" id="balanced_{{ dwarf }}" name="tactic" value="Balanced"><label for="balanced_{{ dwarf }}">Balanced</label></td>
+                    <td class="tactic-cell"><input type="radio" id="overconfidence_{{ dwarf }}" name="tactic" value="Overconfidence"><label for="overconfidence_{{ dwarf }}">Overconfidence</label></td>
                     <td><input type="submit" name="tactics {{ dwarf }}" class="confirm-button" value="Confirm"></td>
                 </tr>
             </table></form>
@@ -225,26 +232,26 @@
         <div class="adventure-loot-chances">
             <h3>Cost: 14 days</h3>
             <input type="submit" id="venture" name="adventure" class="adventure-button" value="Short venture">
-            <p>45% - 3x Common</p>
-            <p>30% - 2x Common, 1x Rare</p>
-            <p>15% - 3x Rare</p>
-            <p>10% - 1x Epic</p>
+            <p>45% - 6x Common</p>
+            <p>30% - 4x Common, 2x Rare</p>
+            <p>15% - 5x Rare</p>
+            <p>10% - 2x Epic + 2x Rare</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 31 days</h3>
             <input type="submit" id="adventure" name="adventure" class="adventure-button" value="Risky adventure">
-            <p>45% - 3x Rare</p>
-            <p>30% - 2x Rare, 1x Epic</p>
-            <p>15% - 3x Epic</p>
+            <p>45% - 6x Rare</p>
+            <p>30% - 4x Rare, 2x Epic</p>
+            <p>15% - 5x Epic</p>
             <p>10% - 1x Legendary</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 90 days</h3>
             <input type="submit" id="expedition" name="adventure" class="adventure-button" value="Legendary expedition">
-            <p>45% - 3x Epic</p>
-            <p>30% - 2x Epic, 1x Legendary</p>
-            <p>15% - 2x Legendary</p>
-            <p>10% - 3x Legendary</p>
+            <p>45% - 5x Epic</p>
+            <p>30% - 7x Epic</p>
+            <p>15% - 1x Legendary</p>
+            <p>10% - 2x Legendary</p>
         </div>
     </form>
 {% endblock %}
