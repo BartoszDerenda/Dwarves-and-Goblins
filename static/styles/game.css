@@ -33,11 +33,6 @@
     margin-bottom: 10%;
 }
 
-img {
-    max-height: 50%;
-    max-width: 50%;
-}
-
 .adventure {
     display: flex;
     flex-direction: row;
@@ -50,6 +45,10 @@ img {
 .adventure-button {
     width: 200px;
     background-color: #3b1b19;
+}
+
+.hero-portrait {
+    padding-top: 30px;
 }
 
 .hero {
@@ -137,6 +136,16 @@ img {
     background-color: #3b1b19;
 }
 
+.confirm-battle {
+    width: 250px;
+    height: 100px;
+    font-size: 2em;
+
+    background-color: #3b1b19;
+
+    margin-top: 50px;
+}
+
 select {
     background-color: #3b1b19;
 }
@@ -148,6 +157,10 @@ table {
     border: 5px ridge #e8e2e1;
 }
 
+.abilities-table {
+    border: None; !important;
+}
+
 th, td {
     padding: 10px;
 }
@@ -156,14 +169,22 @@ tr {
     background-color: #650f0b;
 }
 
-.stats-cell, .equipment-cell, .tactic-cell {
+.stats-cell, .equipment-cell, .tactic-cell, .special-abilities-cell {
     background-color: #880c08;
 }
 
-.stats-cell-total, .equipment-cell-current {
+.special-abilities-cell {
+    width: 25%;
+}
+
+.stats-cell-total, .equipment-cell-current, .abilities-cell {
     background-color: #a80e0a
 }
 
+.pebble {
+    max-height: 50%;
+    max-width: 50%;
+}
 
 
 /* Word coloring */

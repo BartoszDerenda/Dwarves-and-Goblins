@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/styles/battle.css" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+<div class="center">
+    <div id="battlefield">
+        <div id="dwarf">
+            <img src="{{ game.hero[dwarf].hero_portrait }}" alt="dwarf"/>
+            <br>
+            <h2>{{ game.hero[dwarf].hero_name }}</h2>
+            <table>
+                <tr>
+                    <td class="stats-cell">Strength</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].str_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Intelligence</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].int_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Agility</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].agi_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Willpower</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].will_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Endurance</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].end_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Charisma</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].char_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Luck</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].lck_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Speed</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].spd_total }}</td>
+                </tr>
+            </table>
+        </div>
+        <div id="battle-log">
+            {% for line in battlelog %}
+                {{ line }}
+            {% endfor %}
+        </div>
+        <div id="goblin">
+            <img src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
+            <br>
+            <h2>{{ game.enemy[goblin].hero_name }}</h2>
+            <table>
+                <tr>
+                    <td class="stats-cell">Strength</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].str_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Intelligence</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].int_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Agility</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].agi_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Willpower</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].will_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Endurance</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].end_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Charisma</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].char_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Luck</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].lck_total }}</td>
+                </tr>
+                <tr>
+                    <td class="stats-cell">Speed</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].spd_total }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
