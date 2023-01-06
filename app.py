@@ -57,88 +57,13 @@ def game():
         #   If the training is too costly (ie. not enough days left), nothing will happen. Flash error message for this case is to be implemented in the future.
 
         elif request.form.get('train dwarf1', False) == 'Train':
-
-            strength = int(request.form.get("str_increase"))
-            intelligence = int(request.form.get("int_increase"))
-            agility = int(request.form.get("agi_increase"))
-            willpower = int(request.form.get("will_increase"))
-            endurance = int(request.form.get("end_increase"))
-            charisma = int(request.form.get("char_increase"))
-            luck = int(request.form.get("lck_increase"))
-            speed = int(request.form.get("spd_increase"))
-            temp_days = strength*2 + intelligence*2 + agility + willpower + endurance*2 + charisma + luck + speed*2
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            game.hero['dwarf1'].strength += strength
-            game.hero['dwarf1'].intelligence += intelligence
-            game.hero['dwarf1'].agility += agility
-            game.hero['dwarf1'].willpower += willpower
-            game.hero['dwarf1'].endurance += endurance
-            game.hero['dwarf1'].charisma += charisma
-            game.hero['dwarf1'].luck += luck
-            game.hero['dwarf1'].speed += speed
-
-            update_stats('dwarf1')
-
-            game.days -= temp_days
+            train('dwarf1')
 
         elif request.form.get('train dwarf2', False) == 'Train':
-
-            strength = int(request.form.get("str_increase"))
-            intelligence = int(request.form.get("int_increase"))
-            agility = int(request.form.get("agi_increase"))
-            willpower = int(request.form.get("will_increase"))
-            endurance = int(request.form.get("end_increase"))
-            charisma = int(request.form.get("char_increase"))
-            luck = int(request.form.get("lck_increase"))
-            speed = int(request.form.get("spd_increase"))
-            temp_days = strength*2 + intelligence*2 + agility + willpower + endurance*2 + charisma + luck + speed*2
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            game.hero['dwarf2'].strength += strength
-            game.hero['dwarf2'].intelligence += intelligence
-            game.hero['dwarf2'].agility += agility
-            game.hero['dwarf2'].willpower += willpower
-            game.hero['dwarf2'].endurance += endurance
-            game.hero['dwarf2'].charisma += charisma
-            game.hero['dwarf2'].luck += luck
-            game.hero['dwarf2'].speed += speed
-
-            update_stats('dwarf2')
-
-            game.days -= temp_days
+            train('dwarf2')
 
         elif request.form.get('train dwarf3', False) == 'Train':
-
-            strength = int(request.form.get("str_increase"))
-            intelligence = int(request.form.get("int_increase"))
-            agility = int(request.form.get("agi_increase"))
-            willpower = int(request.form.get("will_increase"))
-            endurance = int(request.form.get("end_increase"))
-            charisma = int(request.form.get("char_increase"))
-            luck = int(request.form.get("lck_increase"))
-            speed = int(request.form.get("spd_increase"))
-            temp_days = strength*2 + intelligence*2 + agility + willpower + endurance*2 + charisma + luck + speed*2
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            game.hero['dwarf3'].strength += strength
-            game.hero['dwarf3'].intelligence += intelligence
-            game.hero['dwarf3'].agility += agility
-            game.hero['dwarf3'].willpower += willpower
-            game.hero['dwarf3'].endurance += endurance
-            game.hero['dwarf3'].charisma += charisma
-            game.hero['dwarf3'].luck += luck
-            game.hero['dwarf3'].speed += speed
-
-            update_stats('dwarf3')
-
-            game.days -= temp_days
+            train('dwarf3')
 
 
 
@@ -152,198 +77,13 @@ def game():
         #   Stuff resets and recalculates at the end, as per tradition.
 
         elif request.form.get('equipment dwarf1', False) == 'Equip':
-
-            # Declaring stuff cuz otherwise PyCharm screams, even though there's no way for these to ever be unassigned I think.
-            weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
-
-            # Iterating through global item dictionary in search for objects.
-            for key, value in game.item_dict.items():
-                if key == request.form.get("weapon"):
-                    weapon = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("headpiece"):
-                    headpiece = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("shoulders"):
-                    shoulders = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("chest"):
-                    chest = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("pants"):
-                    pants = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("gloves"):
-                    gloves = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("boots"):
-                    boots = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("artifact"):
-                    artifact = value
-                    game.backpack.remove(value)
-
-            # Sneaky unequipment call
-            for key, value in game.hero['dwarf1'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            # Assigning items from the library to the equipment dictionary.
-            if request.form.get("weapon") is not None:
-                game.hero['dwarf1'].equipment.update({'weapon': weapon})
-
-            if request.form.get("headpiece") is not None:
-                game.hero['dwarf1'].equipment.update({'headpiece': headpiece})
-
-            if request.form.get("shoulders") is not None:
-                game.hero['dwarf1'].equipment.update({'shoulders': shoulders})
-
-            if request.form.get("chest") is not None:
-                game.hero['dwarf1'].equipment.update({'chest': chest})
-
-            if request.form.get("gloves") is not None:
-                game.hero['dwarf1'].equipment.update({'gloves': gloves})
-
-            if request.form.get("pants") is not None:
-                game.hero['dwarf1'].equipment.update({'pants': pants})
-
-            if request.form.get("boots") is not None:
-                game.hero['dwarf1'].equipment.update({'boots': boots})
-
-            if request.form.get("artifact") is not None:
-                game.hero['dwarf1'].equipment.update({'artifact': artifact})
-
-            # Updating stuff
-            stat_reset('dwarf1')
-            update_equipment('dwarf1')
-            update_stats('dwarf1')
+            equip('dwarf1')
 
         elif request.form.get('equipment dwarf2', False) == 'Equip':
-
-            weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
-
-            for key, value in game.item_dict.items():
-                if key == request.form.get("weapon"):
-                    weapon = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("headpiece"):
-                    headpiece = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("shoulders"):
-                    shoulders = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("chest"):
-                    chest = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("pants"):
-                    pants = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("gloves"):
-                    gloves = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("boots"):
-                    boots = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("artifact"):
-                    artifact = value
-                    game.backpack.remove(value)
-
-            for key, value in game.hero['dwarf2'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            if request.form.get("weapon") is not None:
-                game.hero['dwarf2'].equipment.update({'weapon': weapon})
-
-            if request.form.get("headpiece") is not None:
-                game.hero['dwarf2'].equipment.update({'headpiece': headpiece})
-
-            if request.form.get("shoulders") is not None:
-                game.hero['dwarf2'].equipment.update({'shoulders': shoulders})
-
-            if request.form.get("chest") is not None:
-                game.hero['dwarf2'].equipment.update({'chest': chest})
-
-            if request.form.get("gloves") is not None:
-                game.hero['dwarf2'].equipment.update({'gloves': gloves})
-
-            if request.form.get("pants") is not None:
-                game.hero['dwarf2'].equipment.update({'pants': pants})
-
-            if request.form.get("boots") is not None:
-                game.hero['dwarf2'].equipment.update({'boots': boots})
-
-            if request.form.get("artifact") is not None:
-                game.hero['dwarf2'].equipment.update({'artifact': artifact})
-
-            stat_reset('dwarf2')
-            update_equipment('dwarf2')
-            update_stats('dwarf2')
+            equip('dwarf2')
 
         elif request.form.get('equipment dwarf3', False) == 'Equip':
-
-            weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
-
-            for key, value in game.item_dict.items():
-                if key == request.form.get("weapon"):
-                    weapon = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("headpiece"):
-                    headpiece = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("shoulders"):
-                    shoulders = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("chest"):
-                    chest = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("pants"):
-                    pants = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("gloves"):
-                    gloves = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("boots"):
-                    boots = value
-                    game.backpack.remove(value)
-                elif key == request.form.get("artifact"):
-                    artifact = value
-                    game.backpack.remove(value)
-
-            for key, value in game.hero['dwarf3'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            if request.form.get("weapon") is not None:
-                game.hero['dwarf3'].equipment.update({'weapon': weapon})
-
-            if request.form.get("headpiece") is not None:
-                game.hero['dwarf3'].equipment.update({'headpiece': headpiece})
-
-            if request.form.get("shoulders") is not None:
-                game.hero['dwarf3'].equipment.update({'shoulders': shoulders})
-
-            if request.form.get("chest") is not None:
-                game.hero['dwarf3'].equipment.update({'chest': chest})
-
-            if request.form.get("gloves") is not None:
-                game.hero['dwarf3'].equipment.update({'gloves': gloves})
-
-            if request.form.get("pants") is not None:
-                game.hero['dwarf3'].equipment.update({'pants': pants})
-
-            if request.form.get("boots") is not None:
-                game.hero['dwarf3'].equipment.update({'boots': boots})
-
-            if request.form.get("artifact") is not None:
-                game.hero['dwarf3'].equipment.update({'artifact': artifact})
-
-            stat_reset('dwarf3')
-            update_equipment('dwarf3')
-            update_stats('dwarf3')
+            equip('dwarf3')
 
 
 
@@ -357,31 +97,13 @@ def game():
         #   there's no need to cross-reference anything with the help of item_dict.
 
         elif request.form.get('equipment dwarf1', False) == 'Unequip':
-            for key, value in game.hero['dwarf1'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf1'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            stat_reset('dwarf1')
-            update_stats('dwarf1')
+            unequip('dwarf1')
 
         elif request.form.get('equipment dwarf2', False) == 'Unequip':
-            for key, value in game.hero['dwarf2'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf2'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            stat_reset('dwarf2')
-            update_stats('dwarf2')
+            unequip('dwarf2')
 
         elif request.form.get('equipment dwarf3', False) == 'Unequip':
-            for key, value in game.hero['dwarf3'].equipment.items():
-                if value is not None:
-                    game.backpack.append(value)
-            game.hero['dwarf3'].equipment.update({'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None, 'boots': None, 'artifact': None})
-
-            stat_reset('dwarf3')
-            update_stats('dwarf3')
+            unequip('dwarf3')
 
 
         #   ADVENTURE
@@ -534,22 +256,8 @@ def update_equipment(dwarf):
 def stat_reset(dwarf):
 
     # Resets all stats before equipment update
-    game.hero[dwarf].str_mul = 1.0
-    game.hero[dwarf].str_bonus = 0
-    game.hero[dwarf].int_mul = 1.0
-    game.hero[dwarf].int_bonus = 0
-    game.hero[dwarf].agi_mul = 1.0
-    game.hero[dwarf].agi_bonus = 0
-    game.hero[dwarf].will_mul = 1.0
-    game.hero[dwarf].will_bonus = 0
-    game.hero[dwarf].end_mul = 1.0
-    game.hero[dwarf].end_bonus = 0
-    game.hero[dwarf].char_mul = 1.0
-    game.hero[dwarf].char_bonus = 0
-    game.hero[dwarf].lck_mul = 1.0
-    game.hero[dwarf].lck_bonus = 0
-    game.hero[dwarf].spd_mul = 1.0
-    game.hero[dwarf].spd_bonus = 0
+    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[dwarf].agi_mul = game.hero[dwarf].will_mul = game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
+    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = game.hero[dwarf].agi_bonus = game.hero[dwarf].will_bonus = game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = game.hero[dwarf].lck_bonus = game.hero[dwarf].spd_bonus = 0
     game.hero[dwarf].specials_list.clear()
 
 def update_stats(dwarf):
@@ -603,6 +311,112 @@ def update_stats(dwarf):
     if game.hero[dwarf].spd_total <= 0:
         game.hero[dwarf].spd_total = 1
 
+def train(dwarf):
+
+    strength = int(request.form.get("str_increase"))
+    intelligence = int(request.form.get("int_increase"))
+    agility = int(request.form.get("agi_increase"))
+    willpower = int(request.form.get("will_increase"))
+    endurance = int(request.form.get("end_increase"))
+    charisma = int(request.form.get("char_increase"))
+    luck = int(request.form.get("lck_increase"))
+    speed = int(request.form.get("spd_increase"))
+    temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 2 + charisma + luck + speed * 2
+
+    if game.days - temp_days <= 0:
+        return render_template('game.html', game=game)
+
+    game.hero[dwarf].strength += strength
+    game.hero[dwarf].intelligence += intelligence
+    game.hero[dwarf].agility += agility
+    game.hero[dwarf].willpower += willpower
+    game.hero[dwarf].endurance += endurance
+    game.hero[dwarf].charisma += charisma
+    game.hero[dwarf].luck += luck
+    game.hero[dwarf].speed += speed
+
+    update_stats(dwarf)
+
+    game.days -= temp_days
+
+def unequip(dwarf):
+
+    for key, value in game.hero[dwarf].equipment.items():
+        if value is not None:
+            game.backpack.append(value)
+    game.hero[dwarf].equipment.update(
+        {'weapon': None, 'headpiece': None, 'shoulders': None, 'chest': None, 'pants': None, 'gloves': None,
+         'boots': None, 'artifact': None})
+
+    stat_reset(dwarf)
+    update_stats(dwarf)
+
+def equip(dwarf):
+
+    # Declaring stuff cuz otherwise PyCharm screams, even though there's no way for these to ever be unassigned I think.
+    weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
+
+    # Iterating through global item dictionary in search for objects.
+    for key, value in game.item_dict.items():
+        if key == request.form.get("weapon"):
+            weapon = value
+            game.backpack.remove(value)
+        elif key == request.form.get("headpiece"):
+            headpiece = value
+            game.backpack.remove(value)
+        elif key == request.form.get("shoulders"):
+            shoulders = value
+            game.backpack.remove(value)
+        elif key == request.form.get("chest"):
+            chest = value
+            game.backpack.remove(value)
+        elif key == request.form.get("pants"):
+            pants = value
+            game.backpack.remove(value)
+        elif key == request.form.get("gloves"):
+            gloves = value
+            game.backpack.remove(value)
+        elif key == request.form.get("boots"):
+            boots = value
+            game.backpack.remove(value)
+        elif key == request.form.get("artifact"):
+            artifact = value
+            game.backpack.remove(value)
+
+    # Sneaky unequipment call before we overwrite the current one.
+    # Unnecessary stat refresh as part of the package that is unequip()
+    unequip(dwarf)
+
+    # Assigning items from the library to the equipment dictionary.
+    if request.form.get("weapon") is not None:
+        game.hero[dwarf].equipment.update({'weapon': weapon})
+
+    if request.form.get("headpiece") is not None:
+        game.hero[dwarf].equipment.update({'headpiece': headpiece})
+
+    if request.form.get("shoulders") is not None:
+        game.hero[dwarf].equipment.update({'shoulders': shoulders})
+
+    if request.form.get("chest") is not None:
+        game.hero[dwarf].equipment.update({'chest': chest})
+
+    if request.form.get("gloves") is not None:
+        game.hero[dwarf].equipment.update({'gloves': gloves})
+
+    if request.form.get("pants") is not None:
+        game.hero[dwarf].equipment.update({'pants': pants})
+
+    if request.form.get("boots") is not None:
+        game.hero[dwarf].equipment.update({'boots': boots})
+
+    if request.form.get("artifact") is not None:
+        game.hero[dwarf].equipment.update({'artifact': artifact})
+
+    # Refreshing stats
+    stat_reset(dwarf)
+    update_equipment(dwarf)
+    update_stats(dwarf)
+
 
 # Base hero class - for generating both dwarves and goblins
 class Hero:
@@ -655,15 +469,15 @@ class Hero:
         self.will_mul = float(1.0)
         self.will_bonus = 0
         self.will_total = round(self.willpower * self.will_mul + self.will_bonus)
-        self.endurance = random.randint(10, 20)
+        self.endurance = random.randint(100, 200)
         self.end_mul = float(1.0)
         self.end_bonus = 0
         self.end_total = round(self.endurance * self.end_mul + self.end_bonus)
-        self.charisma = random.randint(10, 20)
+        self.charisma = random.randint(100, 200)
         self.char_mul = float(1.0)
         self.char_bonus = 0
         self.char_total = round(self.charisma * self.char_mul + self.char_bonus)
-        self.luck = random.randint(10, 20)
+        self.luck = random.randint(100, 200)
         self.lck_mul = float(1.0)
         self.lck_bonus = 0
         self.lck_total = round(self.luck * self.lck_mul + self.lck_bonus)
@@ -686,7 +500,7 @@ class Hero:
             self.equipment.update({starter_eq: eq_choice})
 
         if self.hero_portrait == '/static/dwarf_portraits/23.jpg':
-            self.hero_name = '???'
+            self.hero_name = 'Stranger'
             self.equipment.update({'weapon': item_20,
                                   'headpiece': item_7,
                                   'shoulders': item_8,
@@ -1576,9 +1390,9 @@ def battle(dwarf, goblin):
 
     dwarf_name = game.hero[dwarf].hero_name
 
-    dwarf_physical = game.hero[dwarf].str_total * 8
-    dwarf_magical = game.hero[dwarf].int_total * 12
-    dwarf_health = game.hero[dwarf].end_total * 25
+    dwarf_physical = game.hero[dwarf].str_total * 5
+    dwarf_magical = game.hero[dwarf].int_total * 7
+    dwarf_health = game.hero[dwarf].end_total * 10
     dwarf_speed = game.hero[dwarf].spd_total
     dwarf_speed_base = game.hero[dwarf].spd_total
     dwarf_charisma = game.hero[dwarf].char_total
@@ -1596,9 +1410,9 @@ def battle(dwarf, goblin):
 
     goblin_name = game.enemy[goblin].hero_name
 
-    goblin_physical = game.enemy[goblin].str_total * 8
-    goblin_magical = game.enemy[goblin].int_total * 12
-    goblin_health = game.enemy[goblin].end_total * 25
+    goblin_physical = game.enemy[goblin].str_total * 5
+    goblin_magical = game.enemy[goblin].int_total * 7
+    goblin_health = game.enemy[goblin].end_total * 10
     goblin_speed = game.enemy[goblin].spd_total
     goblin_speed_base = game.enemy[goblin].spd_total
     goblin_charisma = game.enemy[goblin].char_total
@@ -1613,29 +1427,40 @@ def battle(dwarf, goblin):
     goblin_special_attack_next = False
 
 
-    reduce_next_attack = increase_next_attack = critical = False
-    damage = reduction = increase = 1
+    dwarf_reduce_next_attack = dwarf_increase_next_attack = goblin_reduce_next_attack = goblin_increase_next_attack = critical_message = False
+    damage = goblin_reduce_message = goblin_increase_message = dwarf_increase_message = dwarf_reduce_message = dwarf_reduction = dwarf_increase = goblin_reduction = goblin_increase = 1
+    attack_type = ''
 
-    while win_condition == False:
-
-        turn = ''
+    while not win_condition:
 
         if dwarf_speed >= goblin_speed:
 
             if dwarf_special_attack_next:
                 factor = random.randint(10, 15)
                 damage = (dwarf_physical + dwarf_magical) * round((factor / 10), 2)
+                attack_type = random.choice([' unleashes his <font class="yellow">s</font><font class="orange">p</font><font class="red">e</font><font class="purple">c</font><font class="deep_blue">i</font><font class="blue">a</font><font class="green">l</font> <font class="yellow">a</font><font class="orange">t</font><font class="red">t</font><font class="purple">a</font><font class="deep_blue">c</font><font class="blue">k</font> on'])
+                dwarf_special_attack_charge += 1
                 dwarf_special_attack_next = False
             else:
                 if dwarf_tactic == 'Frenzy':
                     factor = random.randint(10,12)
                     damage = dwarf_physical * round((factor / 10), 2)
+                    attack_type = random.choice(
+                        [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                         ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                         ' <font class="gray">strikes</font>'])
+                    dwarf_special_attack_charge += 1
                     if dwarf_special_attack_charge % 5 == 0:
                         dwarf_special_attack_next = True
 
                 elif dwarf_tactic == 'Focus':
                     factor = random.randint(8,15)
                     damage = dwarf_magical * round((factor / 10), 2)
+                    attack_type = random.choice(
+                        [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                         ' casts <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
+                         ' <font class="deep_blue">electrocutes</font>'])
+                    dwarf_special_attack_charge += 1
                     if dwarf_special_attack_charge % 5 == 0:
                         dwarf_special_attack_next = True
 
@@ -1644,9 +1469,19 @@ def battle(dwarf, goblin):
                     if damage_type == dwarf_physical:
                         factor = random.randint(10,12)
                         damage = dwarf_physical * round((factor / 10), 2)
+                        attack_type = random.choice(
+                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                             ' <font class="gray">strikes</font>'])
+                        dwarf_special_attack_charge += 1
                     else:
                         factor = random.randint(8,15)
                         damage = dwarf_magical * round((factor / 10), 2)
+                        attack_type = random.choice(
+                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                             ' casts <font class="orange">fireball</font> at', ' <font class="red">sets aflame</font>',
+                             ' <font class="deep_blue">electrocutes</font>'])
+                        dwarf_special_attack_charge += 1
 
                     if dwarf_special_attack_charge % 4 == 0:
                         dwarf_special_attack_next = True
@@ -1656,69 +1491,113 @@ def battle(dwarf, goblin):
                     if damage_type == dwarf_physical:
                         factor = random.randint(10,12)
                         damage = round(((dwarf_physical * round((factor / 10), 2)) * 0.85), 2)
+                        attack_type = random.choice(
+                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                             ' <font class="gray">strikes</font>'])
+                        dwarf_special_attack_charge += 1
                     else:
                         factor = random.randint(8,15)
                         damage = round(((dwarf_magical * round((factor / 10), 2)) * 0.85), 2)
+                        attack_type = random.choice(
+                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                             ' casts <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
+                             ' <font class="deep_blue">electrocutes</font>'])
+                        dwarf_special_attack_charge += 1
 
                     if dwarf_special_attack_charge % 3 == 0:
                         dwarf_special_attack_next = True
 
-                roll_crit = random.randint(1,500)
-                if dwarf_luck >= roll_crit:
-                    damage * 1.5
-                    critical = True
+            roll_crit = random.randint(1,500)
+            if dwarf_luck >= roll_crit:
+                damage = damage * 1.5
+                critical_message = True
 
-                roll_charisma = random.randint(1,500)
-                if dwarf_charisma >= roll_charisma:
-                    if random.choice(['reduce', 'increase']) == 'reduce':
-                        reduction = random.randint(15,35)
-                        roll_reduce = 1 + round((reduction / 100), 2)
-                        reduce_next_attack = True
-                    else:
-                        increase = random.randint(15,35)
-                        roll_increase = 1 + round((increase / 100), 2)
-                        increase_next_attack = True
+            roll_charisma = random.randint(1,500)
+            if dwarf_charisma >= roll_charisma:
+                if random.choice(['reduce', 'increase']) == 'reduce':
+                    roll_reduce = dwarf_reduce_message = random.randint(65,85)
+                    dwarf_reduction = round((roll_reduce / 100), 2)
+                    dwarf_reduce_next_attack = True
+                else:
+                    roll_increase = dwarf_increase_message = random.randint(15,35)
+                    dwarf_increase = 1 + round((roll_increase / 100), 2)
 
-                damage = round(damage)
-                goblin_health -= damage
-                funny = random.choice([' hits', ' punches', ' kicks', ' attacks'])
-                turn = '<b>' + dwarf_name + '</b>' + funny + ' goblin for ' + str(damage) + ' damage!'
-                if critical:
-                    turn += ' <i>Critical strike!</i>'
-                if reduce_next_attack:
-                    turn = '<br><i>His horrifying roar terrifies the enemy, decreasing their next attack by ' + str(reduction) + '%! </i>'
-                if increase_next_attack:
-                    turn = '<br><i>His inspiring roar invigorates him, increasing his next attack by ' + str(increase) + '%! </i>'
+            damage = round(damage)
 
-                goblin_speed += goblin_speed_base
+            if goblin_reduce_next_attack:
+                damage = damage * goblin_reduction
+                goblin_reduction = 1
+            if dwarf_increase_next_attack:
+                damage = damage * dwarf_increase
+                dwarf_increase = 1
+                dwarf_increase_next_attack = False
+
+            damage = round(damage)
+            dwarf_reduce_message = (dwarf_reduce_message - 100) * (-1)
+
+            goblin_health -= damage
+            turn = '<b>' + dwarf_name + '</b>' + attack_type + ' goblin for ' + str(damage) + ' damage!'
+            if critical_message:
+                turn += ' <font class="yellow italic">Critical strike!</font>'
+                critical_message = False
+            if dwarf_reduce_next_attack:
+                turn += '<br><font class="italic">His terrifying roar intimidates the enemy, decreasing their next attack by ' + str(dwarf_reduce_message) + '%! </font>'
+            if dwarf_increase > 1.1:
+                turn += '<br><font class="italic">His rallying cry bolsters him, increasing his next attack by ' + str(dwarf_increase_message) + '%! </font>'
+                dwarf_increase_next_attack = True
+
+            goblin_speed += goblin_speed_base
 
         else:
 
             if goblin_special_attack_next:
                 factor = random.randint(10, 15)
                 damage = (goblin_physical + goblin_magical) * round((factor / 10), 2)
+                attack_type = random.choice([' unleashes his <font class="yellow">s</font><font class="orange">p</font><font class="red">e</font><font class="purple">c</font><font class="deep_blue">i</font><font class="blue">a</font><font class="green">l</font> <font class="yellow">a</font><font class="orange">t</font><font class="red">t</font><font class="purple">a</font><font class="deep_blue">c</font><font class="blue">k</font> on'])
+                goblin_special_attack_charge += 1
                 goblin_special_attack_next = False
             else:
                 if goblin_tactic == 'Frenzy':
-                    factor = random.randint(10, 12)
+                    factor = random.randint(10,12)
                     damage = goblin_physical * round((factor / 10), 2)
+                    attack_type = random.choice(
+                        [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                         ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                         ' <font class="gray">strikes</font>'])
+                    goblin_special_attack_charge += 1
                     if goblin_special_attack_charge % 5 == 0:
                         goblin_special_attack_next = True
 
                 elif goblin_tactic == 'Focus':
-                    factor = random.randint(8, 15)
+                    factor = random.randint(8,15)
                     damage = goblin_magical * round((factor / 10), 2)
+                    attack_type = random.choice(
+                        [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                         ' casts <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
+                         ' <font class="deep_blue">electrocutes</font>'])
+                    goblin_special_attack_charge += 1
                     if goblin_special_attack_charge % 5 == 0:
                         goblin_special_attack_next = True
 
                 elif goblin_tactic == 'Balanced':
                     damage_type = random.choice([goblin_physical, goblin_magical])
                     if damage_type == goblin_physical:
-                        factor = random.randint(10, 12)
+                        factor = random.randint(10,12)
                         damage = goblin_physical * round((factor / 10), 2)
+                        attack_type = random.choice(
+                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                             ' <font class="gray">strikes</font>'])
+                        goblin_special_attack_charge += 1
                     else:
-                        factor = random.randint(8, 15)
+                        factor = random.randint(8,15)
                         damage = goblin_magical * round((factor / 10), 2)
+                        attack_type = random.choice(
+                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                             ' casts <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
+                             ' <font class="deep_blue">electrocutes</font>'])
+                        goblin_special_attack_charge += 1
 
                     if goblin_special_attack_charge % 4 == 0:
                         goblin_special_attack_next = True
@@ -1726,56 +1605,75 @@ def battle(dwarf, goblin):
                 elif goblin_tactic == 'Overconfidence':
                     damage_type = random.choice([goblin_physical, goblin_magical])
                     if damage_type == goblin_physical:
-                        factor = random.randint(10, 12)
-                        damage = round(((goblin_physical * round((factor / 10), 2)) * 0.85), 2)
+                        factor = random.randint(10,12)
+                        damage = round(((goblin_physical * round((factor / 10), 2)) * 0.85), 0)
+                        attack_type = random.choice(
+                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                             ' <font class="gray">strikes</font>'])
+                        goblin_special_attack_charge += 1
                     else:
-                        factor = random.randint(8, 15)
-                        damage = round(((goblin_magical * round((factor / 10), 2)) * 0.85), 2)
+                        factor = random.randint(8,15)
+                        damage = round(((goblin_magical * round((factor / 10), 2)) * 0.85), 0)
+                        attack_type = random.choice(
+                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                             ' casts <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
+                             ' <font class="deep_blue">electrocutes</font>'])
+                        goblin_special_attack_charge += 1
 
                     if goblin_special_attack_charge % 3 == 0:
                         goblin_special_attack_next = True
 
-                roll_crit = random.randint(1, 500)
-                if goblin_luck >= roll_crit:
-                    damage = damage * 1.5
-                    critical = True
+            roll_crit = random.randint(1,500)
+            if goblin_luck >= roll_crit:
+                damage = damage * 1.5
+                critical_message = True
 
-                roll_charisma = random.randint(1, 500)
-                if goblin_charisma >= roll_charisma:
-                    if random.choice(['reduce', 'increase']) == 'reduce':
-                        reduction = random.randint(15, 35)
-                        roll_reduce = 1 + round((reduction / 100), 2)
-                        reduce_next_attack = True
-                    else:
-                        increase = random.randint(15, 35)
-                        roll_increase = 1 + round((increase / 100), 2)
-                        increase_next_attack = True
+            roll_charisma = random.randint(1,500)
+            if goblin_charisma >= roll_charisma:
+                if random.choice(['reduce', 'increase']) == 'reduce':
+                    roll_reduce = goblin_reduce_message = random.randint(65,85)
+                    goblin_reduction = round((roll_reduce / 100), 2)
+                    goblin_reduce_next_attack = True
+                else:
+                    roll_increase = goblin_increase_message = random.randint(15,35)
+                    goblin_increase = round(1 + (roll_increase / 100), 2)
 
-                damage = round(damage)
-                dwarf_health -= damage
-                funny = random.choice([' hits', ' punches', ' kicks', ' attacks'])
-                turn = '<b>' + goblin_name + '</b>' + funny + ' hero for ' + str(damage) + ' damage!'
-                if critical:
-                    turn += ' <i>Critical strike!</i>'
-                if reduce_next_attack:
-                    turn += '<br><i>His horrifying screech terrifies the hero, decreasing their next attack by ' + str(reduction) + '%! </i>'
-                if increase_next_attack:
-                    turn += '<br><i>His inspiring screech invigorates him, increasing his next attack by ' + str(increase) + '%! </i>'
+            if dwarf_reduce_next_attack:
+                damage = damage * dwarf_reduction
+                dwarf_reduction = 1
+            if goblin_increase_next_attack:
+                damage = damage * goblin_increase
+                goblin_increase = 1
+                goblin_increase_next_attack = False
 
-                dwarf_speed += dwarf_speed_base
+            damage = round(damage)
+            goblin_reduce_message = (goblin_reduce_message - 100) * (-1)
+
+            dwarf_health -= damage
+            turn = '<b>' + goblin_name + '</b>' + attack_type + ' dwarf for ' + str(damage) + ' damage!'
+            if critical_message:
+                turn += ' <font class="yellow italic">Critical strike!</font>'
+                critical_message = False
+            if goblin_reduce_next_attack:
+                turn += '<br><font class="italic">His horrifying screech intimidates the enemy, decreasing their next attack by ' + str(goblin_reduce_message) + '%! </font>'
+            if goblin_increase > 1.1:
+                turn += '<br><font class="italic">His inspiring cry invigorates him, increasing his next attack by ' + str(goblin_increase_message) + '%! </font>'
+                goblin_increase_next_attack = True
+
+            dwarf_speed += dwarf_speed_base
 
         battle_log.append(turn)
 
         if goblin_health <= 0:
-            message = '<br>' + dwarf_name + ' slays ' + goblin_name + '!<br>' + dwarf_name + ' wins!'
+            message = '<br>' + dwarf_name + ' slays ' + goblin_name + '!<br><h2>You win the battle!</h2>'
             win_condition = True
             battle_log.append(message)
         elif dwarf_health <= 0:
-            message = '<br>' + goblin_name + ' slays ' + dwarf_name + '!<br>' + goblin_name + ' wins!'
+            message = '<br>' + goblin_name + ' slays ' + dwarf_name + '!<br><h2>You lost the battle.</h2>'
             win_condition = True
             battle_log.append(message)
 
-    print(battle_log)
     return battle_log
 
 

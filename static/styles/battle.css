@@ -46,3 +46,35 @@ table {
 .stats-cell-total {
     background-color: #a80e0a
 }
+
+.italic {
+    font-style: italic;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.purple {
+    color: mediumpurple;
+}
+
+.blue {
+    color: deepskyblue;
+}
+
+.deep_blue {
+    color: #0c62ff;
+}
+
+.orange {
+    color: orange;
+}
+
+.red {
+    color: orangered;
+}
+
+.gray {
+    color: gray;
+}
