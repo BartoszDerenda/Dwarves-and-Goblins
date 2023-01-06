@@ -469,7 +469,7 @@ class Hero:
         self.will_mul = float(1.0)
         self.will_bonus = 0
         self.will_total = round(self.willpower * self.will_mul + self.will_bonus)
-        self.endurance = random.randint(100, 200)
+        self.endurance = random.randint(10, 20)
         self.end_mul = float(1.0)
         self.end_bonus = 0
         self.end_total = round(self.endurance * self.end_mul + self.end_bonus)
@@ -477,7 +477,7 @@ class Hero:
         self.char_mul = float(1.0)
         self.char_bonus = 0
         self.char_total = round(self.charisma * self.char_mul + self.char_bonus)
-        self.luck = random.randint(100, 200)
+        self.luck = random.randint(10, 20)
         self.lck_mul = float(1.0)
         self.lck_bonus = 0
         self.lck_total = round(self.luck * self.lck_mul + self.lck_bonus)
@@ -1390,9 +1390,9 @@ def battle(dwarf, goblin):
 
     dwarf_name = game.hero[dwarf].hero_name
 
-    dwarf_physical = game.hero[dwarf].str_total * 5
-    dwarf_magical = game.hero[dwarf].int_total * 7
-    dwarf_health = game.hero[dwarf].end_total * 10
+    dwarf_physical = game.hero[dwarf].str_total * 10
+    dwarf_magical = game.hero[dwarf].int_total * 10
+    dwarf_health = game.hero[dwarf].end_total * 100
     dwarf_speed = game.hero[dwarf].spd_total
     dwarf_speed_base = game.hero[dwarf].spd_total
     dwarf_charisma = game.hero[dwarf].char_total
@@ -1403,16 +1403,16 @@ def battle(dwarf, goblin):
     dwarf_tactic = game.hero[dwarf].tactic
     dwarf_specials = game.hero[dwarf].specials_list
 
-    dwarf_special_attack_charge = 0
+    dwarf_special_attack_charge = 1
     dwarf_special_attack_next = False
 
 
 
     goblin_name = game.enemy[goblin].hero_name
 
-    goblin_physical = game.enemy[goblin].str_total * 5
-    goblin_magical = game.enemy[goblin].int_total * 7
-    goblin_health = game.enemy[goblin].end_total * 10
+    goblin_physical = game.enemy[goblin].str_total * 10
+    goblin_magical = game.enemy[goblin].int_total * 10
+    goblin_health = game.enemy[goblin].end_total * 100
     goblin_speed = game.enemy[goblin].spd_total
     goblin_speed_base = game.enemy[goblin].spd_total
     goblin_charisma = game.enemy[goblin].char_total
@@ -1423,12 +1423,16 @@ def battle(dwarf, goblin):
     goblin_tactic = game.enemy[goblin].tactic
     goblin_specials = game.enemy[goblin].specials_list
 
-    goblin_special_attack_charge = 0
+    goblin_special_attack_charge = 1
     goblin_special_attack_next = False
 
 
-    dwarf_reduce_next_attack = dwarf_increase_next_attack = goblin_reduce_next_attack = goblin_increase_next_attack = critical_message = False
-    damage = goblin_reduce_message = goblin_increase_message = dwarf_increase_message = dwarf_reduce_message = dwarf_reduction = dwarf_increase = goblin_reduction = goblin_increase = 1
+    damage = reduction_message = increase_message = 1
+    critical_message = dwarf_reduction_message = dwarf_increase_message = goblin_reduction_message = goblin_increase_message = False
+    dwarf_reduction = []
+    goblin_reduction = []
+    dwarf_increase = []
+    goblin_increase = []
     attack_type = ''
 
     while not win_condition:
@@ -1443,7 +1447,7 @@ def battle(dwarf, goblin):
                 dwarf_special_attack_next = False
             else:
                 if dwarf_tactic == 'Frenzy':
-                    factor = random.randint(10,12)
+                    factor = random.randint(10, 12)
                     damage = dwarf_physical * round((factor / 10), 2)
                     attack_type = random.choice(
                         [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1454,7 +1458,7 @@ def battle(dwarf, goblin):
                         dwarf_special_attack_next = True
 
                 elif dwarf_tactic == 'Focus':
-                    factor = random.randint(8,15)
+                    factor = random.randint(8, 15)
                     damage = dwarf_magical * round((factor / 10), 2)
                     attack_type = random.choice(
                         [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1467,7 +1471,7 @@ def battle(dwarf, goblin):
                 elif dwarf_tactic == 'Balanced':
                     damage_type = random.choice([dwarf_physical, dwarf_magical])
                     if damage_type == dwarf_physical:
-                        factor = random.randint(10,12)
+                        factor = random.randint(10, 12)
                         damage = dwarf_physical * round((factor / 10), 2)
                         attack_type = random.choice(
                             [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1475,7 +1479,7 @@ def battle(dwarf, goblin):
                              ' <font class="gray">strikes</font>'])
                         dwarf_special_attack_charge += 1
                     else:
-                        factor = random.randint(8,15)
+                        factor = random.randint(8, 15)
                         damage = dwarf_magical * round((factor / 10), 2)
                         attack_type = random.choice(
                             [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1489,7 +1493,7 @@ def battle(dwarf, goblin):
                 elif dwarf_tactic == 'Overconfidence':
                     damage_type = random.choice([dwarf_physical, dwarf_magical])
                     if damage_type == dwarf_physical:
-                        factor = random.randint(10,12)
+                        factor = random.randint(10, 12)
                         damage = round(((dwarf_physical * round((factor / 10), 2)) * 0.85), 2)
                         attack_type = random.choice(
                             [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1497,7 +1501,7 @@ def battle(dwarf, goblin):
                              ' <font class="gray">strikes</font>'])
                         dwarf_special_attack_charge += 1
                     else:
-                        factor = random.randint(8,15)
+                        factor = random.randint(8, 15)
                         damage = round(((dwarf_magical * round((factor / 10), 2)) * 0.85), 2)
                         attack_type = random.choice(
                             [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1516,36 +1520,37 @@ def battle(dwarf, goblin):
             roll_charisma = random.randint(1,500)
             if dwarf_charisma >= roll_charisma:
                 if random.choice(['reduce', 'increase']) == 'reduce':
-                    roll_reduce = dwarf_reduce_message = random.randint(65,85)
-                    dwarf_reduction = round((roll_reduce / 100), 2)
-                    dwarf_reduce_next_attack = True
+                    roll_reduce = random.randint(65,85)
+                    reduction = roll_reduce / 100
+                    reduction_message = (roll_reduce - 100) * (-1)
+                    dwarf_reduction.append(reduction)
+                    dwarf_reduction_message = True
                 else:
-                    roll_increase = dwarf_increase_message = random.randint(15,35)
-                    dwarf_increase = 1 + round((roll_increase / 100), 2)
+                    dwarf_increase_message = True
+
+            while len(dwarf_increase) > 0:
+                damage *= dwarf_increase.pop()
+
+            while len(goblin_reduction) > 0:
+                damage *= goblin_reduction.pop()
 
             damage = round(damage)
-
-            if goblin_reduce_next_attack:
-                damage = damage * goblin_reduction
-                goblin_reduction = 1
-            if dwarf_increase_next_attack:
-                damage = damage * dwarf_increase
-                dwarf_increase = 1
-                dwarf_increase_next_attack = False
-
-            damage = round(damage)
-            dwarf_reduce_message = (dwarf_reduce_message - 100) * (-1)
-
             goblin_health -= damage
+
             turn = '<b>' + dwarf_name + '</b>' + attack_type + ' goblin for ' + str(damage) + ' damage!'
             if critical_message:
                 turn += ' <font class="yellow italic">Critical strike!</font>'
                 critical_message = False
-            if dwarf_reduce_next_attack:
-                turn += '<br><font class="italic">His terrifying roar intimidates the enemy, decreasing their next attack by ' + str(dwarf_reduce_message) + '%! </font>'
-            if dwarf_increase > 1.1:
-                turn += '<br><font class="italic">His rallying cry bolsters him, increasing his next attack by ' + str(dwarf_increase_message) + '%! </font>'
-                dwarf_increase_next_attack = True
+            if dwarf_increase_message:
+                roll_increase = random.randint(15, 35)
+                increase = 1 + (roll_increase / 100)
+                increase_message = roll_increase
+                dwarf_increase.append(increase)
+                turn += '<br><font class="italic">His rallying cry bolsters him, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
+                dwarf_increase_message = False
+            elif dwarf_reduction_message:
+                turn += '<br><font class="italic">His terrifying roar intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
+                dwarf_reduction_message = False
 
             goblin_speed += goblin_speed_base
 
@@ -1559,7 +1564,7 @@ def battle(dwarf, goblin):
                 goblin_special_attack_next = False
             else:
                 if goblin_tactic == 'Frenzy':
-                    factor = random.randint(10,12)
+                    factor = random.randint(10, 12)
                     damage = goblin_physical * round((factor / 10), 2)
                     attack_type = random.choice(
                         [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1570,7 +1575,7 @@ def battle(dwarf, goblin):
                         goblin_special_attack_next = True
 
                 elif goblin_tactic == 'Focus':
-                    factor = random.randint(8,15)
+                    factor = random.randint(8, 15)
                     damage = goblin_magical * round((factor / 10), 2)
                     attack_type = random.choice(
                         [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1583,7 +1588,7 @@ def battle(dwarf, goblin):
                 elif goblin_tactic == 'Balanced':
                     damage_type = random.choice([goblin_physical, goblin_magical])
                     if damage_type == goblin_physical:
-                        factor = random.randint(10,12)
+                        factor = random.randint(10, 12)
                         damage = goblin_physical * round((factor / 10), 2)
                         attack_type = random.choice(
                             [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1591,7 +1596,7 @@ def battle(dwarf, goblin):
                              ' <font class="gray">strikes</font>'])
                         goblin_special_attack_charge += 1
                     else:
-                        factor = random.randint(8,15)
+                        factor = random.randint(8, 15)
                         damage = goblin_magical * round((factor / 10), 2)
                         attack_type = random.choice(
                             [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1605,7 +1610,7 @@ def battle(dwarf, goblin):
                 elif goblin_tactic == 'Overconfidence':
                     damage_type = random.choice([goblin_physical, goblin_magical])
                     if damage_type == goblin_physical:
-                        factor = random.randint(10,12)
+                        factor = random.randint(10, 12)
                         damage = round(((goblin_physical * round((factor / 10), 2)) * 0.85), 0)
                         attack_type = random.choice(
                             [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
@@ -1613,7 +1618,7 @@ def battle(dwarf, goblin):
                              ' <font class="gray">strikes</font>'])
                         goblin_special_attack_charge += 1
                     else:
-                        factor = random.randint(8,15)
+                        factor = random.randint(8, 15)
                         damage = round(((goblin_magical * round((factor / 10), 2)) * 0.85), 0)
                         attack_type = random.choice(
                             [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
@@ -1632,34 +1637,37 @@ def battle(dwarf, goblin):
             roll_charisma = random.randint(1,500)
             if goblin_charisma >= roll_charisma:
                 if random.choice(['reduce', 'increase']) == 'reduce':
-                    roll_reduce = goblin_reduce_message = random.randint(65,85)
-                    goblin_reduction = round((roll_reduce / 100), 2)
-                    goblin_reduce_next_attack = True
+                    roll_reduce = random.randint(65,85)
+                    reduction = roll_reduce / 100
+                    reduction_message = (roll_reduce - 100) * (-1)
+                    goblin_reduction.append(reduction)
+                    goblin_reduction_message = True
                 else:
-                    roll_increase = goblin_increase_message = random.randint(15,35)
-                    goblin_increase = round(1 + (roll_increase / 100), 2)
+                    goblin_increase_message = True
 
-            if dwarf_reduce_next_attack:
-                damage = damage * dwarf_reduction
-                dwarf_reduction = 1
-            if goblin_increase_next_attack:
-                damage = damage * goblin_increase
-                goblin_increase = 1
-                goblin_increase_next_attack = False
+            while len(goblin_increase) > 0:
+                damage *= goblin_increase.pop()
+
+            while len(dwarf_reduction) > 0:
+                damage *= dwarf_reduction.pop()
 
             damage = round(damage)
-            goblin_reduce_message = (goblin_reduce_message - 100) * (-1)
-
             dwarf_health -= damage
+
             turn = '<b>' + goblin_name + '</b>' + attack_type + ' dwarf for ' + str(damage) + ' damage!'
             if critical_message:
                 turn += ' <font class="yellow italic">Critical strike!</font>'
                 critical_message = False
-            if goblin_reduce_next_attack:
-                turn += '<br><font class="italic">His horrifying screech intimidates the enemy, decreasing their next attack by ' + str(goblin_reduce_message) + '%! </font>'
-            if goblin_increase > 1.1:
-                turn += '<br><font class="italic">His inspiring cry invigorates him, increasing his next attack by ' + str(goblin_increase_message) + '%! </font>'
-                goblin_increase_next_attack = True
+            if goblin_increase_message:
+                roll_increase = random.randint(15, 35)
+                increase = 1 + (roll_increase / 100)
+                increase_message = roll_increase
+                goblin_increase.append(increase)
+                turn += '<br><font class="italic">His inspiring cry invigorates him, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
+                goblin_increase_message = False
+            elif goblin_reduction_message:
+                turn += '<br><font class="italic">His horrifying screech intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
+                goblin_reduction_message = False
 
             dwarf_speed += dwarf_speed_base
 
