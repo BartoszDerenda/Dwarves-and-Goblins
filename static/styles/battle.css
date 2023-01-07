@@ -51,12 +51,22 @@ table {
     font-style: italic;
 }
 
+.enemy-turn {
+    background-color: rgba(250, 15, 15, 0.3);
+    padding: 10px;
+}
+
+.hero-turn {
+    background-color: rgba(50, 210, 7, 0.3);
+    padding: 10px;
+}
+
 .yellow {
     color: yellow;
 }
 
 .purple {
-    color: mediumpurple;
+    color: #ac59ff;
 }
 
 .blue {
@@ -64,7 +74,7 @@ table {
 }
 
 .deep_blue {
-    color: #0c62ff;
+    color: #3374d9;
 }
 
 .orange {
@@ -76,5 +86,5 @@ table {
 }
 
 .gray {
-    color: gray;
+    color: #a6a6a6;
 }
