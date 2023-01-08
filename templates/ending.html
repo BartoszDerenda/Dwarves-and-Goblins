@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/styles/homepage.css" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="center">
+        <div id="main-box-narrow">
+            {% if ending_type == 'good ending' %}
+                <h2>Good ending</h2>
+                <br>
+                <p>You banish the goblins.</p>
+            {% elif ending_type == 'normal ending plus' %}
+                <h2>Normal ending</h2>
+                <br>
+                <p>Goblins grow bitter and attack you. The war continues for another millennium...</p>
+            {% elif ending_type == 'normal ending minus' %}
+                <h2>Normal ending</h2>
+                <br>
+                <p>Dwarves grow bitter and attack the goblins. The war continues for another millennium...</p>
+            {% else %}
+                <h2>Bad ending</h2>
+                <br>
+                <p>All hope is lost. Your clan goes on an exodus, looking for new home and history.</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

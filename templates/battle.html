@@ -46,11 +46,64 @@
                     <td class="stats-cell-total">{{ game.hero[dwarf].spd_total }}</td>
                 </tr>
             </table>
+            <br>
+            <table>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Critical chance:
+                    </td>
+                    <td class="stats-cell-total">
+                        {{ (game.hero[dwarf].lck_total / 5)|round|int }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Charisma effect:
+                    </td>
+                    <td class="stats-cell-total">
+                        {{ (game.hero[dwarf].char_total / 5)|round|int }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Dodge chance:
+                    </td>
+                    <td class="stats-cell-total">
+                        {% if ((game.hero[dwarf].agi_total / (game.enemy[goblin].str_total * 3)) * 100)|round|int >= 33 %}
+                            33%
+                        {% else %}
+                            {{ ((game.hero[dwarf].agi_total / (game.enemy[goblin].str_total * 3)) * 100)|round|int }}%
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Magic absorption:
+                    </td>
+                    <td class="stats-cell-total">
+                        {% if ((game.hero[dwarf].will_total / (game.enemy[goblin].int_total * 2)) * 100)|round|int >= 50 %}
+                            50%
+                        {% else %}
+                            {{ ((game.hero[dwarf].will_total / (game.enemy[goblin].int_total * 2)) * 100)|round|int }}%
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="battle-log">
+            <h2>Battleground</h2>
             {% for line in battlelog %}
                 <p>{{ line|safe }}</p>
             {% endfor %}
+            {% if game.hero[dwarf].win == True %}
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back" class="return-back" value="Victory!">
+                </form>
+            {% else %}
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back" class="return-back" value="Retreat">
+                </form>
+            {% endif %}
         </div>
         <div id="goblin">
             <img src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
@@ -89,6 +142,49 @@
                 <tr>
                     <td class="stats-cell">Speed</td>
                     <td class="stats-cell-total">{{ game.enemy[goblin].spd_total }}</td>
+                </tr>
+            </table>
+            <br>
+            <table>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Critical chance:
+                    </td>
+                    <td class="stats-cell-total">
+                        {{ (game.enemy[goblin].lck_total / 5)|round|int }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Charisma effect:
+                    </td>
+                    <td class="stats-cell-total">
+                        {{ (game.enemy[goblin].char_total / 5)|round|int }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Dodge chance:
+                    </td>
+                    <td class="stats-cell-total">
+                        {% if ((game.enemy[goblin].agi_total / (game.hero[dwarf].str_total * 3)) * 100)|round|int >= 33 %}
+                            33%
+                        {% else %}
+                            {{ ((game.enemy[goblin].agi_total / (game.hero[dwarf].str_total * 3)) * 100)|round|int }}%
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stats-cell text-align-left">
+                        Magic absorption:
+                    </td>
+                    <td class="stats-cell-total">
+                        {% if ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|round|int >= 50 %}
+                            50%
+                        {% else %}
+                            {{ ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|round|int }}%
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
         </div>
