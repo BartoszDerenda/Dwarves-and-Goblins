@@ -51,7 +51,6 @@ def game():
                               "Rusty Helmet": item_7, "Rusty Pauldrons": item_8, "Rusty Chainmail": item_9, "Rusty Tasset": item_10, "Rusty Gauntlets": item_11, "Rusty Greaves": item_12,
                               "Tattered Hood": item_13, "Tattered Epaulettes": item_14, "Tattered Robe": item_15, "Tattered Pants": item_16, "Tattered Gloves": item_17, "Tattered Shoes": item_18,
                               "Leather Whip": item_19, "Bronze Broadsword": item_20, "Oak Staff": item_21,
-                              "A Lucky Pebble": item_22,
 
                               "Hardleather Helmet": item_101, "Hardleather Shoulderpads": item_102, "Hardleather Chest": item_103, "Hardleather Pants": item_104, "Hardleather Gloves": item_105, "Hardleather Boots": item_106,
                               "Iron Helmet": item_107, "Iron Pauldrons": item_108, "Iron Cuirass": item_109, "Iron Legguards": item_110, "Iron Handguards": item_111, "Iron Greaves": item_112,
@@ -66,7 +65,7 @@ def game():
 
                               "Crown of Will": item_301, "Heart of the Mountain": item_302,
 
-                              "???": item_404, "Memento": item_999}
+                              "???": item_404, "Memento": item_999, "Lucky Pebble": item_777}
             game.backpack = []
 
 
@@ -157,7 +156,7 @@ def game():
             elif 91 <= odds == 100:
                 spoils = random.choices(item_list_epic, k = 2) + random.choices(item_list_rare, k = 2)
             else:
-                spoils = random.choices(item_list_common, k = 3) + random.choices(item_list_rare, k = 1)
+                spoils = random.choices(item_list_common, k = 2) + random.choices(item_list_rare, k = 1) + [item_777]
 
             game.days -= temp_days
 
@@ -348,7 +347,7 @@ def train(dwarf):
     charisma = int(request.form.get("char_increase"))
     luck = int(request.form.get("lck_increase"))
     speed = int(request.form.get("spd_increase"))
-    temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 2 + charisma + luck + speed * 2
+    temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 2 + charisma + luck + speed * 3
 
     if game.days - temp_days <= 0:
         return render_template('game.html', game=game)
@@ -496,7 +495,7 @@ class Hero:
         self.will_mul = float(1.0)
         self.will_bonus = 0
         self.will_total = round(self.willpower * self.will_mul + self.will_bonus)
-        self.endurance = random.randint(250,300)
+        self.endurance = 1000
         self.end_mul = float(1.0)
         self.end_bonus = 0
         self.end_total = round(self.endurance * self.end_mul + self.end_bonus)
@@ -512,6 +511,7 @@ class Hero:
         self.spd_mul = float(1.0)
         self.spd_bonus = 0
         self.spd_total = round(self.speed * self.spd_mul + self.spd_bonus)
+        self.armor = 0
         self.equipment = {'weapon': None,
                           'headpiece': None,
                           'shoulders': None,
@@ -545,7 +545,7 @@ class Hero:
 # Item class - for designing and creating items
 class Item:
 
-    def __init__(self, item_name, item_slot, rarity, description, str_mul, str_bonus, int_mul, int_bonus, agi_mul, agi_bonus, will_mul, will_bonus, end_mul, end_bonus, char_mul, char_bonus, lck_mul, luck_bonus, spd_mul, spd_bonus, special):
+    def __init__(self, item_name, item_slot, rarity, description, str_mul, str_bonus, int_mul, int_bonus, agi_mul, agi_bonus, will_mul, will_bonus, end_mul, end_bonus, char_mul, char_bonus, lck_mul, luck_bonus, spd_mul, spd_bonus, armor, special):
 
         self.item_name = item_name
         self.item_slot = item_slot
@@ -568,6 +568,7 @@ class Item:
         self.lck_bonus = luck_bonus
         self.spd_mul = spd_mul
         self.spd_bonus = spd_bonus
+        self.armor = armor
 
         self.special = special
 
@@ -585,6 +586,7 @@ item_1 = Item('Leather Cap', 'headpiece', 'common', 'A trusty, sturdy leather ca
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 item_2 = Item('Leather Shoulderpads', 'shoulders', 'common', "Will not save him from losing an arm but will certainly soften up the blow.",
@@ -596,6 +598,7 @@ item_2 = Item('Leather Shoulderpads', 'shoulders', 'common', "Will not save him 
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 item_3 = Item('Leather Jacket', 'chest', 'common', "Dope :D",
@@ -607,6 +610,7 @@ item_3 = Item('Leather Jacket', 'chest', 'common', "Dope :D",
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 item_4 = Item('Leather Pants', 'pants', 'common', "It took a lot of convincing for him to wear it...",
@@ -618,6 +622,7 @@ item_4 = Item('Leather Pants', 'pants', 'common', "It took a lot of convincing f
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 item_5 = Item('Leather Gloves', 'gloves', 'common', "Sturdy leather gloves - every dwarves' best friend.",
@@ -629,6 +634,7 @@ item_5 = Item('Leather Gloves', 'gloves', 'common', "Sturdy leather gloves - eve
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 item_6 = Item('Leather Boots', 'boots', 'common', "Solid, steel capped boots may win or lose you a battle.",
@@ -640,12 +646,13 @@ item_6 = Item('Leather Boots', 'boots', 'common', "Solid, steel capped boots may
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 0,   # Speed
+              8,        # Armor
               None)     # Enchantment
 
 
             # Common - Heavy armor set
 
-item_7 = Item('Rusty Helmet', 'headpiece', 'common', 'Grandma always asked you to wear one while going into the mines.',
+item_7 = Item('Rusty Helmet', 'headpiece', 'common', 'Grandma always asked you to wear one when going into the mines.',
               0.1, 2,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
@@ -654,7 +661,8 @@ item_7 = Item('Rusty Helmet', 'headpiece', 'common', 'Grandma always asked you t
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
-              None)     # Enchantment
+              12,       # Armor
+              "Earthbound")     # Enchantment
 
 item_8 = Item('Rusty Pauldrons', 'shoulders', 'common', 'These would look much more intimidating if not for the state they are in.',
               0.1, 2,   # Strength
@@ -665,7 +673,8 @@ item_8 = Item('Rusty Pauldrons', 'shoulders', 'common', 'These would look much m
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
-              None)     # Enchantment
+              12,       # Armor
+              "Soulrend")     # Enchantment
 
 item_9 = Item('Rusty Chainmail', 'chest', 'common', "Taking a spear to the chest will still hurt like hell but at least he won't bleed out.",
               0.1, 2,   # Strength
@@ -676,6 +685,7 @@ item_9 = Item('Rusty Chainmail', 'chest', 'common', "Taking a spear to the chest
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
+              12,        # Armor
               None)     # Enchantment
 
 item_10 = Item('Rusty Tasset', 'pants', 'common', "Noisy...",
@@ -687,6 +697,7 @@ item_10 = Item('Rusty Tasset', 'pants', 'common', "Noisy...",
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
+              12,        # Armor
               None)     # Enchantment
 
 item_11 = Item('Rusty Gauntlets', 'gloves', 'common', "For all those dirty disarming tricks that goblins are known for.",
@@ -698,6 +709,7 @@ item_11 = Item('Rusty Gauntlets', 'gloves', 'common', "For all those dirty disar
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
+              12,        # Armor
               None)     # Enchantment
 
 item_12 = Item('Rusty Greaves', 'boots', 'common', "What's better than steel capped boots? Full-steel boots! Too bad these have rusty holes in them...",
@@ -709,6 +721,7 @@ item_12 = Item('Rusty Greaves', 'boots', 'common', "What's better than steel cap
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 0,   # Speed
+              12,        # Armor
               None)     # Enchantment
 
 
@@ -723,6 +736,7 @@ item_13 = Item('Tattered Hood', 'headpiece', 'common', "It reduces the vision a 
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 item_14 = Item('Tattered Epaulettes', 'shoulders', 'common', "Makes you look noble - too bad they don't offer much protection.",
@@ -734,6 +748,7 @@ item_14 = Item('Tattered Epaulettes', 'shoulders', 'common', "Makes you look nob
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 item_15 = Item('Tattered Robe', 'chest', 'common', "These must've looked magnificent before moths took a nest in them.",
@@ -745,6 +760,7 @@ item_15 = Item('Tattered Robe', 'chest', 'common', "These must've looked magnifi
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 item_16 = Item('Tattered Pants', 'pants', 'common', "Offer unprecedented freedom of movement.",
@@ -756,6 +772,7 @@ item_16 = Item('Tattered Pants', 'pants', 'common', "Offer unprecedented freedom
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 item_17 = Item('Tattered Gloves', 'gloves', 'common', "They give off a weird feeling of comfort.",
@@ -767,6 +784,7 @@ item_17 = Item('Tattered Gloves', 'gloves', 'common', "They give off a weird fee
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 item_18 = Item('Tattered Shoes', 'boots', 'common', "Pretty airy.",
@@ -778,13 +796,14 @@ item_18 = Item('Tattered Shoes', 'boots', 'common', "Pretty airy.",
               0.0, 2,   # Charisma
               0.0, 2,   # Luck
               0.0, 0,   # Speed
+              4,        # Armor
               None)     # Enchantment
 
 
             # Common - Weapons
 
 item_19 = Item('Leather Whip', 'weapon', 'common', "Takes a bit of practice to use properly.",
-              0.0, 0,   # Strength
+              0.0, 15,   # Strength
               0.0, 0,   # Intelligence
               0.1, 4,   # Agility
               0.0, 0,   # Willpower
@@ -792,10 +811,11 @@ item_19 = Item('Leather Whip', 'weapon', 'common', "Takes a bit of practice to u
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.1, 4,   # Speed
+              0,        # Armor
               None)     # Enchantment
 
 item_20 = Item('Bronze Broadsword', 'weapon', 'common', "Every dwarf and their hogs know how to use one.",
-              0.1, 4,   # Strength
+              0.1, 20,   # Strength
               0.0, 0,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
@@ -803,31 +823,34 @@ item_20 = Item('Bronze Broadsword', 'weapon', 'common', "Every dwarf and their h
               0.0, 0,   # Charisma
               0.1, 4,   # Luck
               0.0, 0,   # Speed
+              0,        # Armor
               None)     # Enchantment
 
 item_21 = Item('Oak Staff', 'weapon', 'common', "Provides just as much support for spellcasting as for melee combat.",
               0.0, 0,   # Strength
-              0.1, 4,   # Intelligence
+              0.1, 20,   # Intelligence
               0.0, 0,   # Agility
               0.0, 0,   # Willpower
               0.0, 0,   # Endurance
               0.1, 4,   # Charisma
               0.1, 4,   # Luck
               0.0, 0,   # Speed
+              0,        # Armor
               None)     # Enchantment
 
             # Common - Artifacts
 
-item_22 = Item('A Lucky Pebble', 'artifact', 'common', "His name is Steeve :D",
+item_777 = Item('Lucky Pebble', 'artifact', 'common', "What is this thing..?",
                0.0, 0,  # Strength
                0.0, 0,  # Intelligence
                0.0, 0,  # Agility
                0.0, 0,  # Willpower
                0.0, 0,  # Endurance
                0.0, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.2, 4,  # Speed
-               None)    # Enchantment
+               0.1, 4,  # Luck
+               0.0, 0,  # Speed
+               2,       # Armor
+               "Lucky")    # Enchantment
 
 
 # RARE ITEMS
@@ -837,67 +860,73 @@ item_22 = Item('A Lucky Pebble', 'artifact', 'common', "His name is Steeve :D",
 item_101 = Item('Hardleather Helmet', 'headpiece', 'rare', "Reinforced version of leather helmet, now with 30% extra sturdiness!",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 item_102 = Item('Hardleather Shoulderpads', 'shoulders', 'rare', "These may actually save him from losing an arm.",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 item_103 = Item('Hardleather Chest', 'chest', 'rare', "Light as leather, hard as bronze!",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 item_104 = Item('Hardleather Pants', 'pants', 'rare', "They limit his movement a bit but the protection they offer are well worth the trade.",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 item_105 = Item('Hardleather Gloves', 'gloves', 'rare', "Manly.",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 item_106 = Item('Hardleather Boots', 'boots', 'rare', "For that extra amount of protection.",
               0.0, 4,   # Strength
               0.0, 0,   # Intelligence
-              0.15, 0,   # Agility
+              0.15, 0,  # Agility
               0.0, 0,   # Willpower
-              0.15, 0,   # Endurance
+              0.15, 0,  # Endurance
               0.0, 0,   # Charisma
               0.0, 0,   # Luck
               0.0, 4,   # Speed
+              3,        # Armor
               None)     # Enchantment
 
 
@@ -905,188 +934,204 @@ item_106 = Item('Hardleather Boots', 'boots', 'rare', "For that extra amount of 
 
 item_107 = Item('Iron Helmet', 'headpiece', 'rare', "This is getting kinda heavy...",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 item_108 = Item('Iron Pauldrons', 'shoulders', 'rare', "Maybe if you polished them, they could blind the enemy.",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 item_109 = Item('Iron Cuirass', 'chest', 'rare', "Wouldn't recommend donning this one on a sunny day.",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 item_110 = Item('Iron Legguards', 'pants', 'rare', "Try kicking this you goblin bastards!",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 item_111 = Item('Iron Handguards', 'gloves', 'rare', "Why would you even need a weapon with a pair of these?",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 item_112 = Item('Iron Greaves', 'boots', 'rare', "We are going full-metal, aw yeah!",
                0.15, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
                0.15, 0,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 4,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 4,   # Charisma
+               0.0, 4,   # Luck
+               0.0, 0,   # Speed
+               6,        # Armor
+               None)     # Enchantment
 
 
             # Rare - Light armor set
 
 item_113 = Item('Silk Headwrap', 'headpiece', 'rare', "Softness of silk helps you concentrate on your manly thoughts.",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 item_114 = Item('Silk Shoulderpads', 'shoulders', 'rare', "These are just for show.",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 item_115 = Item('Silk Vesture', 'chestpiece', 'rare', "Might be mistaken for a bathrobe...",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 item_116 = Item('Silk Kilt', 'pants', 'rare', "No matter what others may say, it's a kilt alright, it's a kilt...",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 item_117 = Item('Silk Gloves', 'gloves', 'rare', "Silk's static inducing attributes have been thaumaturgically confirmed to enhance one's spellweaving abilities.",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 item_118 = Item('Silk Slippers', 'boots', 'rare', "...",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 0,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.4, 0,  # Charisma
-               0.4, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Endurance
+               0.4, 0,   # Charisma
+               0.4, 0,   # Luck
+               0.0, 0,   # Speed
+               2,        # Armor
+               None)     # Enchantment
 
 
             # Rare - Weapons
 
 item_119 = Item('Flintlock Pistol', 'weapon', 'rare', "Once you are out of ammo and gunpowder, it's sturdy handle fits right between goblin's eyes.",
-               0.0, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
+               0.0, 0,   # Strength
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
+               0.0, 0,   # Endurance
                0.15, 4,  # Charisma
                0.15, 4,  # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               0,        # Armor
+               "Hawkeye")     # Enchantment
 
 item_120 = Item('Iron Mace', 'weapon', 'rare', "They say it has been blessed by a hidden deity - for some reason holding it puts any dwarf in a mood for some goblin skull bashing.",
                0.15, 4,  # Strength
-               0.0, 0,  # Intelligence
+               0.0, 0,   # Intelligence
                0.15, 4,  # Agility
-               0.0, 0,  # Willpower
+               0.0, 0,   # Willpower
                0.15, 4,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
+               0.0, 0,   # Speed
+               0,        # Armor
+               "Stun chance")     # Enchantment
 
 item_121 = Item('Amethyst Focus', 'weapon', 'rare', "Every respecting spellcaster has an expensive focus through which they channel their spells.",
-               0.0, 0,  # Strength
+               0.0, 0,   # Strength
                0.15, 4,  # Intelligence
-               0.0, 0,  # Agility
+               0.0, 0,   # Agility
                0.15, 4,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Endurance
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               0,        # Armor
+               None)     # Enchantment
 
 
             # Rare - Artifacts
 
 item_122 = Item('Shiny Coin', 'artifact', 'rare', "Shiny coin. It's nice to the touch.",
-               0.0, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
+               0.0, 0,   # Strength
+               0.0, 0,   # Intelligence
+               0.0, 0,   # Agility
+               0.0, 0,   # Willpower
+               0.0, 0,   # Endurance
+               0.0, 0,   # Charisma
                0.15, 4,  # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               0,        # Armor
+               None)     # Enchantment
 
 
 # EPIC ITEMS
@@ -1094,300 +1139,325 @@ item_122 = Item('Shiny Coin', 'artifact', 'rare', "Shiny coin. It's nice to the 
             # Epic - Medium armor set
 
 item_201 = Item('Dragonscale Helmet', 'headpiece', 'epic', "Gives a quite mean look.",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 item_202 = Item('Dragonscale Shoulderguards', 'shoulders', 'epic', "Hard as metal, light as leather.",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 item_203 = Item('Dragonscale Chainmail', 'chest', 'epic', "Fireproof but not waterproof!",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 item_204 = Item('Dragonscale Reinforced Kilt', 'pants', 'epic', "A much cooler cousin of Silk Kilt.",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 item_205 = Item('Dragonscale Gauntlets', 'gloves', 'epic', "They've got spikes in case you get disarmed.",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 item_206 = Item('Dragonscale Wyrm-riders', 'boots', 'epic', "You could pack a really mean kick with those...",
-               0.2, 6,  # Strength
-               0.0, 0,  # Intelligence
-               0.2, 6,  # Agility
-               0.0, 0,  # Willpower
+               0.2, 6,   # Strength
+               0.0, 0,   # Intelligence
+               0.2, 6,   # Agility
+               0.0, 0,   # Willpower
                0.15, 2,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
+               0.0, 0,   # Charisma
+               0.0, 0,   # Luck
                0.15, 4,  # Speed
-               None)  # Enchantment
+               5,        # Armor
+               None)     # Enchantment
 
 
             # Epic - Heavy armor
 
 item_207 = Item('Mithril Headguard', 'headpiece', 'epic', "One of many symbols of dwarf race.",
-               0.2, 6,  # Strength
-               -0.1, -2,  # Intelligence
-               0.0, 0,  # Agility
-               0.15, 0,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 item_208 = Item('Mithril Pauldrons', 'shoulders', 'epic', "Looking good chief!",
-               0.2, 6,  # Strength
-               -0.15, -4,  # Intelligence
-               0.0, 0,  # Agility
-               0.25, 4,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 item_209 = Item('Mithril Chestplate', 'chest', 'epic', "Could deflect a fireball or two.",
-               0.2, 6,  # Strength
-               -0.15, -4,  # Intelligence
-               0.0, 0,  # Agility
-               0.25, 4,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 item_210 = Item('Mithril Legguards', 'pants', 'epic', "To guard your jewels from grabby mage's hands.",
-               0.2, 6,  # Strength
-               -0.15, -4,  # Intelligence
-               0.0, 0,  # Agility
-               0.25, 4,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 item_211 = Item('Mithril Gauntlets', 'gloves', 'epic', "Law enforcment uses these to arrest skilled magi.",
-               0.2, 6,  # Strength
-               -0.15, -4,  # Intelligence
-               0.0, 0,  # Agility
-               0.25, 4,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 item_212 = Item('Mithril Greaves', 'boots', 'epic', "Grounds any and all magical discharges.",
-               0.2, 6,  # Strength
-               -0.15, -4,  # Intelligence
-               0.0, 0,  # Agility
-               0.25, 4,  # Willpower
-               0.2, 6,  # Endurance
-               0.0, 4,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.2, 6,      # Strength
+               -0.15, -4,   # Intelligence
+               0.0, 0,      # Agility
+               0.25, 4,     # Willpower
+               0.2, 6,      # Endurance
+               0.0, 4,      # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               8,           # Armor
+               None)        # Enchantment
 
 
             # Epic - Light armor
 
 item_213 = Item('Ceremonial Tiara', 'headpiece', 'epic', "You look like a real princess :D",
-               0.0, 0,  # Strength
-               0.35, 10,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 item_214 = Item('Ceremonial Epaluettes', 'shoulders', 'epic', "They make you look bigger and more magnificent.",
-               0.0, 0,  # Strength
-               0.35, 10,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 item_215 = Item('Ceremonial Robe', 'chest', 'epic', "You feel like you could coronate a king in those.",
-               0.0, 0,  # Strength
-               0.35, 8,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 item_216 = Item('Ceremonial Trousers', 'pants', 'epic', "These might look silly but they are so comfortable...",
-               0.0, 0,  # Strength
-               0.35, 8,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 item_217 = Item('Ceremonial Gloves', 'gloves', 'epic', "They crackle with arcane energies...",
-               0.0, 0,  # Strength
-               0.35, 8,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 item_218 = Item('Ceremonial Shoes', 'gloves', 'epic', "The silver-lining helps you gather mana from the ground.",
-               0.0, 0,  # Strength
-               0.35, 8,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.25, 6,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               None)  # Enchantment
+               0.0, 0,      # Strength
+               0.35, 10,    # Intelligence
+               0.0, 0,      # Agility
+               0.0, 0,      # Willpower
+               0.0, 0,      # Endurance
+               0.25, 6,     # Charisma
+               0.0, 0,      # Luck
+               0.0, 0,      # Speed
+               3,           # Armor
+               None)        # Enchantment
 
 
             # Epic - weapons
 
 item_219 = Item('Mageslayer Dagger', 'weapon', 'epic', "A skilled fighter can deflect magic missiles with this blade. It was enchanted to home in into the mage's throats.",
-               0.0, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.15, 8,  # Agility
-               0.45, 18,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
-               0.15, 8,  # Luck
-               0.25, 10,  # Speed
-               "Mageslayer")  # Enchantment
+               0.0, 0,          # Strength
+               0.0, 0,          # Intelligence
+               0.15, 8,         # Agility
+               0.45, 18,        # Willpower
+               0.0, 0,          # Endurance
+               0.0, 0,          # Charisma
+               0.15, 8,         # Luck
+               0.25, 10,        # Speed
+               0,               # Armor
+               "Mageslayer")    # Enchantment
 
 item_220 = Item('Firebrand Sword', 'weapon', 'epic', "A mageblade - forged out of meteorite, reinforced with dark iron. It can withstand a spell and a blade alike.",
-               0.35, 12,  # Strength
-               0.35, 12,  # Intelligence
-               0.15, 8,  # Agility
-               0.15, 8,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               "Firebrand")  # Enchantment
+               0.35, 12,        # Strength
+               0.35, 12,        # Intelligence
+               0.15, 8,         # Agility
+               0.15, 8,         # Willpower
+               0.0, 0,          # Endurance
+               0.0, 0,          # Charisma
+               0.0, 0,          # Luck
+               0.0, 0,          # Speed
+               0,               # Armor
+               "Firebrand")     # Enchantment
 
 item_221 = Item('Dragonwood Wand', 'weapon', 'epic', "Known by it's arcane conductivity, this wand let's you cast a barrage of spells in a blink of an eye!",
-               0.0, 0,  # Strength
-               0.45, 18,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.35, 12,  # Speed
-               "Energize")  # Enchantment
+               0.0, 0,          # Strength
+               0.45, 18,        # Intelligence
+               0.0, 0,          # Agility
+               0.0, 0,          # Willpower
+               0.0, 0,          # Endurance
+               0.0, 0,          # Charisma
+               0.0, 0,          # Luck
+               0.35, 12,        # Speed
+               0,               # Armor
+               "Energize")      # Enchantment
 
 # LEGENDARY ITEMS
 
 item_301 = Item('Crown of Will', 'headpiece', 'legendary', "",
-               0.0, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               3, 0,  # Willpower
-               0.0, 0,  # Endurance
-               5, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               "Dominion")  # Enchantment
+               0.0, 0,          # Strength
+               0.0, 0,          # Intelligence
+               0.0, 0,          # Agility
+               3, 0,            # Willpower
+               0.0, 0,          # Endurance
+               5, 0,            # Charisma
+               0.0, 0,          # Luck
+               0.0, 0,          # Speed
+               4,               # Armor
+               "Dominion")      # Enchantment
 
 item_302 = Item('Heart of the Mountain', 'artifact', 'legendary', "Legends say this type of crystal lies at the very bottom of every mountain. Some dwarf clans call it blasphemous to dig in search of them. Nevertheless, it's aura invigorates you to the very core.",
-               0.5, 20,  # Strength
-               0.5, 20,  # Intelligence
-               0.5, 20,  # Agility
-               0.5, 20,  # Willpower
-               0.5, 20,  # Endurance
-               0.5, 20,  # Charisma
-               0.5, 20,  # Luck
-               0.5, 20,  # Speed
-               "Avatar of the Mountain")  # Enchantment
+               0.5, 20,     # Strength
+               0.5, 20,     # Intelligence
+               0.5, 20,     # Agility
+               0.5, 20,     # Willpower
+               0.5, 20,     # Endurance
+               0.5, 20,     # Charisma
+               0.5, 20,     # Luck
+               0.5, 20,     # Speed
+               20,          # Armor
+               "Avatar")    # Enchantment
 
 
 
             # Special items
 
 item_404 = Item('???', 'artifact', 'cursed', "You feel like something bad would happen if you were to bring it into battle...",
-               -0.5, -20,  # Strength
-               -0.5, -20,  # Intelligence
-               -0.5, -20,  # Agility
-               -0.5, -20,  # Willpower
-               -0.5, -20,  # Endurance
-               -0.5, -20,  # Charisma
-               -0.5, -20,  # Luck
-               -0.5, -20,  # Speed
-               "Cursed")  # Enchantment
+               -0.5, -20,   # Strength
+               -0.5, -20,   # Intelligence
+               -0.5, -20,   # Agility
+               -0.5, -20,   # Willpower
+               -0.5, -20,   # Endurance
+               -0.5, -20,   # Charisma
+               -0.5, -20,   # Luck
+               -0.5, -20,   # Speed
+               -20,         # Armor
+               "Cursed")    # Enchantment
 
 item_999 = Item('Memento', 'artifact', 'common', "Picture of unknown family, found among stranger's possessions. For some reason, it fills you with unspeakable rage and sense of vengeance.",
-               0.0, 0,  # Strength
-               0.0, 0,  # Intelligence
-               0.0, 0,  # Agility
-               0.0, 0,  # Willpower
-               0.0, 0,  # Endurance
-               0.0, 0,  # Charisma
-               0.0, 0,  # Luck
-               0.0, 0,  # Speed
-               "Goblinbane")  # Enchantment
+               0.0, 0,          # Strength
+               0.0, 0,          # Intelligence
+               0.0, 0,          # Agility
+               0.0, 0,          # Willpower
+               0.0, 0,          # Endurance
+               0.0, 0,          # Charisma
+               0.0, 0,          # Luck
+               0.0, 0,          # Speed
+               -4,              # Armor
+               "Goblinbane")    # Enchantment
 
-item_list_common = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10, item_11, item_12, item_13, item_14, item_15, item_16, item_17, item_18, item_19, item_20, item_21, item_22]
+item_list_common = [item_1, item_2, item_3, item_4, item_5, item_6, item_7, item_8, item_9, item_10, item_11, item_12, item_13, item_14, item_15, item_16, item_17, item_18, item_19, item_20, item_21]
 item_list_rare = [item_101, item_102, item_103, item_104, item_105, item_106, item_107, item_108, item_109, item_110, item_111, item_112, item_113, item_114, item_115, item_116, item_117, item_118, item_119, item_120, item_121, item_122]
 item_list_epic = [item_201, item_202, item_203, item_204, item_205, item_206, item_207, item_208, item_209, item_210, item_211, item_212, item_213, item_214, item_215, item_216, item_217, item_218, item_219, item_220, item_221]
 item_list_legendary = [item_301, item_302]
-item_list_special = [item_404, item_999]
+item_list_special = [item_404, item_999, item_777]
 
 class Game:
 
@@ -1422,7 +1492,7 @@ def battle(dwarf, goblin):
 
     dwarf_physical = game.hero[dwarf].str_total * 3
     dwarf_magical = game.hero[dwarf].int_total * 4
-    dwarf_health = game.hero[dwarf].end_total * 5
+
     dwarf_speed = game.hero[dwarf].spd_total
     dwarf_speed_base = game.hero[dwarf].spd_total
     dwarf_charisma = game.hero[dwarf].char_total
@@ -1431,6 +1501,10 @@ def battle(dwarf, goblin):
     dwarf_agility = game.hero[dwarf].agi_total
     dwarf_strength = game.hero[dwarf].str_total
     dwarf_intelligence = game.hero[dwarf].int_total
+
+    dwarf_armor = game.hero[dwarf].armor
+    dwarf_health = game.hero[dwarf].end_total * 5
+    dwarf_max_health = game.hero[dwarf].end_total * 5
 
     dwarf_tactic = game.hero[dwarf].tactic
     dwarf_specials = game.hero[dwarf].specials_list
@@ -1444,7 +1518,7 @@ def battle(dwarf, goblin):
 
     goblin_physical = game.enemy[goblin].str_total * 3
     goblin_magical = game.enemy[goblin].int_total * 4
-    goblin_health = game.enemy[goblin].end_total * 5
+
     goblin_speed = game.enemy[goblin].spd_total
     goblin_speed_base = game.enemy[goblin].spd_total
     goblin_charisma = game.enemy[goblin].char_total
@@ -1453,6 +1527,10 @@ def battle(dwarf, goblin):
     goblin_agility = game.enemy[goblin].agi_total
     goblin_strength = game.enemy[goblin].str_total
     goblin_intelligence = game.enemy[goblin].int_total
+
+    goblin_armor = game.enemy[goblin].armor
+    goblin_health = game.enemy[goblin].end_total * 5
+    goblin_max_health = game.enemy[goblin].end_total * 5
 
     goblin_tactic = game.enemy[goblin].tactic
     goblin_specials = game.enemy[goblin].specials_list
@@ -1470,7 +1548,92 @@ def battle(dwarf, goblin):
     goblin_increase = []
     attack_message = ''
     absorb_message = ''
-    attack_type = ''
+    attack_type = []
+
+    dwarf_avoidance_message = False
+    goblin_firebrand_message = False
+    goblin_lifesteal_message = False
+    goblin_hawkeye_message = False
+    goblin_avoidance_message = False
+    dwarf_firebrand_message = False
+    dwarf_lifesteal_message = False
+    dwarf_hawkeye_message = False
+    goblin_stun_message = False
+    dwarf_stun_message = False
+    goblin_mindsap_will_message = False
+    dwarf_mindsap_will_message = False
+    goblin_mindsap_int_message = False
+    dwarf_mindsap_int_message = False
+    goblin_soulrend_message = False
+    dwarf_soulrend_message = False
+    goblin_souldrain_message = False
+    dwarf_souldrain_message = False
+    goblin_earthbound_message = False
+    dwarf_earthbound_message = False
+    lifesteal = 0
+    soulrend = 0
+    souldrain = 0
+
+    physical_attack_strings = [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
+                               ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
+                               ' <font class="gray">strikes</font>']
+
+    better_physical_attack_strings = [' <font class="gray">hits</font>', ' <font class="gray">attacks</font>',
+                                      ' <font class="gray">strikes</font>']
+
+    magic_attack_strings = [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
+                            ' launches a <font class="orange">fireball</font> at',
+                            ' sets <font class="red">aflame</font>',
+                            ' <font class="deep_blue">electrocutes</font>']
+
+    def roll_physical_attack_type(attack_type, roll):
+        attack_type += ["physical"]
+        if roll == 0:
+            attack_type += ["hit"]
+        elif roll == 1:
+            attack_type += ["punch"]
+        elif roll == 2:
+            attack_type += ["kick"]
+        elif roll == 3:
+            attack_type += ["attack"]
+        else:
+            attack_type += ["strike"]
+
+        return attack_type
+
+    def roll_magical_attack_type(attack_type, roll):
+        attack_type += ["magical"]
+        if roll == 0:
+            attack_type += ["freeze"]
+        elif roll == 1:
+            attack_type += ["arcane blast"]
+        elif roll == 2:
+            attack_type += ["fireball"]
+        elif roll == 3:
+            attack_type += ["aflame"]
+        else:
+            attack_type += ["electrocute"]
+
+        return attack_type
+
+
+
+    # SPECIAL ABILITIES
+    # The ones that do something at the start of the encounter.
+    if 'Adrenaline' in game.hero[dwarf].specials_list:
+        dwarf_speed = dwarf_speed * 4
+
+    if 'Adrenaline' in game.enemy[goblin].specials_list:
+        goblin_speed = goblin_speed * 4
+
+    if 'Lucky' in game.hero[dwarf].specials_list:
+        dwarf_agility = goblin_strength * 2
+        dwarf_luck += 200
+
+    if 'Lucky' in game.enemy[goblin].specials_list:
+        goblin_agility = dwarf_strength * 2
+        goblin_luck += 200
+
 
     while not win_condition:
 
@@ -1480,18 +1643,18 @@ def battle(dwarf, goblin):
                 factor = random.randint(10, 15)
                 damage = (dwarf_physical + dwarf_magical) * round((factor / 10), 2)
                 attack_message = random.choice([' unleashes his <font class="yellow">s</font><font class="orange">p</font><font class="red">e</font><font class="purple">c</font><font class="deep_blue">i</font><font class="blue">a</font><font class="green">l</font> <font class="yellow">a</font><font class="orange">t</font><font class="red">t</font><font class="purple">a</font><font class="deep_blue">c</font><font class="blue">k</font> on'])
-                attack_type = "special"
+                attack_type += ["special"]
                 dwarf_special_attack_charge += 1
                 dwarf_special_attack_next = False
             else:
                 if dwarf_tactic == 'Frenzy':
                     factor = random.randint(10, 12)
                     damage = dwarf_physical * round((factor / 10), 2)
-                    attack_message = random.choice(
-                        [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                         ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                         ' <font class="gray">strikes</font>'])
-                    attack_type = "physical"
+
+                    roll = random.randint(0, 4)
+                    attack_message = physical_attack_strings[roll]
+                    roll_physical_attack_type(attack_type, roll)
+
                     dwarf_special_attack_charge += 1
                     if dwarf_special_attack_charge % 5 == 0:
                         dwarf_special_attack_next = True
@@ -1499,11 +1662,11 @@ def battle(dwarf, goblin):
                 elif dwarf_tactic == 'Focus':
                     factor = random.randint(8, 15)
                     damage = dwarf_magical * round((factor / 10), 2)
-                    attack_message = random.choice(
-                        [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                         ' launches a <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
-                         ' <font class="deep_blue">electrocutes</font>'])
-                    attack_type = "magical"
+
+                    roll = random.randint(0, 4)
+                    attack_message = magic_attack_strings[roll]
+                    roll_magical_attack_type(attack_type, roll)
+
                     dwarf_special_attack_charge += 1
                     if dwarf_special_attack_charge % 5 == 0:
                         dwarf_special_attack_next = True
@@ -1513,20 +1676,21 @@ def battle(dwarf, goblin):
                     if damage_type == dwarf_physical:
                         factor = random.randint(10, 12)
                         damage = dwarf_physical * round((factor / 10), 2)
-                        attack_message = random.choice(
-                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                             ' <font class="gray">strikes</font>'])
-                        attack_type = "physical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = physical_attack_strings[roll]
+                        roll_physical_attack_type(attack_type, roll)
+
                         dwarf_special_attack_charge += 1
+
                     else:
                         factor = random.randint(8, 15)
                         damage = dwarf_magical * round((factor / 10), 2)
-                        attack_message = random.choice(
-                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                             ' launches a <font class="orange">fireball</font> at', ' <font class="red">sets aflame</font>',
-                             ' <font class="deep_blue">electrocutes</font>'])
-                        attack_type = "magical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = magic_attack_strings[roll]
+                        roll_magical_attack_type(attack_type, roll)
+
                         dwarf_special_attack_charge += 1
 
                     if dwarf_special_attack_charge % 4 == 0:
@@ -1537,20 +1701,21 @@ def battle(dwarf, goblin):
                     if damage_type == dwarf_physical:
                         factor = random.randint(10, 12)
                         damage = round(((dwarf_physical * round((factor / 10), 2)) * 0.85), 2)
-                        attack_message = random.choice(
-                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                             ' <font class="gray">strikes</font>'])
-                        attack_type = "physical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = physical_attack_strings[roll]
+                        roll_physical_attack_type(attack_type, roll)
+
                         dwarf_special_attack_charge += 1
+
                     else:
                         factor = random.randint(8, 15)
                         damage = round(((dwarf_magical * round((factor / 10), 2)) * 0.85), 2)
-                        attack_message = random.choice(
-                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                             ' launches a <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
-                             ' <font class="deep_blue">electrocutes</font>'])
-                        attack_type = "magical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = magic_attack_strings[roll]
+                        roll_magical_attack_type(attack_type, roll)
+
                         dwarf_special_attack_charge += 1
 
                     if dwarf_special_attack_charge % 3 == 0:
@@ -1558,7 +1723,7 @@ def battle(dwarf, goblin):
 
             roll_crit = random.randint(1,500)
             if dwarf_luck >= roll_crit:
-                damage = damage * 1.5
+                damage *= 1.5
                 critical_message = True
 
             roll_charisma = random.randint(1,500)
@@ -1578,7 +1743,7 @@ def battle(dwarf, goblin):
             while len(goblin_reduction) > 0:
                 damage *= goblin_reduction.pop()
 
-            if attack_type == "physical":
+            if attack_type[0] == "physical":
                 if (goblin_agility / (dwarf_strength * 3)) > 0.33:
                     goblin_dodge = 0.33
                 elif (goblin_agility / (dwarf_strength * 3)) < 0:
@@ -1592,7 +1757,7 @@ def battle(dwarf, goblin):
                     damage = 0
                     goblin_dodge_message = True
 
-            elif attack_type == "magical":
+            elif attack_type[0] == "magical":
                 if (goblin_willpower / (dwarf_intelligence * 2)) > 0.5:
                     goblin_absorb = 0.5
                 elif (goblin_willpower / (dwarf_intelligence * 2)) < 0:
@@ -1606,36 +1771,177 @@ def battle(dwarf, goblin):
                     damage -= (damage * goblin_absorb)
                     goblin_absorb_message = True
 
-            else:
-                pass
+
+            # SPECIAL ABILITIES
+            # Oh boy...
+
+            if 'Combat 101' in game.hero[dwarf].specials_list:
+                if attack_type[0] == "physical":
+                    roll = random.randint(0, 2)
+                    attack_message = better_physical_attack_strings[roll]
+
+                    attack_type.clear()
+                    attack_type += ["physical"]
+                    if roll == 0:
+                        attack_type += ["hit"]
+                    elif roll == 1:
+                        attack_type += ["attack"]
+                    else:
+                        attack_type += ["strike"]
+
+            if 'Stun chance' in game.hero[dwarf].specials_list:
+                if (attack_type[0] == "physical") and (attack_type[1] != "kick" or attack_type[1] != "punch"):
+                    roll = random.randint(1,100)
+                    if roll <= 15:
+                        goblin_speed -= goblin_speed_base
+                        dwarf_stun_message = True
+
+            if 'Adrenaline' in game.hero[dwarf].specials_list:
+                dwarf_speed_base *= 0.9
+
+            if 'Momentum' in game.hero[dwarf].specials_list:
+                dwarf_speed_base *= 1.01
+
+            if 'Energize' in game.hero[dwarf].specials_list:
+                dwarf_speed_base *= 1.02
+
+            if 'Avatar' in game.hero[dwarf].specials_list:
+                damage *= 0.8
+
+            if 'Dominion' in game.hero[dwarf].specials_list:
+                if attack_type[0] == "magical":
+                    damage += dwarf_willpower + dwarf_charisma
+
+            if 'Firebrand' in game.hero[dwarf].specials_list:
+                if attack_type[0] == "physical":
+                    damage += 35
+                    dwarf_firebrand_message = True
+
+            if 'Avoidance' in game.enemy[goblin].specials_list:
+                roll = random.randint(1,100)
+                if roll <= 20:
+                    damage = 0
+                    goblin_avoidance_message = True
+
+            if 'Lifesteal' in game.hero[dwarf].specials_list:
+                lifesteal = damage * 0.1
+                damage -= lifesteal
+                dwarf_lifesteal_message = True
+
+            if 'Earthbound' in game.enemy[goblin].specials_list:
+                goblin_armor *= 1.05
+                goblin_agility *= 1.05
+                goblin_willpower *= 1.05
+                goblin_earthbound_message = True
+
+            if 'Aegis' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "special":
+                    damage *= 0.5
+
+            if 'Hawkeye' in game.hero[dwarf].specials_list:
+                if critical_message:
+                    damage += 50
+                    dwarf_hawkeye_message = True
+
+            if 'Mind Sap' in game.hero[dwarf].specials_list:
+                roll = random.randint(0,1)
+                if roll == 0:
+                    goblin_willpower *= 0.95
+                    dwarf_mindsap_will_message = True
+                else:
+                    goblin_intelligence *= 0.95
+                    dwarf_mindsap_int_message = True
+
+            if 'Spiky boots' in game.hero[dwarf].specials_list:
+                if (attack_type[0] == "physical") and (attack_type[1] == "kick") and critical_message != True:
+                    damage *= 1.5
+
+            if 'Soulrend' in game.hero[dwarf].specials_list:
+                if (attack_type[0] == "physical") and ((attack_type[1] != "kick") or (attack_type[1] != "punch")):
+                    soulrend = goblin_max_health * 0.05
+                    damage += soulrend
+                    dwarf_soulrend_message = True
+
+            if 'Soul Drain' in game.hero[dwarf].specials_list:
+                if attack_type[0] == "magical":
+                    souldrain = goblin_max_health * 0.03
+                    dwarf_health += souldrain
+                    damage += souldrain
+                    dwarf_souldrain_message = True
+
 
             damage = round(damage)
             goblin_health -= damage
 
             if goblin_dodge_message:
                 turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + ' the goblin, but he manages to dodge the attack!'
-            elif goblin_absorb_message:
-                turn = '<div class="hero-turn">' + dwarf_name + attack_message + ' goblin for ' + str(damage) + " damage! (Enemy's willpower mitigates +" + str(absorb_message) + " points of damage.)"
-                goblin_absorb_message = False
+                goblin_dodge_message = False
+            elif goblin_avoidance_message:
+                turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + ' the goblin, but he manages to avoid the attack!'
+                goblin_avoidance_message = False
+
             else:
-                turn = '<div class="hero-turn">' + dwarf_name + attack_message + ' goblin for ' + str(damage) + ' damage!'
 
-            if critical_message and goblin_dodge_message != True:
-                turn += ' <font class="yellow italic">Critical strike!</font>'
-                critical_message = False
-            if dwarf_increase_message:
-                roll_increase = random.randint(15, 35)
-                increase = 1 + (roll_increase / 100)
-                increase_message = roll_increase
-                dwarf_increase.append(increase)
-                turn += '<br><font class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
-                dwarf_increase_message = False
-            elif dwarf_reduction_message:
-                turn += '<br><font class="italic">His terrifying roar intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
-                dwarf_reduction_message = False
+                turn = '<div class="hero-turn">' + dwarf_name + attack_message + ' goblin for ' + str(damage)
 
-            goblin_dodge_message = False
+                if dwarf_firebrand_message:
+                    turn += ' <font class="orange">(+35)</font>'
+                    dwarf_firebrand_message = False
+                if dwarf_lifesteal_message:
+                    turn += ' <font class="deep_purple">(+' + lifesteal + ')</font>'
+                    dwarf_lifesteal_message = False
+                if dwarf_hawkeye_message:
+                    turn += ' <font class="yellow">(+50)</font>'
+                    dwarf_hawkeye_message = False
+
+                if goblin_absorb_message:
+                    turn += " damage! (Enemy's willpower mitigates +" + str(absorb_message) + " points of damage.)"
+                else:
+                    turn += ' damage!'
+
+                goblin_absorb_message = False
+
+                if critical_message and goblin_dodge_message != True:
+                    turn += ' <font class="yellow italic">Critical strike!</font>'
+                    critical_message = False
+
+                if dwarf_increase_message:
+                    roll_increase = random.randint(15, 35)
+                    increase = 1 + (roll_increase / 100)
+                    increase_message = roll_increase
+                    dwarf_increase.append(increase)
+                    turn += '<br><font class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
+                    dwarf_increase_message = False
+                elif dwarf_reduction_message:
+                    turn += '<br><font class="italic">His terrifying roar intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
+                    dwarf_reduction_message = False
+
+                if dwarf_stun_message:
+                    turn += '<br>' + dwarf_name + ' manages to stun the opponent! They skip their next turn.'
+                    dwarf_stun_message = False
+
+                if dwarf_mindsap_will_message:
+                    turn += '<br>' + dwarf_name + " saps enemy's willpower, reducing it by 5%!"
+                    dwarf_mindsap_will_message = False
+
+                if dwarf_mindsap_int_message:
+                    turn += '<br>' + dwarf_name + " saps enemy's intelligence, reducing it by 5%!"
+                    dwarf_mindsap_int_message = False
+
+                if dwarf_soulrend_message:
+                    turn += '<br>' + dwarf_name + " rends enemy's very soul, damaging the enemy for " + soulrend + '!'
+                    dwarf_soulrend_message = False
+
+                if dwarf_souldrain_message:
+                    turn += '<br>' + dwarf_name + " drains enemy's very soul, healing himself and damaging the enemy for " + souldrain + '!'
+                    dwarf_souldrain_message = False
+
+                if goblin_earthbound_message:
+                    turn += "<br>Tel'lar reacts to it's owner taking damage, bolstering up their defences!<br>Enemy's armor, agility and willpower is increased by 5%!"
+                    goblin_earthbound_message = False
+
             turn += '</div>'
+            attack_type.clear()
             goblin_speed += goblin_speed_base
 
         else:
@@ -1644,18 +1950,28 @@ def battle(dwarf, goblin):
                 factor = random.randint(10, 15)
                 damage = (goblin_physical + goblin_magical) * round((factor / 10), 2)
                 attack_message = random.choice([' unleashes his <font class="yellow">s</font><font class="orange">p</font><font class="red">e</font><font class="purple">c</font><font class="deep_blue">i</font><font class="blue">a</font><font class="green">l</font> <font class="yellow">a</font><font class="orange">t</font><font class="red">t</font><font class="purple">a</font><font class="deep_blue">c</font><font class="blue">k</font> on'])
-                attack_type = "special"
+                attack_type = ["special"]
                 goblin_special_attack_charge += 1
                 goblin_special_attack_next = False
             else:
                 if goblin_tactic == 'Frenzy':
                     factor = random.randint(10, 12)
                     damage = goblin_physical * round((factor / 10), 2)
-                    attack_message = random.choice(
-                        [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                         ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                         ' <font class="gray">strikes</font>'])
-                    attack_type = "physical"
+
+                    roll = random.randint(0, 4)
+                    attack_message = physical_attack_strings[roll]
+                    attack_type += ["physical"]
+                    if roll == 0:
+                        attack_type += ["hit"]
+                    elif roll == 1:
+                        attack_type += ["punch"]
+                    elif roll == 2:
+                        attack_type += ["kick"]
+                    elif roll == 3:
+                        attack_type += ["attack"]
+                    else:
+                        attack_type += ["strike"]
+
                     goblin_special_attack_charge += 1
                     if goblin_special_attack_charge % 5 == 0:
                         goblin_special_attack_next = True
@@ -1663,11 +1979,21 @@ def battle(dwarf, goblin):
                 elif goblin_tactic == 'Focus':
                     factor = random.randint(8, 15)
                     damage = goblin_magical * round((factor / 10), 2)
-                    attack_message = random.choice(
-                        [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                         ' launches a <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
-                         ' <font class="deep_blue">electrocutes</font>'])
-                    attack_type = "magical"
+
+                    roll = random.randint(0, 4)
+                    attack_message = magic_attack_strings[roll]
+                    attack_type += ["magical"]
+                    if roll == 0:
+                        attack_type += ["freeze"]
+                    elif roll == 1:
+                        attack_type += ["arcane blast"]
+                    elif roll == 2:
+                        attack_type += ["fireball"]
+                    elif roll == 3:
+                        attack_type += ["aflame"]
+                    else:
+                        attack_type += ["electrocute"]
+
                     goblin_special_attack_charge += 1
                     if goblin_special_attack_charge % 5 == 0:
                         goblin_special_attack_next = True
@@ -1677,20 +2003,41 @@ def battle(dwarf, goblin):
                     if damage_type == goblin_physical:
                         factor = random.randint(10, 12)
                         damage = goblin_physical * round((factor / 10), 2)
-                        attack_message = random.choice(
-                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                             ' <font class="gray">strikes</font>'])
-                        attack_type = "physical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = physical_attack_strings[roll]
+                        attack_type += ["physical"]
+                        if roll == 0:
+                            attack_type += ["hit"]
+                        elif roll == 1:
+                            attack_type += ["punch"]
+                        elif roll == 2:
+                            attack_type += ["kick"]
+                        elif roll == 3:
+                            attack_type += ["attack"]
+                        else:
+                            attack_type += ["strike"]
+
                         goblin_special_attack_charge += 1
+
                     else:
                         factor = random.randint(8, 15)
                         damage = goblin_magical * round((factor / 10), 2)
-                        attack_message = random.choice(
-                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                             ' launches a <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
-                             ' <font class="deep_blue">electrocutes</font>'])
-                        attack_type = "magical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = magic_attack_strings[roll]
+                        attack_type += ["magical"]
+                        if roll == 0:
+                            attack_type += ["freeze"]
+                        elif roll == 1:
+                            attack_type += ["arcane blast"]
+                        elif roll == 2:
+                            attack_type += ["fireball"]
+                        elif roll == 3:
+                            attack_type += ["aflame"]
+                        else:
+                            attack_type += ["electrocute"]
+
                         goblin_special_attack_charge += 1
 
                     if goblin_special_attack_charge % 4 == 0:
@@ -1701,20 +2048,40 @@ def battle(dwarf, goblin):
                     if damage_type == goblin_physical:
                         factor = random.randint(10, 12)
                         damage = round(((goblin_physical * round((factor / 10), 2)) * 0.85), 0)
-                        attack_message = random.choice(
-                            [' <font class="gray">hits</font>', ' <font class="gray">punches</font>',
-                             ' <font class="gray">kicks</font>', ' <font class="gray">attacks</font>',
-                             ' <font class="gray">strikes</font>'])
-                        attack_type = "physical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = physical_attack_strings[roll]
+                        attack_type += ["physical"]
+                        if roll == 0:
+                            attack_type += ["hit"]
+                        elif roll == 1:
+                            attack_type += ["punch"]
+                        elif roll == 2:
+                            attack_type += ["kick"]
+                        elif roll == 3:
+                            attack_type += ["attack"]
+                        else:
+                            attack_type += ["strike"]
+
                         goblin_special_attack_charge += 1
                     else:
                         factor = random.randint(8, 15)
                         damage = round(((goblin_magical * round((factor / 10), 2)) * 0.85), 0)
-                        attack_message = random.choice(
-                            [' <font class="blue">freezes</font>', ' <font class="purple">arcane blasts</font>',
-                             ' launches a <font class="orange">fireball</font> at', ' sets <font class="red">aflame</font>',
-                             ' <font class="deep_blue">electrocutes</font>'])
-                        attack_type = "magical"
+
+                        roll = random.randint(0, 4)
+                        attack_message = magic_attack_strings[roll]
+                        attack_type += ["magical"]
+                        if roll == 0:
+                            attack_type += ["freeze"]
+                        elif roll == 1:
+                            attack_type += ["arcane blast"]
+                        elif roll == 2:
+                            attack_type += ["fireball"]
+                        elif roll == 3:
+                            attack_type += ["aflame"]
+                        else:
+                            attack_type += ["electrocute"]
+
                         goblin_special_attack_charge += 1
 
                     if goblin_special_attack_charge % 3 == 0:
@@ -1742,7 +2109,7 @@ def battle(dwarf, goblin):
             while len(dwarf_reduction) > 0:
                 damage *= dwarf_reduction.pop()
 
-            if attack_type == "physical":
+            if attack_type[0] == "physical":
                 if (dwarf_agility / (goblin_strength * 3)) > 0.33:
                     dwarf_dodge = 0.33
                 elif (dwarf_agility / (goblin_strength * 3)) < 0:
@@ -1756,7 +2123,7 @@ def battle(dwarf, goblin):
                     damage = 0
                     dwarf_dodge_message = True
 
-            elif attack_type == "magical":
+            elif attack_type[0] == "magical":
                 if (dwarf_willpower / (goblin_intelligence * 2)) > 0.5:
                     dwarf_absorb = 0.5
                 elif (dwarf_willpower / (goblin_intelligence * 2)) < 0:
@@ -1770,36 +2137,177 @@ def battle(dwarf, goblin):
                     damage = damage - (damage * dwarf_absorb)
                     dwarf_absorb_message = True
 
-            else:
-                pass
+
+            # SPECIAL ABILITIES
+            # Oh boy...
+
+            if 'Combat 101' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "physical":
+                    roll = random.randint(0, 2)
+                    attack_message = better_physical_attack_strings[roll]
+
+                    attack_type.clear()
+                    attack_type += "physical"
+                    if roll == 0:
+                        attack_type += "hit"
+                    elif roll == 1:
+                        attack_type += "attack"
+                    else:
+                        attack_type += "strike"
+
+            if 'Stun chance' in game.enemy[goblin].specials_list:
+                if (attack_type[0] == "physical") and (attack_type[1] != "kick" or attack_type[1] != "punch"):
+                    roll = random.randint(1,100)
+                    if roll <= 15:
+                        goblin_speed -= goblin_speed_base
+                        goblin_stun_message = True
+
+            if 'Adrenaline' in game.enemy[goblin].specials_list:
+                goblin_speed_base *= 0.9
+
+            if 'Momentum' in game.enemy[goblin].specials_list:
+                goblin_speed_base *= 1.01
+
+            if 'Energize' in game.enemy[goblin].specials_list:
+                goblin_speed_base *= 1.02
+
+            if 'Avatar' in game.enemy[goblin].specials_list:
+                damage *= 0.8
+
+            if 'Dominion' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "magical":
+                    damage += goblin_willpower + goblin_charisma
+
+            if 'Firebrand' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "physical":
+                    damage += 35
+                    goblin_firebrand_message = True
+
+            if 'Avoidance' in game.hero[dwarf].specials_list:
+                roll = random.randint(1,100)
+                if roll <= 20:
+                    damage = 0
+                    dwarf_avoidance_message = True
+
+            if 'Lifesteal' in game.enemy[goblin].specials_list:
+                lifesteal = damage * 0.1
+                damage -= lifesteal
+                goblin_lifesteal_message = True
+
+            if 'Earthbound' in game.enemy[goblin].specials_list:
+                goblin_armor *= 1.05
+                goblin_agility *= 1.05
+                goblin_willpower *= 1.05
+                goblin_earthbound_message = True
+
+            if 'Aegis' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "special":
+                    damage *= 0.5
+
+            if 'Hawkeye' in game.enemy[goblin].specials_list:
+                if critical_message:
+                    damage += 50
+                    goblin_hawkeye_message = True
+
+            if 'Mind Sap' in game.enemy[goblin].specials_list:
+                roll = random.randint(0,1)
+                if roll == 0:
+                    dwarf_willpower *= 0.95
+                    goblin_mindsap_will_message = True
+                else:
+                    dwarf_intelligence *= 0.95
+                    goblin_mindsap_int_message = True
+
+            if 'Spiky boots' in game.enemy[goblin].specials_list:
+                if (attack_type[0] == "physical") and (attack_type[1] == "kick") and critical_message != True:
+                    damage *= 1.5
+
+            if 'Soulrend' in game.enemy[goblin].specials_list:
+                if (attack_type[0] == "physical") and ((attack_type[1] != "kick") or (attack_type[1] != "punch")):
+                    soulrend = dwarf_max_health * 0.05
+                    damage += soulrend
+                    goblin_soulrend_message = True
+
+            if 'Soul Drain' in game.enemy[goblin].specials_list:
+                if attack_type[0] == "magical":
+                    souldrain = dwarf_max_health * 0.03
+                    goblin_health += souldrain
+                    damage += souldrain
+                    goblin_souldrain_message = True
+
+
 
             damage = round(damage)
             dwarf_health -= damage
 
             if dwarf_dodge_message:
                 turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + ' the dwarf, but he manages to dodge the attack!'
-            elif dwarf_absorb_message:
-                turn = '<div class="enemy-turn">' + goblin_name + attack_message + ' dwarf for ' + str(damage) + " damage! (Enemy's willpower mitigates +" + str(absorb_message) + " points of damage.)"
-                dwarf_absorb_message = False
+                dwarf_dodge_message = False
+            elif dwarf_avoidance_message:
+                turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + ' the dwarf, but he manages to avoid the attack!'
+                dwarf_avoidance_message = False
+
             else:
-                turn = '<div class="enemy-turn">' + dwarf_name + attack_message + ' dwarf for ' + str(damage) + ' damage!'
 
-            if critical_message and dwarf_dodge_message != True:
-                turn += ' <font class="yellow italic">Critical strike!</font>'
-                critical_message = False
-            if goblin_increase_message:
-                roll_increase = random.randint(15, 35)
-                increase = 1 + (roll_increase / 100)
-                increase_message = roll_increase
-                goblin_increase.append(increase)
-                turn += '<br><font class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
-                goblin_increase_message = False
-            elif goblin_reduction_message:
-                turn += '<br><font class="italic">His horrifying screech intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
-                goblin_reduction_message = False
+                turn = '<div class="enemy-turn">' + goblin_name + attack_message + ' dwarf for ' + str(damage)
 
-            dwarf_dodge_message = False
+                if goblin_firebrand_message:
+                    turn += ' <font class="orange">(+35)</font>'
+                    goblin_firebrand_message = False
+                if goblin_lifesteal_message:
+                    turn += ' <font class="deep_purple">(+' + lifesteal + ')</font>'
+                    goblin_lifesteal_message = False
+                if goblin_hawkeye_message:
+                    turn += ' <font class="yellow">(+50)</font>'
+                    goblin_hawkeye_message = False
+
+                if dwarf_absorb_message:
+                    turn += " damage! (Enemy's willpower mitigates +" + str(absorb_message) + " points of damage.)"
+                else:
+                    turn += ' damage'
+
+                dwarf_absorb_message = False
+
+                if critical_message and dwarf_dodge_message != True:
+                    turn += ' <font class="yellow italic">Critical strike!</font>'
+                    critical_message = False
+                if goblin_increase_message:
+                    roll_increase = random.randint(15, 35)
+                    increase = 1 + (roll_increase / 100)
+                    increase_message = roll_increase
+                    goblin_increase.append(increase)
+                    turn += '<br><font class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(increase_message) + '%!</font>'
+                    goblin_increase_message = False
+                elif goblin_reduction_message:
+                    turn += '<br><font class="italic">His horrifying screech intimidates the enemy, decreasing the power of their next attack by ' + str(reduction_message) + '%!</font>'
+                    goblin_reduction_message = False
+
+                if goblin_stun_message:
+                    turn += '<br>' + goblin_name + ' manages to stun the opponent! They skip their next turn.'
+                    goblin_stun_message = False
+
+                if goblin_mindsap_will_message:
+                    turn += '<br>' + goblin_name + " saps enemy's willpower, reducing it by 5%!"
+                    goblin_mindsap_will_message = False
+
+                if goblin_mindsap_int_message:
+                    turn += '<br>' + goblin_name + " saps enemy's intelligence, reducing it by 5%!"
+                    goblin_mindsap_int_message = False
+
+                if goblin_soulrend_message:
+                    turn += '<br>' + goblin_name + " rends enemy's very soul, damaging the enemy for " + soulrend + '!'
+                    goblin_soulrend_message = False
+
+                if goblin_souldrain_message:
+                    turn += '<br>' + goblin_name + " drains enemy's very soul, healing himself and damaging the enemy for " + souldrain + '!'
+                    goblin_souldrain_message = False
+
+                if dwarf_earthbound_message:
+                    turn += "<br>Tel'lar reacts to it's owner taking damage, bolstering up their defences!<br>Enemy's armor, agility and willpower is increased by 5%!"
+                    dwarf_earthbound_message = False
+
             turn += '</div>'
+            attack_type.clear()
             dwarf_speed += dwarf_speed_base
 
         battle_log.append(turn)

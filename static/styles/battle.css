@@ -39,10 +39,12 @@ table {
 
 .stats-cell {
     background-color: #880c08;
+    padding: 5px 3px 5px 3px;
 }
 
 .stats-cell-total {
-    background-color: #a80e0a
+    background-color: #a80e0a;
+    padding: 5px 3px 5px 3px;
 }
 
 .italic {
@@ -71,44 +73,4 @@ table {
 .hero-turn {
     background-color: rgba(50, 210, 7, 0.3);
     padding: 10px;
-}
-
-.yellow {
-    color: yellow;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.purple {
-    color: #ac59ff;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.blue {
-    color: deepskyblue;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.deep_blue {
-    color: #3374d9;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.orange {
-    color: orange;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.red {
-    color: orangered;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.green {
-    color: limegreen;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.gray {
-    color: #a6a6a6;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }

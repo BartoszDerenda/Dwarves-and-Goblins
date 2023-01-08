@@ -6,7 +6,7 @@
 {% block body %}
 <div id="fixed-counter">Days left: {{ game.days }}</div>
 <div class="center">
-    <div id="main-box">
+    <div id="main-box-game">
     {% for dwarf in game.hero %}
         {% if game.hero[dwarf].battle == False %}
             <div id="{{ dwarf }}" class="hero">
@@ -44,7 +44,15 @@
                             <td><input type="submit" name="train {{ dwarf }}" class="confirm-button" value="Train"></td>
                         </tr>
                         <tr>
-                            <th><label for="strength_{{ dwarf }}">Strength</label></th>
+                            <th class="tooltip"><label for="strength_{{ dwarf }}"><span class="red">Strength</span></label>
+                                <div class="tooltip-text">
+                                    <span class="red">Strength</span>
+                                    <br>Strength increases your physical damage dealt by 3 points.
+                                    <br>Physical damage has a spread of x1.0 - x1.2
+                                    <br><br>Cost of training:
+                                    <br>1 point of Strength = 2 days
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="strength">{{ game.hero[dwarf].strength }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].str_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].str_bonus }}</td>
@@ -52,7 +60,16 @@
                             <td><input type="number" id="strength_{{ dwarf }}" name="str_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="intelligence_{{ dwarf }}">Intelligence</label></th>
+                            <th class="tooltip"><label for="intelligence_{{ dwarf }}"><span class="blue">Intelligence</span></label>
+                                <div class="tooltip-text">
+                                    <span class="blue">Intelligence</span>
+                                    <br>Intelligence increases your magical damage dealt by 4 points.
+                                    <br>Magical damage has a spread of x0.8 - x1.5
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Intelligence = 2 days
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="intelligence">{{ game.hero[dwarf].intelligence }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].int_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].int_bonus }}</td>
@@ -60,7 +77,18 @@
                             <td><input type="number" id="intelligence_{{ dwarf }}" name="int_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="agility_{{ dwarf }}">Agility</label></th>
+                            <th class="tooltip"><label for="agility_{{ dwarf }}"><span class="orange">Agility</span></label>
+                                <div class="tooltip-text">
+                                    <span class="orange">Agility</span>
+                                    <br>Agility increases your chance to dodge enemy's physical attacks.
+                                    <br>Formula: ([Your agility] / ([Enemy's strength] x3)) / 100 = Dodge chance %
+                                    <br>
+                                    <br>Dodge caps at 33%
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Agility = 1 day
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="agility">{{ game.hero[dwarf].agility }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].agi_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].agi_bonus }}</td>
@@ -68,7 +96,18 @@
                             <td><input type="number" id="agility_{{ dwarf }}" name="agi_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="willpower_{{ dwarf }}">Willpower</label></th>
+                            <th class="tooltip"><label for="willpower_{{ dwarf }}"><span class="purple">Willpower</span></label>
+                                <div class="tooltip-text">
+                                    <span class="purple">Willpower</span>
+                                    <br>Willpower decreases the amount of damage you take from magical attacks.
+                                    <br>Formula: ([Your willpower] / ([Enemy's intelligence] x2)) / 100 = Magical damage absorption %
+                                    <br>
+                                    <br>Absorption caps at 50%
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Willpower = 1 day
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="willpower">{{ game.hero[dwarf].willpower }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].will_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].will_bonus }}</td>
@@ -76,7 +115,16 @@
                             <td><input type="number" id="willpower_{{ dwarf }}" name="will_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="endurance_{{ dwarf }}">Endurance</label></th>
+                            <th class="tooltip"><label for="endurance_{{ dwarf }}"><span class="gray">Endurance</span></label>
+                                <div class="tooltip-text">
+                                    <span class="gray">Endurance</span>
+                                    <br>Endurance increases your health by 5 points.
+                                    <br>You need health points to survive.
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Endurance = 2 days
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="endurance">{{ game.hero[dwarf].endurance }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].end_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].end_bonus }}</td>
@@ -84,7 +132,25 @@
                             <td><input type="number" id="endurance_{{ dwarf }}" name="end_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="charisma_{{ dwarf }}">Charisma</label></th>
+                            <th class="tooltip"><label for="charisma_{{ dwarf }}"><span class="pink">Charisma</span></label>
+                                <div class="tooltip-text">
+                                    <span class="pink">Charisma</span>
+                                    <br>Charisma increases your chance to activate charisma effect on attack by 0.2%
+                                    <br>Charisma effect can either increase the power of your next attack by 15 - 35%
+                                    <br>or decrease the power of enemy's next attack by 15 - 35%.
+                                    <br>Multiple attack reductions in a row stack multiplicatively.
+                                    <br>
+                                    <br>500 Charisma = 100% chance to proc the effect on every attack
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Charisma = 1 day
+                                    <br>
+                                    <br>
+                                    <div class="font-small">Legends say, that a dwarf of one-thousand Charisma points wearing a legendary item
+                                        <br>would single-handedly bring peace to this war-torn land...
+                                    </div>
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="charisma">{{ game.hero[dwarf].charisma }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].char_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].char_bonus }}</td>
@@ -92,7 +158,18 @@
                             <td><input type="number" id="charisma_{{ dwarf }}" name="char_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="luck_{{ dwarf }}">Luck</label></th>
+                            <th class="tooltip"><label for="luck_{{ dwarf }}"><span class="green">Luck</span></label>
+                                <div class="tooltip-text">
+                                    <span class="green">Luck</span>
+                                    <br>Luck increases your chance to perform a critical attack by 0.2%
+                                    <br>Critical attack increases damage of your attack by x1.5
+                                    <br>
+                                    <br>500 Luck = 100% critical strike chance
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Luck = 1 day
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="luck">{{ game.hero[dwarf].luck }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].lck_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].lck_bonus }}</td>
@@ -100,7 +177,16 @@
                             <td><input type="number" id="luck_{{ dwarf }}" name="lck_increase" class="input-stats" value="0"></td>
                         </tr>
                         <tr>
-                            <th><label for="speed_{{ dwarf }}">Speed</label></th>
+                            <th class="tooltip"><label for="speed_{{ dwarf }}"><span class="yellow">Speed</span></label>
+                                <div class="tooltip-text">
+                                    <span class="yellow">Speed</span>
+                                    <br>Speed dictates the turn order.
+                                    <br>The more speed you have than your enemy, the more often you will be able to act.
+                                    <br>
+                                    <br>Cost of training:
+                                    <br>1 point of Speed = 3 days
+                                </div>
+                            </th>
                             <td class="stats-cell"><label for="speed">{{ game.hero[dwarf].speed }}</label></td>
                             <td class="stats-cell">x{{ game.hero[dwarf].spd_mul }}</td>
                             <td class="stats-cell">{% if game.hero[dwarf].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].spd_bonus }}</td>
@@ -117,7 +203,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Weapon</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['weapon'].rarity }}">{{ game.hero[dwarf].equipment['weapon'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['weapon'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['weapon'].rarity }}">
+                                {{ game.hero[dwarf].equipment['weapon'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['weapon'].rarity }}">{{ game.hero[dwarf].equipment['weapon'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['weapon'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['weapon'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['weapon'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['weapon'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="weapon">
                             <option> </option>
@@ -131,7 +336,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Headpiece</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['headpiece'].rarity }}">{{ game.hero[dwarf].equipment['headpiece'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['headpiece'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['headpiece'].rarity }}">
+                                {{ game.hero[dwarf].equipment['headpiece'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['headpiece'].rarity }}">{{ game.hero[dwarf].equipment['headpiece'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['headpiece'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['headpiece'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['headpiece'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['headpiece'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="headpiece">
                             <option> </option>
@@ -145,7 +469,127 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Shoulders</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['shoulders'].rarity }}">{{ game.hero[dwarf].equipment['shoulders'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['shoulders'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['shoulders'].rarity }}">
+                                {{ game.hero[dwarf].equipment['shoulders'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['shoulders'].rarity }}">{{ game.hero[dwarf].equipment['shoulders'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['shoulders'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['shoulders'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['shoulders'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['shoulders'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="shoulders">
                             <option> </option>
@@ -159,7 +603,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Chest</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['chest'].rarity }}">{{ game.hero[dwarf].equipment['chest'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['chest'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['chest'].rarity }}">
+                                {{ game.hero[dwarf].equipment['chest'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['chest'].rarity }}">{{ game.hero[dwarf].equipment['chest'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['chest'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['chest'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['chest'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['chest'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="chest">
                             <option> </option>
@@ -173,7 +736,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Pants</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['pants'].rarity }}">{{ game.hero[dwarf].equipment['pants'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['pants'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['pants'].rarity }}">
+                                {{ game.hero[dwarf].equipment['pants'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['pants'].rarity }}">{{ game.hero[dwarf].equipment['pants'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['pants'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['pants'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['pants'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['pants'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="pants">
                             <option> </option>
@@ -187,7 +869,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Gloves</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['gloves'].rarity }}">{{ game.hero[dwarf].equipment['gloves'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['gloves'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['gloves'].rarity }}">
+                                {{ game.hero[dwarf].equipment['gloves'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['gloves'].rarity }}">{{ game.hero[dwarf].equipment['gloves'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['gloves'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['gloves'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['gloves'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['gloves'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="gloves">
                             <option> </option>
@@ -201,7 +1002,126 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Boots</td>
-                        <td class="equipment-cell-current {{ game.hero[dwarf].equipment['boots'].rarity }}">{{ game.hero[dwarf].equipment['boots'].item_name }}</td>
+                        {% if game.hero[dwarf].equipment['boots'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% else %}
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['boots'].rarity }}">
+                                {{ game.hero[dwarf].equipment['boots'].item_name }}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['boots'].rarity }}">{{ game.hero[dwarf].equipment['boots'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['boots'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['boots'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['boots'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['boots'].description }}</span>
+                                </div>
+                            </td>
+                        {% endif %}
                         <td>
                             <select name="boots">
                             <option> </option>
@@ -215,11 +1135,131 @@
                     </tr>
                     <tr>
                         <td class="equipment-cell">Artifact</td>
-                        {% if game.hero[dwarf].equipment['artifact'].item_name == "A Lucky Pebble" %}
-                            <td class="equipment-cell-current"><img class="pebble" src="/static/pebble.png" alt="A Lucky Pebble"></td>
+                        {% if game.hero[dwarf].equipment['artifact'] == None %}
+                            <td class="equipment-cell-current"></td>
+                        {% elif game.hero[dwarf].equipment['artifact'].item_name == "Lucky Pebble" %}
+                            <td class="equipment-cell-current tooltip"><img class="pebble" src="/static/pebble.png" alt="Lucky Pebble">
                         {% else %}
-                            <td class="equipment-cell-current {{ game.hero[dwarf].equipment['artifact'].rarity }}">{{ game.hero[dwarf].equipment['artifact'].item_name }}</td>
+                            <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment['artifact'].rarity }}">
+                            {{ game.hero[dwarf].equipment['artifact'].item_name }}
                         {% endif %}
+                        {% if game.hero[dwarf].equipment['artifact'] != None %}
+                                <div class="tooltip-text tooltip-item">
+                                    <div class="item-name-border">
+                                        <span class="{{ game.hero[dwarf].equipment['artifact'].rarity }}">{{ game.hero[dwarf].equipment['artifact'].item_name }}</span>
+                                    </div>
+                                    <br>
+                                    <table class="table-borderless">
+                                        <tr>
+                                            <th class="item-table-cell">
+
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Multiplier
+                                            </th>
+                                            <th class="item-table-cell">
+                                                Bonus
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="red">Str</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].str_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].str_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].str_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].str_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="blue">Int</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].int_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].int_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].int_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].int_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="orange">Agi</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].agi_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].agi_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].agi_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].agi_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="purple">Will</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].will_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].will_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].will_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].will_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="gray">End</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].end_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].end_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].end_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].end_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="pink">Char</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].char_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].char_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].char_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].char_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="green">Lck</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].lck_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].lck_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].lck_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].lck_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell">
+                                                <span class="yellow">Spd</span>
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].spd_mul >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].spd_mul }}
+                                            </td>
+                                            <td class="item-table-cell-value">
+                                                {% if game.hero[dwarf].equipment['artifact'].spd_bonus >= 0 %}+{% endif %}{{ game.hero[dwarf].equipment['artifact'].spd_bonus }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item-table-cell" colspan="2">Armor value</td>
+                                            <td class="item-table-cell-value">{{ game.hero[dwarf].equipment['artifact'].armor }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <span class="break-words">{{ game.hero[dwarf].equipment['artifact'].description }}</span>
+                                </div>
+                            </td>
+                            {% else %}
+                            {% endif %}
                         <td>
                             <select name="artifact">
                                 <option> </option>
@@ -234,8 +1274,32 @@
                 </table></form>
                 <form class="tactics" method="POST" action="{{ url_for('game') }}#{{ dwarf }}"><table>
                     <tr>
-                        <td><h3>Tactics</h3></td>
-                        <td class="tactic-cell"><input type="radio" id="frenzy_{{ dwarf }}" name="tactic" value="Frenzy"><label for="frenzy_{{ dwarf }}">Frenzy</label></td>
+                        <td class="tooltip"><h3>Tactics</h3>
+                            <div class="tooltip-text">Tactics decide on the fighting style of the dwarf.
+                                <br>
+                                <br><span class="font-bold Frenzy">Frenzy</span>
+                                <br>The dwarf will use only physical attacks.
+                                <br>The special attacks occurs every 5 turns.
+                                <br>
+                                <br><span class="font-bold Focus">Focus</span>
+                                <br>The dwarf will use only magical attacks.
+                                <br>The special attack occurs every 5 turns.
+                                <br>
+                                <br><span class="font-bold Balanced">Balanced</span>
+                                <br>The dwarf will weave both physical attacks as well as the magical attacks into his battle style.
+                                <br>The special attack occurs every 4 turns.
+                                <br>
+                                <br><span class="font-bold Overconfidence">Overconfidence</span>
+                                <br>The dwarf feels to be above the enemy and wants to defeat it as spectacularly as he can.
+                                <br>He uses both physical and magical attacks, although they both suffer x0.85 damage reduction.
+                                <br>The special attack occurs every 3 turns.
+                                <br>
+                                <br>
+                                <br>Special attack - deal (([physical damage] + [magic damage]) x1.2) to the enemy.
+                                <br>This type of damage cannot be dodged by agility or absorbed by willpower.
+                            </div>
+                        </td>
+                        <td class="tactic-cell tooltip"><input type="radio" id="frenzy_{{ dwarf }}" name="tactic" value="Frenzy"><label for="frenzy_{{ dwarf }}">Frenzy</label></td>
                         <td class="tactic-cell"><input type="radio" id="focus_{{ dwarf }}" name="tactic" value="Focus"><label for="focus_{{ dwarf }}">Focus</label></td>
                         <td class="tactic-cell"><input type="radio" id="balanced_{{ dwarf }}" name="tactic" value="Balanced"><label for="balanced_{{ dwarf }}">Balanced</label></td>
                         <td class="tactic-cell"><input type="radio" id="overconfidence_{{ dwarf }}" name="tactic" value="Overconfidence"><label for="overconfidence_{{ dwarf }}">Overconfidence</label></td>

@@ -1,3 +1,13 @@
+#main-box-game {
+    padding: 10vh 5vw 10vh 5vw;
+    margin-left: 7vw;
+    overflow: auto;
+
+    background-color: #3b1b19;
+    height: 100%;
+    width: 75vw;
+}
+
 #fixed-counter {
     width: 100%;
     height: 5vh;
@@ -21,11 +31,13 @@
     justify-content: center;
 
     margin-bottom: 7vh;
+    padding: 15px;
 
     position: fixed;
     bottom: 0;
 
     border: 5px ridge #e8e2e1;
+    border-left: none;
     background-color: #880c08;
 }
 
@@ -144,6 +156,7 @@
     font-size: 2em;
 
     background-color: #3b1b19;
+    border: 5px ridge #e8e2e1;
 
     margin-top: 50px;
 }
@@ -180,7 +193,7 @@ tr {
     background-color: #650f0b;
 }
 
-.stats-cell, .equipment-cell, .tactic-cell, .special-abilities-cell {
+.stats-cell, .equipment-cell, .tactic-cell, .special-abilities-cell, .item-table-cell {
     background-color: #880c08;
 }
 
@@ -188,13 +201,60 @@ tr {
     width: 25%;
 }
 
-.stats-cell-total, .equipment-cell-current, .abilities-cell {
-    background-color: #a80e0a
+.stats-cell-total, .equipment-cell-current, .abilities-cell, .item-table-cell-value {
+    background-color: #a80e0a;
 }
 
 .pebble {
     max-height: 50%;
     max-width: 50%;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    background-color: #650f0b;
+    border: 4px ridge #e8e2e1;
+    text-align: center;
+    padding: 20px;
+
+    position: absolute;
+    z-index: 10;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
+.font-small {
+    font-size: 0.7em;
+    line-height: 20px;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.table-borderless {
+    border: none; !important;
+}
+
+.tooltip-item {
+    width: 20%;
+}
+
+.break-words {
+    overflow-wrap: break-word;
+}
+
+.item-name-border {
+    background-color: #3b1b19;
+    border: 4px ridge #e8e2e1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.item-armor-value {
+    background-color: #6b6b6b;
 }
 
 .dwarf-win {
@@ -229,81 +289,4 @@ tr {
 
     background-color: rgba(255, 0, 0, 0.5);
     border: 5px ridge #e8e2e1;
-}
-
-
-/* Word coloring */
-
-.Frenzy {
-    color: #fa0f0f;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.Focus {
-    color: #38acef;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.Balanced {
-    color: #49da0f;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.Overconfidence {
-    color: #fffb1a;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.common {
-    color: #32d207;
-    font-weight: bold;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.rare {
-    color: #1ca5ff;
-    font-weight: bold;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.epic {
-    color: #b800ff;
-    font-weight: bold;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.legendary {
-    color: #ff8000;
-    font-weight: bold;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-}
-
-.cursed {
-    color: #ff0000;
-    text-shadow: -3px 3px black, 3px 3px black, 3px 3px black, 3px -3px black;
-}
-
-.option_common {
-    color: #32d207;
-    font-weight: bold;
-}
-
-.option_rare {
-    color: #1ca5ff;
-    font-weight: bold;
-}
-
-.option_epic {
-    color: #b800ff;
-    font-weight: bold;
-}
-
-.option_legendary {
-    color: #ff8000;
-    font-weight: bold;
-}
-
-.option_cursed {
-    color: #ff0000;
-    font-weight: bold;
 }
