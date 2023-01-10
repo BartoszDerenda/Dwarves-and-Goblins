@@ -23,6 +23,7 @@
 #button:hover {
     background-color: #e8e2e1;
     color: #423f3e;
+    text-shadow: none;
 }
 
 #main-box-narrow {

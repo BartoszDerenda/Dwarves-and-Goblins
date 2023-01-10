@@ -63,6 +63,18 @@ table {
     background-color: #3b1b19;
 
     margin-top: 50px;
+
+    transition: 0.2s ease-in; /* vendorless fallback */
+    -o-transition: 0.2s ease-in; /* opera */
+    -ms-transition: 0.2s ease-in; /* IE 10 */
+    -moz-transition: 0.2s ease-in; /* Firefox */
+    -webkit-transition: 0.2s ease-in; /*safari and chrome */
+}
+
+.return-back:hover {
+    background-color: #e8e2e1;
+    color: #423f3e;
+    text-shadow: none;
 }
 
 .enemy-turn {
