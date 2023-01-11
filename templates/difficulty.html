@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/styles/difficulty.css" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="center">
+        <div id="main-box-narrow">
+            <h2>One more thing...</h2>
+            <h3>How tough are you?</h3>
+            <br>
+            <form method="POST" action="{{ url_for('game') }}">
+                <input class="button copper" type="submit" name="game_start" value="Copper Soft">
+            </form>
+            <br>
+            <br>
+            <form method="POST" action="{{ url_for('game') }}">
+                <input class="button steel" type="submit" name="game_start" value="Steel Solid">
+            </form>
+            <br>
+            <br>
+            <form method="POST" action="{{ url_for('game') }}">
+                <input class="button adamantite" type="submit" name="game_start" value="Adamantite Hard">
+            </form>
+            <br>
+            <br>
+            <form method="POST" action="{{ url_for('game') }}">
+                <input class="button death" type="submit" name="game_start" value="Dwarves must perish!">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

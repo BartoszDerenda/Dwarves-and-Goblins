@@ -125,6 +125,11 @@ body {
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
+.shadow_bolt {
+    color: #5800b0;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
 .blue {
     color: deepskyblue;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;

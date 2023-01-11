@@ -23,7 +23,7 @@
                                     <td class="abilities-cell tooltip"><span class="{{ game.ability_dict.get(special)[1] }}">{{ special }}</span>
                                         <div class="tooltip-text tooltip-ability">
                                             <span class="{{ game.ability_dict.get(special)[1] }}">{{ special }}</span>
-                                            <br>{{ game.ability_dict.get(special)[0] }}
+                                            <br><span class="white">{{ game.ability_dict.get(special)[0] }}</span>
                                         </div>
                                     </td>
                                 {% endfor %}
@@ -198,7 +198,7 @@
                                 <div class="tooltip-text">
                                     <span class="white">Armor value</span>
                                     <br>Armor decreases the damage you take from enemy physical, magical and special attacks.
-                                    <br>It does not reduce damage done by special abilities and % based damage types (ie. Soulrend, Souldrain).
+                                    <br>It does not reduce damage done by special abilities and % based damage types (ie. Soulrend, Soul Drain).
                                     <br>Damage reduction of magical attacks happens before willpower absorption.
                                     <br>
                                     <br>Armor >= Damage taken = 0 damage taken (+ special abilities damage)
@@ -222,7 +222,9 @@
                         {% if game.hero[dwarf].equipment[item_slot] == None %}
                             <td class="equipment-cell-current"></td>
                         {% elif game.hero[dwarf].equipment[item_slot].item_name == "Lucky Pebble" %}
-                            <td class="equipment-cell-current tooltip"><img class="pebble" src="/static/pebble.png" alt="Lucky Pebble">
+                            <td class="equipment-cell-current tooltip"><img class="item-image" src="/static/pebble.png" alt="Lucky Pebble">
+                        {% elif game.hero[dwarf].equipment[item_slot].item_name == "Pipe Bomb" %}
+                            <td class="equipment-cell-current tooltip"><img class="item-image" src="/static/pipe-bomb.png" alt="Pipe Bomb">
                         {% else %}
                             <td class="equipment-cell-current tooltip {{ game.hero[dwarf].equipment[item_slot].rarity }}">
                             {{ game.hero[dwarf].equipment[item_slot].item_name }}
@@ -435,8 +437,13 @@
                                         </tr>
                                     </table>
                                     {% if game.hero[dwarf].equipment[item_slot].special != None %}
-                                        <br><span class="{{ game.hero[dwarf].equipment[item_slot].rarity }}">{{ game.hero[dwarf].equipment[item_slot].special }}</span>
-                                        <br><span class="white">{{ game.hero[dwarf].equipment[item_slot].special_desc }}</span>
+                                        {% if game.hero[dwarf].equipment[item_slot].item_name == "Auto Crossbow" %}
+                                            <br><span class="rare">{{ game.hero[dwarf].equipment[item_slot].special }}</span>
+                                            <br><span class="white">{{ game.hero[dwarf].equipment[item_slot].special_desc }}</span>
+                                        {% else %}
+                                            <br><span class="{{ game.hero[dwarf].equipment[item_slot].rarity }}">{{ game.hero[dwarf].equipment[item_slot].special }}</span>
+                                            <br><span class="white">{{ game.hero[dwarf].equipment[item_slot].special_desc }}</span>
+                                        {% endif %}
                                         <br>
                                     {% endif %}
                                     <br><span class="break-words">{{ game.hero[dwarf].equipment[item_slot].description }}</span>
@@ -541,7 +548,7 @@
 </div>
     <form id="fixed-adventure" method="POST" action="{{ url_for('game') }}">
         <div class="adventure-loot-chances">
-            <h3>Cost: 14 days</h3>
+            <h3>Cost: 15 days</h3>
             <input type="submit" id="venture" name="adventure" class="adventure-button" value="Short venture">
             <p>45% - 6x Common</p>
             <p>30% - 4x Common, 2x Rare</p>
@@ -549,7 +556,7 @@
             <p>10% - 2x Epic + 2x Rare</p>
         </div>
         <div class="adventure-loot-chances">
-            <h3>Cost: 31 days</h3>
+            <h3>Cost: 30 days</h3>
             <input type="submit" id="adventure" name="adventure" class="adventure-button" value="Risky adventure">
             <p>45% - 6x Rare</p>
             <p>30% - 4x Rare, 2x Epic</p>
@@ -557,7 +564,7 @@
             <p>10% - 1x Legendary</p>
         </div>
         <div class="adventure-loot-chances">
-            <h3>Cost: 90 days</h3>
+            <h3>Cost: 60 days</h3>
             <input type="submit" id="expedition" name="adventure" class="adventure-button" value="Legendary expedition">
             <p>45% - 5x Epic</p>
             <p>30% - 7x Epic</p>
