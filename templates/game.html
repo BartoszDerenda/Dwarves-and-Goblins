@@ -135,10 +135,10 @@
                             <th class="tooltip"><label for="charisma_{{ dwarf }}"><span class="pink">Charisma</span></label>
                                 <div class="tooltip-text">
                                     <span class="pink">Charisma</span>
-                                    <br>Charisma increases your chance to activate charisma effect on attack by 1%
+                                    <br>Charisma increases your chance to activate charisma effect on your turn by 1%
                                     <br>Charisma effect can either increase the power of your next attack by 15 - 35%
                                     <br>or decrease the power of enemy's next attack by 15 - 35%.
-                                    <br>Multiple attack reductions in a row stack multiplicatively.
+                                    <br>Multiple attack decreases and increases in a row stack multiplicatively.
                                     <br>
                                     <br>100 Charisma = 100% chance to proc the effect on every attack
                                     <br>
@@ -546,26 +546,26 @@
         <div class="adventure-loot-chances">
             <h3>Cost: 15 days</h3>
             <input type="submit" id="venture" name="adventure" class="adventure-button" value="Short venture">
-            <p>50% - 7x Common</p>
+            <p>45% - 7x Common</p>
             <p>35% - 4x Common, 3x Rare</p>
             <p>15% - 7x Rare</p>
-            <p>??% - 6x Common + Special</p>
+            <p>5% - 6x Common + Special</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 30 days</h3>
             <input type="submit" id="adventure" name="adventure" class="adventure-button" value="Risky adventure">
-            <p>50% - 7x Rare</p>
+            <p>45% - 7x Rare</p>
             <p>35% - 4x Rare, 3x Epic</p>
             <p>15% - 7x Epic</p>
-            <p>??% - 1x Legendary</p>
+            <p>5% - 1x Legendary</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 60 days</h3>
             <input type="submit" id="expedition" name="adventure" class="adventure-button" value="Legendary expedition">
-            <p>50% - 7x Epic</p>
+            <p>45% - 7x Epic</p>
             <p>35% - 4x Epic, 1x Legendary</p>
             <p>15% - 3x Legendary</p>
-            <p>??% - 1x Cursed</p>
+            <p>5% - 1x Cursed</p>
         </div>
     </form>
 {% endblock %}

@@ -118,7 +118,6 @@ item_6 = Item('Leather Boots', 'Boots', 'common',
               "Ouch!",  # Enchantment
               "Your kicks deal 20% more damage.")  # Enchantment description
 
-
 # Common - Heavy armor set
 
 item_7 = Item('Rusty Helmet', 'Headpiece', 'common',
@@ -365,7 +364,6 @@ item_98 = Item('Volatile Flask', 'Artifact', 'common',
                "Unstable Concoction",  # Enchantment
                "At the start of the battle either you or the enemy takes 250 extra damage.")  # Enchantment description
 
-
 # RARE ITEMS
 # Rare - Medium armor set
 
@@ -450,7 +448,6 @@ item_106 = Item('Hardleather Boots', 'Boots', 'rare',
                 18,  # Armor
                 None,  # Enchantment
                 None)  # Enchantment description
-
 
 # Rare - Heavy armor set
 
@@ -538,7 +535,6 @@ item_112 = Item('Iron Greaves', 'Boots', 'rare',
                 None,  # Enchantment
                 None)  # Enchantment description
 
-
 # Rare - Light armor set
 
 item_113 = Item('Silk Headwrap', 'Headpiece', 'rare',
@@ -625,7 +621,6 @@ item_118 = Item('Silk Slippers', 'Boots', 'rare', "Not a battle armament but you
                 "Static",  # Enchantment
                 "Your electrocute spell deals 50% more damage.")  # Enchantment description
 
-
 # Rare - Other armor pieces
 
 item_119 = Item('Boots of Swiftness', 'Boots', 'rare',
@@ -641,7 +636,6 @@ item_119 = Item('Boots of Swiftness', 'Boots', 'rare',
                 8,  # Armor
                 None,  # Enchantment
                 None)  # Enchantment description
-
 
 # Rare - Weapons
 
@@ -672,11 +666,11 @@ item_151 = Item('Iron Mace', 'Weapon', 'rare',
                 0.0, 0,  # Speed
                 0,  # Armor
                 "Stun Chance",  # Enchantment
-                "15% chance on weapon strike to stun the enemy for a turn.")  # Enchantment description
+                "On weapon strike, 15% chance to stun the enemy for a turn.")  # Enchantment description
 
 item_152 = Item('Scrying Orb', 'Weapon', 'rare',
                 "Some adept magi can use them to spy on others, but "
-                "legendary mages can use them to see into past and future.",
+                "those truly knowledgeable in the arcane arts can use them to see into past and future.",
                 0.0, 0,  # Strength
                 0.15, 6,  # Intelligence
                 0.0, 0,  # Agility
@@ -686,8 +680,9 @@ item_152 = Item('Scrying Orb', 'Weapon', 'rare',
                 0.0, 0,  # Luck
                 0.15, 6,  # Speed
                 0,  # Armor
-                None,  # Enchantment
-                None)  # Enchantment description
+                "Mind Sap",  # Enchantment
+                "On magical attack hit, decrease opponent's "
+                "willpower or intelligence by 5%.")  # Enchantment description
 
 item_153 = Item('Crossbow', 'Weapon', 'rare',
                 '"Just a crossbow" is exactly what you want your enemies to think. '
@@ -721,7 +716,6 @@ item_154 = Item('Iron-clad Gauntlets', 'Weapon', 'rare',
                 "Crating",  # Enchantment
                 "Your punches deal 30% more damage. On top of that, everytime "
                 "you dodge an attack, you counterattack with a punch.")  # Enchantment description
-
 
 # Rare - Artifacts
 
@@ -927,7 +921,6 @@ item_212 = Item('Mithril Greaves', 'Boots', 'epic',
                 None,  # Enchantment
                 None)  # Enchantment description
 
-
 # Epic - Light armor
 
 item_213 = Item('Ceremonial Tiara', 'Headpiece', 'epic',
@@ -1014,7 +1007,6 @@ item_218 = Item('Ceremonial Shoes', 'Gloves', 'epic',
                 None,  # Enchantment
                 None)  # Enchantment description
 
-
 # Epic - Other armor pieces
 
 item_219 = Item('Red Boots of Swiftness', 'Boots', 'epic',
@@ -1047,6 +1039,21 @@ item_220 = Item('Trickster Gauntlets', 'Gloves', 'epic',
                 "Multi-tool",  # Enchantment
                 "Makes for a good beer keg opener.")  # Enchantment description
 
+item_221 = Item('Vampiric Cowl', 'Headpiece', 'epic',
+                "It comes with a mask and a fake pair of longer set of teeth to "
+                "help you with your newfound taste for blood.",
+                0.0, 0,  # Strength
+                0.1, 4,  # Intelligence
+                0.0, 0,  # Agility
+                0.0, 0,  # Willpower
+                0.0, 0,  # Endurance
+                0.2, 8,  # Charisma
+                0.0, 0,  # Luck
+                0.0, 0,  # Speed
+                14,  # Armor
+                "Lifesteal",  # Enchantment
+                "You heal for 20% of your damage done.")  # Enchantment description
+
 # Epic - Weapons
 
 item_250 = Item('Mageslayer Dagger', 'Weapon', 'epic',
@@ -1062,7 +1069,7 @@ item_250 = Item('Mageslayer Dagger', 'Weapon', 'epic',
                 0.2, 9,  # Speed
                 0,  # Armor
                 "Mageslayer",  # Enchantment
-                "On weapon strike deal bonus damage equal to 150% of enemy's intelligence.")  # Enchantment description
+                "On weapon strike, deal bonus damage equal to 150% of enemy's intelligence.")  # Enchantment description
 
 item_251 = Item('Firebrand Sword', 'Weapon', 'epic',
                 "A two-handed mageblade forged out of meteorite, reinforced with dark iron. "
@@ -1188,7 +1195,6 @@ item_297 = Item('Adrenalinium', 'Artifact', 'epic',
                 "You start off with a massive 400% speed boost, "
                 "but every turn, you lose 15% of your speed till the end of battle.")  # Enchantment description
 
-
 # LEGENDARY ITEMS
 
 item_301 = Item('Crown of Will', 'Headpiece', 'legendary',
@@ -1203,7 +1209,10 @@ item_301 = Item('Crown of Will', 'Headpiece', 'legendary',
                 0.0, 0,  # Speed
                 4,  # Armor
                 "Dominion",  # Enchantment
-                "1.5x of your charisma and willpower translates into magic damage.")  # Enchantment description
+                "At the start of battle, empower your magical damage by 1.5x of "
+                "your charisma and willpower till the end of battle. This effect "
+                "only happens once, increasing those two stats during battle will not "
+                "provide further damage increases.")  # Enchantment description
 
 item_302 = Item('Heart of the Mountain', 'Artifact', 'legendary',
                 "Legends say that such a crystal lies at the very bottom of every mountain. "
@@ -1315,7 +1324,6 @@ item_308 = Item("Elixir of Giants", 'Artefact', 'legendary',
                 None,  # Enchantment
                 None)  # Enchantment description
 
-
 # Special items
 
 item_777 = Item('Lucky Pebble', 'Artifact', 'common', "What is this thing..?",
@@ -1397,7 +1405,7 @@ item_list_rare = [item_101, item_102, item_103, item_104, item_105, item_106, it
                   item_151, item_152, item_153, item_154, item_199, item_198]
 item_list_epic = [item_201, item_202, item_203, item_204, item_205, item_206, item_207, item_208, item_209, item_210,
                   item_211, item_212, item_213, item_214, item_215, item_216, item_217, item_218, item_219, item_220,
-                  item_250, item_251, item_252, item_253, item_254, item_255, item_299, item_298, item_297]
+                  item_221, item_250, item_251, item_252, item_253, item_254, item_255, item_299, item_298, item_297]
 item_list_legendary = [item_301, item_302, item_303, item_304, item_305, item_306, item_307, item_308]
 item_list_cursed = [item_404, item_495, item_600]
 item_list_special = [item_999, item_777]
@@ -1421,7 +1429,7 @@ item_list_boots_rare = [item_106, item_112, item_118, item_119]
 item_list_artifact_rare = [item_199, item_198]
 
 item_list_weapon_epic = [item_250, item_251, item_252, item_253, item_254, item_255]
-item_list_headpiece_epic = [item_201, item_207, item_213]
+item_list_headpiece_epic = [item_201, item_207, item_213, item_221]
 item_list_shoulders_epic = [item_102, item_108, item_214]
 item_list_chest_epic = [item_203, item_209, item_215]
 item_list_pants_epic = [item_204, item_210, item_216]
@@ -1449,7 +1457,8 @@ item_dict = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jac
 
              "Boots of Swiftness": item_119,
 
-             "Flintlock Pistol": item_150, "Iron Mace": item_151, "Amethyst Focus": item_152, "Crossbow": item_153, "Iron-clad Gauntlets": item_154,
+             "Flintlock Pistol": item_150, "Iron Mace": item_151, "Scrying Orb": item_152, "Crossbow": item_153,
+             "Iron-clad Gauntlets": item_154,
 
              "Shiny Coin": item_199, "Buckler": item_198,
 
@@ -1461,7 +1470,7 @@ item_dict = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jac
              "Ceremonial Tiara": item_213, "Ceremonial Epaluettes": item_214, "Ceremonial Robe": item_215,
              "Ceremonial Trousers": item_216, "Ceremonial Gloves": item_217, "Ceremonial Shoes": item_218,
 
-             "Red Boots of Swiftness": item_219, "Trickster Gauntlets": item_220,
+             "Red Boots of Swiftness": item_219, "Trickster Gauntlets": item_220, "Vampiric Cowl": item_221,
 
              "Mageslayer Dagger": item_250, "Firebrand Sword": item_251, "Dragonwood Wand": item_252,
              '"Portable" Cannon': item_253, "Grimoire of Shadows": item_254, "Auto Crossbow": item_255,
@@ -1485,7 +1494,7 @@ ability_dict = {
     "Goblinbane": ["Deal 15% more damage to the goblins.", "common"],
     "Ouch!": ["Your kicks deal 20% more damage.", "common"],
 
-    "Stun Chance": ["15% chance on weapon strike to stun the enemy for a turn.", "rare"],
+    "Stun Chance": ["On weapon strike, 15% chance to stun the enemy for a turn.", "rare"],
     "Momentum": ["Gain 1% speed every time you take a turn.", "rare"],
     "Hawkeye": ["Your critical attacks deal extra 50 damage.", "rare"],
     "Spiked Boots": ["Your kicks always crit.", "rare"],
@@ -1495,52 +1504,62 @@ ability_dict = {
                 "you dodge an attack, you counterattack with a punch.", "rare"],
     "Critical Boost": ["Your critical attacks now deal x2.0 damage instead of x1.5", "rare"],
     "Armor Up!": ["Increase your total armor value by 25%.", "rare"],
+    "Mind Sap": ["On magical attack hit, decrease opponent's willpower or intelligence by 5%.", "rare"],
 
     "Blade Mail": ["You reflect 15% of melee damage taken.", "epic"],
     "Pearl Armor": ["You reflect 15% of magic damage taken.", "epic"],
     "Energize": ["Gain 3% speed every time you take a turn.", "epic"],
-    "Mind Sap": ["On hit decrease opponent's willpower or intelligence by 5%.", "epic"],
-    "Lifesteal": ["You heal for 10% of your damage done.", "epic"],
+    "Lifesteal": ["You heal for 20% of your damage done.", "epic"],
     "Firebrand": ["On weapon strike, deal 45 extra fire damage to the enemy.", "epic"],
     "Smoke Bomb": ["First 4 enemy hits will always miss!", "epic"],
-    "Mageslayer": ["On weapon strike deal bonus damage equal to 150% of enemy's intelligence.", "epic"],
+    "Mageslayer": ["On weapon, strike deal bonus damage equal to 150% of enemy's intelligence.", "epic"],
     "Fireproof": ["You take 50% less damage from fire based spells.", "epic"],
     "Anti-magic Zone": ["You take 20% less damage from magical attacks.", "epic"],
     "Authority": ["Steal 35% of your opponent's charisma.", "epic"],
     "Mist": ["First four of enemy attacks will be avoided.", "epic"],
     "Multi-tool": [
-        "After a bit of testing, your dwarf managed to figure out their true functionality - on hit 15% chance to blind the enemy. Their next attack will be avoided.",
+        "After a bit of testing, your dwarf managed to figure out their true functionality - on successful attack, "
+        "15% chance to blind the enemy. Their next attack will be avoided.",
         "epic"],
     "Reload": [
-        "It takes two turns to fire this weapon. This also means that special attacks will happen much less frequently, although thanks to your over-preparing nature, first one happens a turn quicker.",
+        "It takes two turns to fire this weapon. This also means that special attacks will happen much less "
+        "frequently, although thanks to your over-preparing nature, first one happens a turn quicker.",
         "epic"],
     "Avoidance": ["20% chance to avoid enemy attack.", "epic"],
     "Dark Arts": [
-        "All of your magic spells are replaced with Shadow Bolt. This forbidden spell penetrates enemy's defences, ignoring their willpower absorption.",
+        "All of your magic spells are replaced with Shadow Bolt. This forbidden spell penetrates enemy's defences, "
+        "ignoring their willpower absorption.",
         "epic"],
     "Adrenaline": [
-        "You start off with a massive 400% speed boost, but every turn, you lose 15% of your speed till the end of battle.",
+        "You start off with a massive 400% speed boost, but every turn, you lose 15% of your speed till the end of "
+        "battle.",
         "epic"],
     "Barbed Fists": ["Your punches always crit.", "epic"],
 
     "Earthbound": [
-        "The legendary shield-sword Tel'lar protects you from harm. Every time you are struck in combat, gain 5% armor, agility and willpower.",
+        "The legendary shield-sword Tel'lar protects you from harm. Every time you are struck in combat, "
+        "gain 5% armor, agility and willpower.",
         "legendary"],
     "Soul Drain": ["On magical hit, steal 3% total health from the enemy.", "legendary"],
     "Soulrend": ["On weapon strike, deal 5% extra damage based off enemy's total health.", "legendary"],
     "Avatar": ["You assume the legendary form of Avatar of the Mountain. Take 20% less damage from all sources.",
                "legendary"],
-    "Dominion": ["1.5x of your charisma and willpower translates into magic damage.", "legendary"],
+    "Dominion": ["At the start of battle, empower your magical damage by 1.5x of "
+                 "your charisma and willpower till the end of battle. This effect "
+                 "only happens once, increasing those two stats during battle will not "
+                 "provide further damage increases.", "legendary"],
     "Aegis": ["You take 65% less damage from special attacks.", "legendary"],
     "Neurotoxin": [
-        "On first weapon strike, reduce opponent's willpower, agility, charisma and luck by 35% and deal 500 extra damage.",
+        "On first weapon strike, reduce opponent's willpower, agility, charisma and luck by 35% and deal 500 extra "
+        "damage.",
         "legendary"],
 
     "Cursed": ["Perhaps it would be wiser not to bring it into battle...", "cursed"],
     "Pipe Bomb": ["At the start of the battle either you or the enemy takes 2500 extra damage.", "cursed"],
     "Warframe": [
-        "You somehow managed to fit inside... Strength and speed is tremendously increased but you will self-destruct in 10 turns - may your ashes scatter among the stars well, soldier.",
+        "You somehow managed to fit inside... Strength and speed is tremendously increased but you will self-destruct "
+        "in 10 turns - may your ashes scatter among the stars well, soldier.",
         "cursed"],
     "Nanomachines": ["You take 50% less damage from physical and magical attacks but 300% more from special attacks.",
                      "cursed"]
-    }
+}
