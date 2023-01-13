@@ -13,11 +13,7 @@
     border-radius: 40px;
     box-shadow: 0 7px 15px rgba(0, 0, 0, 1);
 
-    transition: 0.2s ease-in; /* vendorless fallback */
-    -o-transition: 0.2s ease-in; /* opera */
-    -ms-transition: 0.2s ease-in; /* IE 10 */
-    -moz-transition: 0.2s ease-in; /* Firefox */
-    -webkit-transition: 0.2s ease-in; /*safari and chrome */
+    transition: 0.2s ease-in;
 }
 
 #button:hover {

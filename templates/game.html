@@ -135,20 +135,15 @@
                             <th class="tooltip"><label for="charisma_{{ dwarf }}"><span class="pink">Charisma</span></label>
                                 <div class="tooltip-text">
                                     <span class="pink">Charisma</span>
-                                    <br>Charisma increases your chance to activate charisma effect on attack by 0.2%
+                                    <br>Charisma increases your chance to activate charisma effect on attack by 1%
                                     <br>Charisma effect can either increase the power of your next attack by 15 - 35%
                                     <br>or decrease the power of enemy's next attack by 15 - 35%.
                                     <br>Multiple attack reductions in a row stack multiplicatively.
                                     <br>
-                                    <br>500 Charisma = 100% chance to proc the effect on every attack
+                                    <br>100 Charisma = 100% chance to proc the effect on every attack
                                     <br>
                                     <br>Cost of training:
                                     <br>1 point of Charisma = 1 day
-                                    <br>
-                                    <br>
-                                    <div class="font-small">Legends say, that a dwarf of one-thousand Charisma points wearing a legendary item
-                                        <br>would single-handedly bring peace to this war-torn land...
-                                    </div>
                                 </div>
                             </th>
                             <td class="stats-cell"><label for="charisma">{{ game.hero[dwarf].charisma }}</label></td>
@@ -161,10 +156,10 @@
                             <th class="tooltip"><label for="luck_{{ dwarf }}"><span class="green">Luck</span></label>
                                 <div class="tooltip-text">
                                     <span class="green">Luck</span>
-                                    <br>Luck increases your chance to perform a critical attack by 0.2%
+                                    <br>Luck increases your chance to perform a critical attack by 1%
                                     <br>Critical attack increases damage of your attack by x1.5
                                     <br>
-                                    <br>500 Luck = 100% critical strike chance
+                                    <br>100 Luck = 100% critical strike chance
                                     <br>
                                     <br>Cost of training:
                                     <br>1 point of Luck = 1 day
@@ -200,6 +195,7 @@
                                     <br>Armor decreases the damage you take from enemy physical, magical and special attacks.
                                     <br>It does not reduce damage done by special abilities and % based damage types (ie. Soulrend, Soul Drain).
                                     <br>Damage reduction of magical attacks happens before willpower absorption.
+                                    <br>Armor reduction is x1.5 more powerful against special attacks.
                                     <br>
                                     <br>Armor >= Damage taken = 0 damage taken (+ special abilities damage)
                                     <br>
@@ -550,26 +546,26 @@
         <div class="adventure-loot-chances">
             <h3>Cost: 15 days</h3>
             <input type="submit" id="venture" name="adventure" class="adventure-button" value="Short venture">
-            <p>45% - 6x Common</p>
-            <p>30% - 4x Common, 2x Rare</p>
-            <p>15% - 5x Rare</p>
-            <p>10% - 2x Epic + 2x Rare</p>
+            <p>50% - 7x Common</p>
+            <p>35% - 4x Common, 3x Rare</p>
+            <p>15% - 7x Rare</p>
+            <p>??% - 6x Common + Special</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 30 days</h3>
             <input type="submit" id="adventure" name="adventure" class="adventure-button" value="Risky adventure">
-            <p>45% - 6x Rare</p>
-            <p>30% - 4x Rare, 2x Epic</p>
-            <p>15% - 5x Epic</p>
-            <p>10% - 1x Legendary</p>
+            <p>50% - 7x Rare</p>
+            <p>35% - 4x Rare, 3x Epic</p>
+            <p>15% - 7x Epic</p>
+            <p>??% - 1x Legendary</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 60 days</h3>
             <input type="submit" id="expedition" name="adventure" class="adventure-button" value="Legendary expedition">
-            <p>45% - 5x Epic</p>
-            <p>30% - 7x Epic</p>
-            <p>15% - 1x Legendary</p>
-            <p>10% - 2x Legendary</p>
+            <p>50% - 7x Epic</p>
+            <p>35% - 4x Epic, 1x Legendary</p>
+            <p>15% - 3x Legendary</p>
+            <p>??% - 1x Cursed</p>
         </div>
     </form>
 {% endblock %}

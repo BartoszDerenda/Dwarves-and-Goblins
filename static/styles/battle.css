@@ -64,11 +64,7 @@ table {
 
     margin-top: 50px;
 
-    transition: 0.2s ease-in; /* vendorless fallback */
-    -o-transition: 0.2s ease-in; /* opera */
-    -ms-transition: 0.2s ease-in; /* IE 10 */
-    -moz-transition: 0.2s ease-in; /* Firefox */
-    -webkit-transition: 0.2s ease-in; /*safari and chrome */
+    transition: 0.2s ease-in;
 }
 
 .return-back:hover {
