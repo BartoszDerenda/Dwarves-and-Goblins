@@ -11,22 +11,22 @@ app.secret_key = '8008135'
 
 games = {}
 
+
 @app.route('/')
 def homepage():
-
     if 'key' not in session:
         session['key'] = uuid.uuid4()
 
     return render_template('homepage.html')
 
+
 @app.route('/difficulty', methods=['GET', 'POST'])
 def difficulty_setting():
-
     return render_template('difficulty.html')
+
 
 @app.route('/ending', methods=['GET', 'POST'])
 def ending():
-
     if request.method == 'POST':
         if request.form.get('ending', False) == 'Banish the goblins':
             ending_type = 'good ending'
@@ -47,7 +47,6 @@ def ending():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
-
     global game
 
     if request.method == 'POST':
@@ -95,14 +94,14 @@ def game():
         elif request.form.get('back', False) == 'Victory!' or request.form.get('back', False) == 'Retreat':
             return render_template('game.html', game=game)
 
-
         #   TRAIN
         #   Deadmines: Become superhuman
         #
         #   HTML form, string  ->  game.hero[dwarf].<stats>
         #
-        #   Takes an input from the HTML form, adds stats from the input into the dwarf at the cost of days.
-        #   If the training is too costly (ie. not enough days left), nothing will happen. Flash error message for this case is to be implemented in the future.
+        # Takes an input from the HTML form, adds stats from the input into the dwarf at the cost of days. If the
+        # training is too costly (i.e. not enough days left), nothing will happen. Flash error message for this case
+        # is to be implemented in the future.
 
         elif request.form.get('train dwarf1', False) == 'Train':
             train('dwarf1')
@@ -113,16 +112,16 @@ def game():
         elif request.form.get('train dwarf3', False) == 'Train':
             train('dwarf3')
 
-
-
         #   EQUIP
         #   It was a Barbie doll dress up game all along...
         #
-        #   game.backpack, array  ->  HTML form, string  ->  game.item_dict, dictionary  ->  game.hero[dwarf].equipment, dictionary
+        # game.backpack, array  ->  HTML form, string  ->  game.item_dict, dictionary  ->
+        # -> game.hero[dwarf].equipment, dictionary
         #
-        #   Takes a string from HTML form option field (ex. "Leather Cap"), then searches for its object in item_dict which contains reference to all items in the game.
-        #   Then takes that object and slams it into the corresponding equipment slot. Also there's an unequipment call somewhere in the middle.
-        #   Stuff resets and recalculates at the end, as per tradition.
+        # Takes a string from HTML form option field (ex. "Leather Cap"), then searches for its object in item_dict
+        # which contains reference to all items in the game. Then takes that object and slams it into the
+        # corresponding equipment slot, also there's an unequipment call somewhere in the middle. Stuff resets and
+        # recalculates at the end, as per tradition.
 
         elif request.form.get('equipment dwarf1', False) == 'Equip':
             equip('dwarf1')
@@ -133,16 +132,15 @@ def game():
         elif request.form.get('equipment dwarf3', False) == 'Equip':
             equip('dwarf3')
 
-
-
         #   UNEQUIP
         #   For peeling the dwarves out of their juicy equipment.
         #
         #   HTML form, string  ->  game.hero[dwarf].equipment
         #
-        #   Takes a string from HTML form option field (ex. "Leather Cap") and searches for it in the corresponding dwarf's equipment.
-        #   Puts it into his backpack and deletes it from the equipment. Because both objects already have the actual object of the item inside them,
-        #   there's no need to cross-reference anything with the help of item_dict.
+        # Takes a string from HTML form option field (ex. "Leather Cap") and searches for it in the corresponding
+        # dwarf's equipment. Puts it into his backpack and deletes it from the equipment. Because both objects
+        # already have the actual object of the item inside them, there's no need to cross-reference anything with
+        # the help of item_dict.
 
         elif request.form.get('equipment dwarf1', False) == 'Unequip':
             unequip('dwarf1')
@@ -152,7 +150,6 @@ def game():
 
         elif request.form.get('equipment dwarf3', False) == 'Unequip':
             unequip('dwarf3')
-
 
         #   ADVENTURE
         #   Your only source of loot.
@@ -295,17 +292,16 @@ def game():
             else:
                 game.hero['dwarf3'].tactic = request.form.get('tactic')
 
-
     return render_template('game.html', game=game)
 
-def update_equipment(dwarf):
 
+def update_equipment(dwarf):
     # Updates multipliers and bonuses values based on current equipment
     for item_slot, item_name in game.hero[dwarf].equipment.items():
         if item_name is not None:
 
             rounded = game.hero[dwarf].str_mul + game.hero[dwarf].equipment[item_slot].str_mul
-            game.hero[dwarf].str_mul = round(rounded,2)
+            game.hero[dwarf].str_mul = round(rounded, 2)
             game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[item_slot].str_bonus
 
             rounded = game.hero[dwarf].int_mul + game.hero[dwarf].equipment[item_slot].int_mul
@@ -343,13 +339,12 @@ def update_equipment(dwarf):
 
 
 def update_equipment_enemy(goblin):
-
     # Updates multipliers and bonuses values based on current equipment
     for item_slot, item_name in game.enemy[goblin].equipment.items():
         if item_name is not None:
 
             rounded = game.enemy[goblin].str_mul + game.enemy[goblin].equipment[item_slot].str_mul
-            game.enemy[goblin].str_mul = round(rounded,2)
+            game.enemy[goblin].str_mul = round(rounded, 2)
             game.enemy[goblin].str_bonus += game.enemy[goblin].equipment[item_slot].str_bonus
 
             rounded = game.enemy[goblin].int_mul + game.enemy[goblin].equipment[item_slot].int_mul
@@ -385,26 +380,31 @@ def update_equipment_enemy(goblin):
             if game.enemy[goblin].equipment[item_slot].special is not None:
                 game.enemy[goblin].specials_list.append(game.enemy[goblin].equipment[item_slot].special)
 
-def stat_reset(dwarf):
 
+def stat_reset(dwarf):
     # Resets all stats before equipment update
-    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[dwarf].agi_mul = game.hero[dwarf].will_mul = game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
-    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = game.hero[dwarf].agi_bonus = game.hero[dwarf].will_bonus = game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = game.hero[dwarf].lck_bonus = game.hero[dwarf].spd_bonus = 0
+    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[dwarf].agi_mul = game.hero[dwarf].will_mul = 1.0
+    game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
+    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = game.hero[dwarf].agi_bonus = 0
+    game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = game.hero[dwarf].lck_bonus = 0
+    game.hero[dwarf].will_bonus = game.hero[dwarf].spd_bonus = 0
     game.hero[dwarf].armor = 0
     game.hero[dwarf].specials_list.clear()
 
-def update_stats(dwarf):
 
+def update_stats(dwarf):
     # Updates total stats based on the bases, multipliers and bonuses
     if game.hero[dwarf].str_mul <= 0.0:
         game.hero[dwarf].str_mul = 0.1
-    game.hero[dwarf].str_total = round(game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
+    game.hero[dwarf].str_total = round(
+        game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
     if game.hero[dwarf].str_total <= 0:
         game.hero[dwarf].str_total = 1
 
     if game.hero[dwarf].int_mul <= 0.0:
         game.hero[dwarf].int_mul = 0.1
-    game.hero[dwarf].int_total = round(game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
+    game.hero[dwarf].int_total = round(
+        game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
     if game.hero[dwarf].int_total <= 0:
         game.hero[dwarf].int_total = 1
 
@@ -416,19 +416,22 @@ def update_stats(dwarf):
 
     if game.hero[dwarf].will_mul <= 0.0:
         game.hero[dwarf].will_mul = 0.1
-    game.hero[dwarf].will_total = round(game.hero[dwarf].willpower * game.hero[dwarf].will_mul + game.hero[dwarf].will_bonus)
+    game.hero[dwarf].will_total = round(
+        game.hero[dwarf].willpower * game.hero[dwarf].will_mul + game.hero[dwarf].will_bonus)
     if game.hero[dwarf].will_total <= 0:
         game.hero[dwarf].will_total = 1
 
     if game.hero[dwarf].end_mul <= 0.0:
         game.hero[dwarf].end_mul = 0.1
-    game.hero[dwarf].end_total = round(game.hero[dwarf].endurance * game.hero[dwarf].end_mul + game.hero[dwarf].end_bonus)
+    game.hero[dwarf].end_total = round(
+        game.hero[dwarf].endurance * game.hero[dwarf].end_mul + game.hero[dwarf].end_bonus)
     if game.hero[dwarf].end_total <= 0:
         game.hero[dwarf].end_total = 1
 
     if game.hero[dwarf].char_mul <= 0.0:
         game.hero[dwarf].char_mul = 0.1
-    game.hero[dwarf].char_total = round(game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
+    game.hero[dwarf].char_total = round(
+        game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
     if game.hero[dwarf].char_total <= 0:
         game.hero[dwarf].char_total = 1
 
@@ -444,59 +447,67 @@ def update_stats(dwarf):
     if game.hero[dwarf].spd_total <= 0:
         game.hero[dwarf].spd_total = 1
 
-def update_stats_enemy(goblin):
 
+def update_stats_enemy(goblin):
     # Updates total stats based on the bases, multipliers and bonuses
     if game.enemy[goblin].str_mul <= 0.0:
         game.enemy[goblin].str_mul = 0.1
-    game.enemy[goblin].str_total = round(game.enemy[goblin].strength * game.enemy[goblin].str_mul + game.enemy[goblin].str_bonus)
+    game.enemy[goblin].str_total = round(
+        game.enemy[goblin].strength * game.enemy[goblin].str_mul + game.enemy[goblin].str_bonus)
     if game.enemy[goblin].str_total <= 0:
         game.enemy[goblin].str_total = 1
 
     if game.enemy[goblin].int_mul <= 0.0:
         game.enemy[goblin].int_mul = 0.1
-    game.enemy[goblin].int_total = round(game.enemy[goblin].intelligence * game.enemy[goblin].int_mul + game.enemy[goblin].int_bonus)
+    game.enemy[goblin].int_total = round(
+        game.enemy[goblin].intelligence * game.enemy[goblin].int_mul + game.enemy[goblin].int_bonus)
     if game.enemy[goblin].int_total <= 0:
         game.enemy[goblin].int_total = 1
 
     if game.enemy[goblin].agi_mul <= 0.0:
         game.enemy[goblin].agi_mul = 0.1
-    game.enemy[goblin].agi_total = round(game.enemy[goblin].agility * game.enemy[goblin].agi_mul + game.enemy[goblin].agi_bonus)
+    game.enemy[goblin].agi_total = round(
+        game.enemy[goblin].agility * game.enemy[goblin].agi_mul + game.enemy[goblin].agi_bonus)
     if game.enemy[goblin].agi_total <= 0:
         game.enemy[goblin].agi_total = 1
 
     if game.enemy[goblin].will_mul <= 0.0:
         game.enemy[goblin].will_mul = 0.1
-    game.enemy[goblin].will_total = round(game.enemy[goblin].willpower * game.enemy[goblin].will_mul + game.enemy[goblin].will_bonus)
+    game.enemy[goblin].will_total = round(
+        game.enemy[goblin].willpower * game.enemy[goblin].will_mul + game.enemy[goblin].will_bonus)
     if game.enemy[goblin].will_total <= 0:
         game.enemy[goblin].will_total = 1
 
     if game.enemy[goblin].end_mul <= 0.0:
         game.enemy[goblin].end_mul = 0.1
-    game.enemy[goblin].end_total = round(game.enemy[goblin].endurance * game.enemy[goblin].end_mul + game.enemy[goblin].end_bonus)
+    game.enemy[goblin].end_total = round(
+        game.enemy[goblin].endurance * game.enemy[goblin].end_mul + game.enemy[goblin].end_bonus)
     if game.enemy[goblin].end_total <= 0:
         game.enemy[goblin].end_total = 1
 
     if game.enemy[goblin].char_mul <= 0.0:
         game.enemy[goblin].char_mul = 0.1
-    game.enemy[goblin].char_total = round(game.enemy[goblin].charisma * game.enemy[goblin].char_mul + game.enemy[goblin].char_bonus)
+    game.enemy[goblin].char_total = round(
+        game.enemy[goblin].charisma * game.enemy[goblin].char_mul + game.enemy[goblin].char_bonus)
     if game.enemy[goblin].char_total <= 0:
         game.enemy[goblin].char_total = 1
 
     if game.enemy[goblin].lck_mul <= 0.0:
         game.enemy[goblin].lck_mul = 0.1
-    game.enemy[goblin].lck_total = round(game.enemy[goblin].luck * game.enemy[goblin].lck_mul + game.enemy[goblin].lck_bonus)
+    game.enemy[goblin].lck_total = round(
+        game.enemy[goblin].luck * game.enemy[goblin].lck_mul + game.enemy[goblin].lck_bonus)
     if game.enemy[goblin].lck_total <= 0:
         game.enemy[goblin].lck_total = 1
 
     if game.enemy[goblin].spd_mul <= 0.0:
         game.enemy[goblin].spd_mul = 0.1
-    game.enemy[goblin].spd_total = round(game.enemy[goblin].speed * game.enemy[goblin].spd_mul + game.enemy[goblin].spd_bonus)
+    game.enemy[goblin].spd_total = round(
+        game.enemy[goblin].speed * game.enemy[goblin].spd_mul + game.enemy[goblin].spd_bonus)
     if game.enemy[goblin].spd_total <= 0:
         game.enemy[goblin].spd_total = 1
 
-def train(dwarf):
 
+def train(dwarf):
     if request.form.get("str_increase") != '':
         strength = int(request.form.get("str_increase"))
     else:
@@ -548,8 +559,8 @@ def train(dwarf):
 
     game.days -= temp_days
 
-def unequip(dwarf):
 
+def unequip(dwarf):
     for key, value in game.hero[dwarf].equipment.items():
         if value is not None:
             game.backpack.append(value)
@@ -560,8 +571,8 @@ def unequip(dwarf):
     stat_reset(dwarf)
     update_stats(dwarf)
 
-def equip(dwarf):
 
+def equip(dwarf):
     # Declaring stuff cuz otherwise PyCharm screams, even though there's no way for these to ever be unassigned I think.
     weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
 
@@ -626,6 +637,7 @@ def equip(dwarf):
     update_equipment(dwarf)
     update_stats(dwarf)
 
+
 def game_mode_easy():
     for goblin in game.enemy:
         game.enemy[goblin].strength = random.randint(15, 25)
@@ -647,6 +659,7 @@ def game_mode_easy():
 
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
+
 
 def game_mode_normal():
     for goblin in game.enemy:
@@ -670,6 +683,7 @@ def game_mode_normal():
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
 
+
 def game_mode_hard():
     for goblin in game.enemy:
         game.enemy[goblin].strength = random.randint(25, 40)
@@ -692,10 +706,10 @@ def game_mode_hard():
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
 
-def game_mode_death():
 
+def game_mode_death():
     # TO DO LATER
-    # I will make around 20 custom built goblins made out of most broken builds I can think of :)
+    # I will make around 20 custom-built goblins made out of most broken builds I can think of :)
     for goblin in game.enemy:
         game.enemy[goblin].strength = random.randint(25, 40)
         game.enemy[goblin].intelligence = random.randint(25, 40)
@@ -721,22 +735,25 @@ def game_mode_death():
 # Base hero class - for generating both dwarves and goblins
 class Hero:
     def __init__(self, token):
-        dwarf_names = ['Karl', 'Bjourn', 'Boris', 'Darvis', 'Gamrid', 'Magni', 'Muradin', 'Dagran', 'Brann', 'Falstad', 'Ragnok']
-        dwarf_surnames = ['Darkstone', 'Deeprock', 'Hammerblow', 'Buzzbeard', 'Surefoot', 'Copperfinger', 'Highcliff', 'Stoneborn', 'Ironbreaker', 'Bronzebeard']
+        dwarf_names = ['Karl', 'Bjourn', 'Boris', 'Darvis', 'Gamrid', 'Magni', 'Muradin', 'Dagran', 'Brann', 'Falstad',
+                       'Ragnok']
+        dwarf_surnames = ['Darkstone', 'Deeprock', 'Hammerblow', 'Buzzbeard', 'Surefoot', 'Copperfinger', 'Highcliff',
+                          'Stoneborn', 'Ironbreaker', 'Bronzebeard']
         goblin_names = ['Zorgg', 'Timmy', 'Velrog', 'Borkle', 'Burd', 'Beerk', 'Gnarlak', "Ur'lok", "Zyg'fryd"]
-        goblin_surnames = ['the Destroyer', 'Unbreakable', 'Markuth', 'Mudborn', 'Cogknife', 'Duskshiv', 'Darguun', "Dhak'ar"]
+        goblin_surnames = ['the Destroyer', 'Unbreakable', 'Markuth', 'Mudborn', 'Cogknife', 'Duskshiv', 'Darguun',
+                           "Dhak'ar"]
 
         # Generating the names
         if token == "dwarf":
             name = random.choice(dwarf_names)
             surname = random.choice(dwarf_surnames)
             name_surname = name + ' ' + surname
-            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1,23)) + '.jpg'
+            hero_portrait = '/static/dwarf_portraits/' + str(random.randint(1, 23)) + '.jpg'
         else:
             name = random.choice(goblin_names)
             surname = random.choice(goblin_surnames)
             name_surname = name + ' ' + surname
-            hero_portrait = '/static/goblin_portraits/' + str(random.randint(1,10)) + '.jpg'
+            hero_portrait = '/static/goblin_portraits/' + str(random.randint(1, 10)) + '.jpg'
 
         # Generating starter equipment (only for the player)
         starter_eq = eq_choice = None
@@ -806,14 +823,15 @@ class Hero:
         if self.hero_portrait == '/static/dwarf_portraits/23.jpg':
             self.hero_name = 'Stranger'
             self.equipment.update({'Weapon': item_51,
-                                  'Headpiece': item_7,
-                                  'Shoulders': item_8,
-                                  'Chest': item_9,
-                                  'Gloves': item_10,
-                                  'Pants': item_11,
-                                  'Boots': item_13,
-                                  'Artifact': item_999})
+                                   'Headpiece': item_7,
+                                   'Shoulders': item_8,
+                                   'Chest': item_9,
+                                   'Gloves': item_10,
+                                   'Pants': item_11,
+                                   'Boots': item_13,
+                                   'Artifact': item_999})
             self.tactic = 'Frenzy'
+
 
 class Game:
 
@@ -828,22 +846,23 @@ class Game:
 
 @app.route('/battleground', methods=['GET', 'POST'])
 def battleground():
-
     if request.method == 'POST':
 
         if request.form.get('battle dwarf1', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf1', goblin='goblin1', battlelog=battle('dwarf1', 'goblin1'))
+            return render_template('battle.html', game=game, dwarf='dwarf1', goblin='goblin1',
+                                   battlelog=battle('dwarf1', 'goblin1'))
 
         elif request.form.get('battle dwarf2', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf2', goblin='goblin2', battlelog=battle('dwarf2', 'goblin2'))
+            return render_template('battle.html', game=game, dwarf='dwarf2', goblin='goblin2',
+                                   battlelog=battle('dwarf2', 'goblin2'))
 
         elif request.form.get('battle dwarf3', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf3', goblin='goblin3', battlelog=battle('dwarf3', 'goblin3'))
+            return render_template('battle.html', game=game, dwarf='dwarf3', goblin='goblin3',
+                                   battlelog=battle('dwarf3', 'goblin3'))
+
 
 def battle(dwarf, goblin):
-
     battle_log = []
-    turn = ''
     win_condition = False
 
     dwarf_name = game.hero[dwarf].hero_name
@@ -869,8 +888,6 @@ def battle(dwarf, goblin):
     dwarf_special_attack_charge = 1
     dwarf_special_attack_next = False
 
-
-
     goblin_name = game.enemy[goblin].hero_name
 
     goblin_physical = game.enemy[goblin].str_total * 3
@@ -894,10 +911,11 @@ def battle(dwarf, goblin):
     goblin_special_attack_charge = 1
     goblin_special_attack_next = False
 
-
     damage = 1
     reduction_message = 1
-    critical_message = dwarf_reduction_message = dwarf_increase_message = goblin_reduction_message = goblin_increase_message = goblin_dodge_message = goblin_absorb_message = dwarf_dodge_message = dwarf_absorb_message = False
+    critical_message = dwarf_reduction_message = dwarf_increase_message = goblin_reduction_message = \
+        goblin_increase_message = goblin_dodge_message = goblin_absorb_message = dwarf_dodge_message = \
+        dwarf_absorb_message = False
     dwarf_reduction = []
     goblin_reduction = []
     dwarf_increase = []
@@ -961,96 +979,54 @@ def battle(dwarf, goblin):
                                       ' <span class="gray">strikes</span>']
 
     magical_attack_strings = [' <span class="blue">freezes</span>', ' <span class="purple">arcane blasts</span>',
-                            ' launches a <span class="orange">fireball</span> at',
-                            ' sets <span class="red">aflame</span>',
-                            ' <span class="deep_blue">electrocutes</span>']
+                              ' launches a <span class="orange">fireball</span> at',
+                              ' sets <span class="red">aflame</span>',
+                              ' <span class="deep_blue">electrocutes</span>']
 
     better_magical_attack_strings = ' launches a <span class="shadow_bolt">shadow bolt</span>'
 
-    def dwarf_messages_reset():
-        dwarf_absorb_message = False
-        dwarf_avoidance_message = False
-        dwarf_firebrand_message = False
-        dwarf_lifesteal_message = False
-        dwarf_hawkeye_message = False
-        dwarf_stun_message = False
-        dwarf_mindsap_will_message = False
-        dwarf_mindsap_int_message = False
-        dwarf_soulrend_message = False
-        dwarf_souldrain_message = False
-        dwarf_earthbound_message = False
-        dwarf_mageslayer_message = False
-        dwarf_neurotoxin_message = False
-        dwarf_multitool_message = False
-        dwarf_counterattack_message = False
-        lifesteal = 0
-        mageslayer = 0
-        soulrend = 0
-        souldrain = 0
-        counterattack = 0
-
-    def goblin_messages_reset():
-        goblin_absorb_message = False
-        goblin_avoidance_message = False
-        goblin_firebrand_message = False
-        goblin_lifesteal_message = False
-        goblin_hawkeye_message = False
-        goblin_stun_message = False
-        goblin_mindsap_will_message = False
-        goblin_mindsap_int_message = False
-        goblin_soulrend_message = False
-        goblin_souldrain_message = False
-        goblin_earthbound_message = False
-        goblin_mageslayer_message = False
-        goblin_neurotoxin_message = False
-        goblin_multitool_message = False
-        goblin_counterattack_message = False
-        lifesteal = 0
-        mageslayer = 0
-        soulrend = 0
-        souldrain = 0
-        counterattack = 0
-
-    def roll_physical_attack_type(attack_type, roll):
-        attack_type += ["physical"]
-        if roll == 0:
-            attack_type += ["hit"]
-        elif roll == 1:
-            attack_type += ["punch"]
-        elif roll == 2:
-            attack_type += ["kick"]
-        elif roll == 3:
-            attack_type += ["attack"]
+    def roll_physical_attack_type(attack, chance):
+        attack += ["physical"]
+        if chance == 0:
+            attack += ["hit"]
+        elif chance == 1:
+            attack += ["punch"]
+        elif chance == 2:
+            attack += ["kick"]
+        elif chance == 3:
+            attack += ["attack"]
         else:
-            attack_type += ["strike"]
+            attack += ["strike"]
 
-        return attack_type
+        return attack
 
-    def roll_magical_attack_type(attack_type, roll):
-        attack_type += ["magical"]
-        if roll == 0:
-            attack_type += ["freeze"]
-        elif roll == 1:
-            attack_type += ["arcane blast"]
-        elif roll == 2:
-            attack_type += ["fireball"]
-        elif roll == 3:
-            attack_type += ["aflame"]
+    def roll_magical_attack_type(attack, chance):
+        attack += ["magical"]
+        if chance == 0:
+            attack += ["freeze"]
+        elif chance == 1:
+            attack += ["arcane blast"]
+        elif chance == 2:
+            attack += ["fireball"]
+        elif chance == 3:
+            attack += ["aflame"]
         else:
-            attack_type += ["electrocute"]
+            attack += ["electrocute"]
 
-        return attack_type
+        return attack
 
     # SPECIAL ABILITIES
     # The ones that do something at the start of the encounter or need to be set up at the start of the encounter.
     if 'Adrenaline' in game.hero[dwarf].specials_list:
         dwarf_speed_base = dwarf_speed_base * 4
-        turn = '<div class="hero-turn">' + dwarf_name + ' injects himself with Adrenalinium, increasing his speed tremendously!</div>'
+        turn = '<div class="hero-turn">' + dwarf_name + ' injects himself with Adrenalinium, ' \
+                                                        'increasing his speed tremendously!</div>'
         battle_log.append(turn)
 
     if 'Adrenaline' in game.enemy[goblin].specials_list:
         goblin_speed_base = goblin_speed_base * 4
-        turn = '<div class="enemy-turn">' + goblin_name + ' injects himself with Adrenalinium, increasing his speed tremendously!</div>'
+        turn = '<div class="enemy-turn">' + goblin_name + ' injects himself with Adrenalinium, ' \
+                                                          'increasing his speed tremendously!</div>'
         battle_log.append(turn)
 
     if 'Mist' in game.hero[dwarf].specials_list:
@@ -1071,7 +1047,8 @@ def battle(dwarf, goblin):
     if 'Armor Up!' in game.enemy[goblin].specials_list:
         goblin_armor *= 1.25
 
-    # I put goblin's Authority first, so that if both player and the computer has it, the player will gain more charisma as a recompensation.
+    # I put goblin's Authority first, so that if both player and the
+    # computer has it, the player will gain more charisma as a recompensation.
     if 'Authority' in game.enemy[goblin].specials_list:
         steal = dwarf_charisma * 0.65
         goblin_charisma += steal
@@ -1083,58 +1060,76 @@ def battle(dwarf, goblin):
     if 'Dominion' in game.hero[dwarf].specials_list:
         if attack_type[0] == "magical":
             dwarf_magical += (goblin_willpower + goblin_charisma) * 1.5
-            turn = '<div class="hero-turn">' + dwarf_name + "'s magical powers are empowered by the Crown of Will!</div>"
+            turn = '<div class="hero-turn">' + dwarf_name + "'s magical powers are " \
+                                                            "empowered by the Crown of Will!</div>"
             battle_log.append(turn)
 
     if 'Dominion' in game.enemy[goblin].specials_list:
         if attack_type[0] == "magical":
             goblin_magical += (goblin_willpower + goblin_charisma) * 1.5
-            turn = '<div class="goblin-turn">' + goblin_name + "'s magical powers are empowered by the Crown of Will!</div>"
+            turn = '<div class="goblin-turn">' + goblin_name + "'s magical powers are " \
+                                                               "empowered by the Crown of Will!</div>"
             battle_log.append(turn)
 
     if 'Unstable Concoction' in game.hero[dwarf].specials_list and dwarf_health > 0:
-        roll = random.randint(0,1)
+        roll = random.randint(0, 1)
         if roll == 0:
-            turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>...unfortunately, in a freak accident, it splashes right on his face, dealing 250 damage!</div>'
+            turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>' \
+                                                            '...unfortunately, in a freak accident, it splashes ' \
+                                                            'right on his face, dealing 250 damage!</div>'
             dwarf_health -= 250
             battle_log.append(turn)
         else:
-            turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>...it hits the opponent, splashing all over him, dealing 250 damage!</div>'
+            turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>' \
+                                                            '...it hits the opponent, splashing all over him, ' \
+                                                            'dealing 250 damage!</div>'
             goblin_health -= 250
             battle_log.append(turn)
 
     if 'Unstable Concoction' in game.enemy[goblin].specials_list and goblin_health > 0:
-            roll = random.randint(0,1)
-            if roll == 0:
-                turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>...fortunately, in a freak accident, it splashes right on his face, dealing 250 damage!</div>'
-                goblin_health -= 250
-                battle_log.append(turn)
-            else:
-                turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>...it hits the opponent, splashing all over him, dealing 250 damage!</div>'
-                dwarf_health -= 250
-                battle_log.append(turn)
+        roll = random.randint(0, 1)
+        if roll == 0:
+            turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                              '...fortunately, in a freak accident, it splashes ' \
+                                                              'right on his face, dealing 250 damage!</div>'
+            goblin_health -= 250
+            battle_log.append(turn)
+        else:
+            turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                              '...it hits the opponent, splashing all over him, ' \
+                                                              'dealing 250 damage!</div>'
+            dwarf_health -= 250
+            battle_log.append(turn)
 
     if 'Pipe Bomb' in game.hero[dwarf].specials_list and dwarf_health > 0:
-        roll = random.randint(0,1)
+        roll = random.randint(0, 1)
         if roll == 0:
-            turn = '<div class="hero-turn">' + dwarf_name + ' throws a Pipe Bomb at the enemy...!<br>...unfortunately, in a freak accident, it explodes right in his face, dealing 2500 damage!</div>'
+            turn = '<div class="hero-turn">' + dwarf_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                            '...unfortunately, in a freak accident, it explodes ' \
+                                                            'right in his face, dealing 2500 damage!</div>'
             dwarf_health -= 2500
             battle_log.append(turn)
         else:
-            turn = '<div class="hero-turn">' + dwarf_name + ' throws a Pipe Bomb at the enemy...!<br>...it hits the opponent, exploding on contact, dealing 2500 damage!</div>'
+            turn = '<div class="hero-turn">' + dwarf_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                            '...it hits the opponent, exploding on contact, ' \
+                                                            'dealing 2500 damage!</div>'
             goblin_health -= 2500
             battle_log.append(turn)
 
     if 'Pipe Bomb' in game.enemy[goblin].specials_list and goblin_health > 0:
-            roll = random.randint(0,1)
-            if roll == 0:
-                turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>...fortunately, in a freak accident, it explodes right in his face, dealing 2500 damage!</div>'
-                goblin_health -= 2500
-                battle_log.append(turn)
-            else:
-                turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>...it hits the opponent, exploding on contact, dealing 2500 damage!</div>'
-                dwarf_health -= 2500
-                battle_log.append(turn)
+        roll = random.randint(0, 1)
+        if roll == 0:
+            turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                              '...fortunately, in a freak accident, it explodes ' \
+                                                              'right in his face, dealing 2500 damage!</div>'
+            goblin_health -= 2500
+            battle_log.append(turn)
+        else:
+            turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
+                                                              '...it hits the opponent, exploding on contact, ' \
+                                                              'dealing 2500 damage!</div>'
+            dwarf_health -= 2500
+            battle_log.append(turn)
 
     while not win_condition:
 
@@ -1143,7 +1138,13 @@ def battle(dwarf, goblin):
             if dwarf_special_attack_next:
                 factor = random.randint(10, 11)
                 damage = (dwarf_physical + dwarf_magical) * round((factor / 10), 2)
-                attack_message = random.choice([' unleashes his <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span> <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span> on'])
+                attack_message = random.choice([' unleashes his <span class="yellow">s</span>'
+                                                '<span class="orange">p</span><span class="red">e</span>'
+                                                '<span class="purple">c</span><span class="deep_blue">i</span>'
+                                                '<span class="blue">a</span><span class="green">l</span> '
+                                                '<span class="yellow">a</span><span class="orange">t</span>'
+                                                '<span class="red">t</span><span class="purple">a</span>'
+                                                '<span class="deep_blue">c</span><span class="blue">k</span> on'])
                 attack_type += ["special"]
                 attack_type += ["special"]
                 dwarf_special_attack_charge += 1
@@ -1234,7 +1235,7 @@ def battle(dwarf, goblin):
                     critical_message = True
 
             # Luck effect chance
-            roll_crit = random.randint(1,100)
+            roll_crit = random.randint(1, 100)
             if (dwarf_luck >= roll_crit) and (critical_message is not True):
                 damage *= 1.5
                 critical_message = True
@@ -1261,14 +1262,14 @@ def battle(dwarf, goblin):
                 else:
                     dwarf_increase_message = True
 
-            # Notice how charisma effects can stack - multiple debuffs can often stack but multiple positive buffs can only really affect weapons with Reload ability.
-            # For the Reload charisma stacking to work, the "damage > 0" is necessary.
+            # Notice how charisma effects can stack - multiple debuffs can often stack but multiple positive buffs
+            # can only really affect weapons with Reload ability. For the Reload charisma stacking to work,
+            # the "damage > 0" is necessary.
             while len(dwarf_increase) > 0 and damage > 0:
                 damage *= dwarf_increase.pop()
 
             while len(goblin_reduction) > 0:
                 damage *= goblin_reduction.pop()
-
 
             # Armor reduction - happens after willpower absorption to make it less powerful.
             # The difference between (250 - 100) * 0.5 and 250 * 05 - 100 is unwelcome.
@@ -1355,7 +1356,8 @@ def battle(dwarf, goblin):
                 goblin_avoidance_stacks -= 1
                 goblin_avoidance_message = True
                 goblin_absorb_message = False
-                # Gotta put absorb message as false so that we don't end up "absorbing" next physical attack accidentally.
+                # I've got to put absorb message as false so that we don't end up "absorbing" next physical attack
+                # accidentally.
 
             if 'Crating' in game.enemy[goblin].specials_list:
                 if goblin_dodge_message:
@@ -1365,8 +1367,8 @@ def battle(dwarf, goblin):
                     counterattack = round(counterattack)
                     goblin_counterattack_message = True
 
-            # Specific damage type reduction special abilities...
-            # ...that reduce damage after armor and willpower calculation, but don't reduce damage of other special abilities.
+            # Specific damage type reduction special abilities that reduce damage after armor and willpower
+            # calculation, but don't reduce damage of other special abilities.
             if 'Aegis' in game.enemy[goblin].specials_list:
                 if attack_type[0] == "special":
                     damage *= 0.35
@@ -1498,9 +1500,11 @@ def battle(dwarf, goblin):
                 lifesteal = round(lifesteal)
                 dwarf_lifesteal_message = True
 
-            # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already happened.
+            # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already
+            # happened.
             if 'Neurotoxin' in game.hero[dwarf].specials_list:
-                if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")) and dwarf_neurotoxin_payload:
+                if (attack_type[0] == "physical") and (
+                        (attack_type[1] != "kick") and (attack_type[1] != "punch")) and dwarf_neurotoxin_payload:
                     goblin_willpower *= 0.65
                     goblin_agility *= 0.65
                     goblin_charisma *= 0.65
@@ -1517,11 +1521,12 @@ def battle(dwarf, goblin):
             #
             # THE MESSAGES
             #
-            # And before you start to scream - I tried giving charisma effect-message some kind of function
-            # but it just wouldn't work, I couldn't make it work. I'm gonna think about a fix later.
+            # And before you start to scream - I tried giving charisma effect-message some kind of function,
+            # but it just wouldn't work, I couldn't make it work. I'm going to think about a fix later.
             # For now - enjoy the copypaste.
 
-            # Reload weapon must be the first case to check - it would be silly if the opponent somehow dodged or avoided a you reloading.
+            # Reload weapon must be the first case to check - it would be silly if the opponent
+            # somehow dodged or avoided you reloading.
             if dwarf_reload_message:
                 turn = '<div class="hero-turn">' + dwarf_name + ' is busy reloading his weapon.'
                 dwarf_reload_message = False
@@ -1530,51 +1535,57 @@ def battle(dwarf, goblin):
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     dwarf_increase.append(increase)
-                    turn += '<br><span class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His rallying cry bolsters him up, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     dwarf_increase_message = False
                 elif dwarf_reduction_message:
-                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     dwarf_reduction_message = False
                 goblin_absorb_message = False
+                goblin_dodge_message = False
 
             elif goblin_dodge_message:
-                turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + ' the goblin, but he manages to dodge the attack!'
+                turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + \
+                       ' the goblin, but he manages to dodge the attack!'
                 goblin_dodge_message = False
                 if goblin_counterattack_message:
-                    turn += '<br>' + goblin_name + " manages to counterattack with a punch, dealing " + str(counterattack) + ' damage!'
+                    turn += '<br>' + goblin_name + " manages to counterattack with a punch, dealing " + str(
+                        counterattack) + ' damage!'
                     goblin_counterattack_message = False
                 if dwarf_increase_message:
                     roll_increase = random.randint(15, 35)
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     dwarf_increase.append(increase)
-                    turn += '<br><span class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His rallying cry bolsters him up, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     dwarf_increase_message = False
                 elif dwarf_reduction_message:
-                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     dwarf_reduction_message = False
                 goblin_absorb_message = False
+                goblin_avoidance_message = False
 
             elif goblin_avoidance_message:
-                turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + ' the goblin, but he manages to avoid the attack!'
+                turn = '<div class="hero-turn">' + dwarf_name + ' tries to ' + attack_message + \
+                       ' the goblin, but he manages to avoid the attack!'
                 goblin_avoidance_message = False
                 if dwarf_increase_message:
                     roll_increase = random.randint(15, 35)
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     dwarf_increase.append(increase)
-                    turn += '<br><span class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His rallying cry bolsters him up, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     dwarf_increase_message = False
                 elif dwarf_reduction_message:
-                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     dwarf_reduction_message = False
                 goblin_absorb_message = False
+                goblin_dodge_message = False
 
             else:
 
@@ -1609,12 +1620,12 @@ def battle(dwarf, goblin):
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     dwarf_increase.append(increase)
-                    turn += '<br><span class="italic">His rallying cry bolsters him up, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His rallying cry bolsters him up, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     dwarf_increase_message = False
                 elif dwarf_reduction_message:
-                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His terrifying roar intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     dwarf_reduction_message = False
 
                 if dwarf_stun_message:
@@ -1634,30 +1645,37 @@ def battle(dwarf, goblin):
                     dwarf_mindsap_int_message = False
 
                 if dwarf_soulrend_message:
-                    turn += '<br>' + dwarf_name + " rends enemy's very soul, damaging the opponent for " + str(soulrend) + ' damage!'
+                    turn += '<br>' + dwarf_name + " rends enemy's very soul, damaging the opponent for " + str(
+                        soulrend) + ' damage!'
                     dwarf_soulrend_message = False
 
                 if dwarf_souldrain_message:
-                    turn += '<br>' + dwarf_name + " drains enemy's very soul, healing himself and damaging the opponent for " + str(souldrain) + ' damage!'
+                    turn += '<br>' + dwarf_name + " drains enemy's very soul, healing himself " \
+                                                  "and damaging the opponent for " + str(souldrain) + ' damage!'
                     dwarf_souldrain_message = False
 
                 if dwarf_multitool_message:
-                    turn += "<br>" + dwarf_name + " manages to briefly blind the opponent, making their next attack a sure miss!"
+                    turn += "<br>" + dwarf_name + " manages to briefly blind the opponent, " \
+                                                  "making their next attack a sure miss!"
                     dwarf_multitool_message = False
 
                 if goblin_earthbound_message:
-                    turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their defences!<br>Goblin's armor, agility and willpower is increased by 5%!"
+                    turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their " \
+                            "defences!<br>Goblin's armor, agility and willpower is increased by 5%!"
                     goblin_earthbound_message = False
 
                 if 'Warframe' in game.hero[dwarf].specials_list and dwarf_warframe_message is not True:
                     turn += '<br><br>' + str(dwarf_self_destruct) + '...'
 
                 if dwarf_warframe_message:
-                    turn += '<br><br>"Beep, beep, beep!"<br>' + "Dwarf's warframe explodes into million pieces, damaging the pilot for 9999 damage!"
+                    turn += '<br><br>"Beep, beep, beep!"<br>' + "Dwarf's warframe explodes into " \
+                                                                "million pieces, damaging the pilot for 9999 damage!"
                     dwarf_warframe_message = False
 
                 if dwarf_neurotoxin_message:
-                    turn += '<br><br>' + "Powerful neurotoxin that coats dwarf's weapon poisons the enemy, decreasing their agility, willpower, charisma and luck by 35% and dealing 500 extra damage!"
+                    turn += '<br><br>' + "Powerful neurotoxin that coats dwarf's weapon poisons " \
+                                         "the enemy, decreasing their agility, willpower, charisma and luck by 35% " \
+                                         "and dealing 500 extra damage!"
                     dwarf_neurotoxin_message = False
 
             turn += '</div>'
@@ -1665,14 +1683,21 @@ def battle(dwarf, goblin):
             attack_type.clear()
             goblin_speed += goblin_speed_base
             damage = 0
-            battle_log.append(turn)     # Do not move it outside of the while loop, otherwise the "at the start of the battle" effects append twice.
+            battle_log.append(turn)
+            # Do not move it outside the while loop,
+            # otherwise the "at the start of the battle" effects append twice.
 
         elif goblin_speed > dwarf_speed and goblin_health > 0 and dwarf_health > 0:
 
             if goblin_special_attack_next:
                 factor = random.randint(10, 11)
                 damage = (goblin_physical + goblin_magical) * round((factor / 10), 2)
-                attack_message = random.choice([' unleashes his <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span> <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span> on'])
+                attack_message = random.choice([
+                    'unleashes his <span class="yellow">s</span><span class="orange">p</span><span '
+                    'class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span '
+                    'class="blue">a</span><span class="green">l</span> <span class="yellow">a</span><span '
+                    'class="orange">t</span><span class="red">t</span><span class="purple">a</span><span '
+                    'class="deep_blue">c</span><span class="blue">k</span> on'])
                 attack_type = ["special"]
                 attack_type += ["special"]
                 goblin_special_attack_charge += 1
@@ -1762,7 +1787,7 @@ def battle(dwarf, goblin):
                     critical_message = True
 
             # Luck effect chance
-            roll_crit = random.randint(1,100)
+            roll_crit = random.randint(1, 100)
             if (goblin_luck >= roll_crit) and (critical_message is not True):
                 damage = damage * 1.5
                 critical_message = True
@@ -1777,7 +1802,6 @@ def battle(dwarf, goblin):
                 else:
                     goblin_reload = True
 
-
             # Charisma effect chance
             roll_charisma = random.randint(1, 100)
             if goblin_charisma >= roll_charisma:
@@ -1790,8 +1814,9 @@ def battle(dwarf, goblin):
                 else:
                     goblin_increase_message = True
 
-            # Notice how charisma effects can stack - multiple debuffs can often stack but positive buffs can only really affect weapons with Reload ability.
-            # For the Reload charisma stacking to work, the "damage > 0" is necessary.
+            # Notice how charisma effects can stack - multiple debuffs can often stack but positive buffs can only
+            # really affect weapons with Reload ability. For the Reload charisma stacking to work, the "damage > 0"
+            # is necessary.
             while len(goblin_increase) > 0 and damage > 0:
                 damage *= goblin_increase.pop()
 
@@ -1883,7 +1908,8 @@ def battle(dwarf, goblin):
                 dwarf_avoidance_stacks -= 1
                 dwarf_avoidance_message = True
                 dwarf_absorb_message = False
-                # Gotta put absorb message as false so that we don't end up "absorbing" next physical attack accidentally.
+                # I've got to put absorb message as false so that we don't end up "absorbing" next physical attack
+                # accidentally.
 
             if 'Crating' in game.hero[dwarf].specials_list:
                 if dwarf_dodge_message:
@@ -1893,8 +1919,8 @@ def battle(dwarf, goblin):
                     counterattack = round(counterattack)
                     dwarf_counterattack_message = True
 
-            # Specific defensive special abilities...
-            # ...that reduce damage after armor and willpower calculation, but don't reduce damage of other special abilities.
+            # Specific defensive special abilities that reduce damage after armor and willpower calculation,
+            # but don't reduce damage of other special abilities.
             if 'Aegis' in game.hero[dwarf].specials_list:
                 if attack_type[0] == "special":
                     damage *= 0.35
@@ -2020,9 +2046,11 @@ def battle(dwarf, goblin):
                 lifesteal = round(lifesteal)
                 goblin_lifesteal_message = True
 
-            # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already happened.
+            # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already
+            # happened.
             if 'Neurotoxin' in game.enemy[goblin].specials_list:
-                if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")) and goblin_neurotoxin_payload:
+                if (attack_type[0] == "physical") and (
+                        (attack_type[1] != "kick") and (attack_type[1] != "punch")) and goblin_neurotoxin_payload:
                     dwarf_willpower *= 0.65
                     dwarf_agility *= 0.65
                     dwarf_charisma *= 0.65
@@ -2039,11 +2067,12 @@ def battle(dwarf, goblin):
             #
             # THE MESSAGES
             #
-            # And before you start to scream - I tried giving charisma effect-message some kind of function
-            # but it just wouldn't work, I couldn't make it work. I'm gonna think about a fix later.
+            # And before you start to scream - I tried giving charisma effect-message some kind of function,
+            # but it just wouldn't work, I couldn't make it work. I'm going to think about a fix later.
             # For now - enjoy the copypaste.
 
-            # Reload weapon must be the first case to check - it would be silly if the opponent somehow dodged or avoided a you reloading.
+            # Reload weapon must be the first case to check - it would be silly if the opponent somehow dodged or
+            # avoided you reloading.
             if goblin_reload_message:
                 turn = '<div class="enemy-turn">' + goblin_name + ' is busy reloading his weapon.'
                 goblin_reload_message = False
@@ -2052,51 +2081,57 @@ def battle(dwarf, goblin):
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     goblin_increase.append(increase)
-                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His inspiring shriek invigorates him, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     goblin_increase_message = False
                 elif goblin_reduction_message:
-                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     goblin_reduction_message = False
                 dwarf_absorb_message = False
+                dwarf_dodge_message = False
 
             elif dwarf_dodge_message:
-                turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + ' the dwarf, but he manages to dodge the attack!'
+                turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + \
+                       ' the dwarf, but he manages to dodge the attack!'
                 dwarf_dodge_message = False
                 if dwarf_counterattack_message:
-                    turn += '<br>' + dwarf_name + " manages to counterattack with a punch, dealing " + str(counterattack) + ' damage!'
+                    turn += '<br>' + dwarf_name + " manages to counterattack with a punch, dealing " + str(
+                        counterattack) + ' damage!'
                     dwarf_counterattack_message = False
                 if goblin_increase_message:
                     roll_increase = random.randint(15, 35)
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     goblin_increase.append(increase)
-                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His inspiring shriek invigorates him, ' \
+                            'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                     goblin_increase_message = False
                 elif goblin_reduction_message:
-                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     goblin_reduction_message = False
                 dwarf_absorb_message = False
+                dwarf_avoidance_message = False
 
             elif dwarf_avoidance_message:
-                turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + ' the dwarf, but he manages to avoid the attack!'
+                turn = '<div class="enemy-turn">' + goblin_name + ' tries to ' + attack_message + \
+                       ' the dwarf, but he manages to avoid the attack!'
                 dwarf_avoidance_message = False
                 if goblin_increase_message:
                     roll_increase = random.randint(15, 35)
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     goblin_increase.append(increase)
-                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of ' \
+                            'his next attack by ' + str(increase_message) + '%!</span>'
                     goblin_increase_message = False
                 elif goblin_reduction_message:
-                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     goblin_reduction_message = False
                 dwarf_absorb_message = False
+                dwarf_dodge_message = False
 
             else:
 
@@ -2131,12 +2166,12 @@ def battle(dwarf, goblin):
                     increase = 1 + (roll_increase / 100)
                     increase_message = roll_increase
                     goblin_increase.append(increase)
-                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of his next attack by ' + str(
-                        increase_message) + '%!</span>'
+                    turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of ' \
+                            'his next attack by ' + str(increase_message) + '%!</span>'
                     goblin_increase_message = False
                 elif goblin_reduction_message:
-                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, decreasing the power of his next attack by ' + str(
-                        reduction_message) + '%!</span>'
+                    turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
+                            'decreasing the power of his next attack by ' + str(reduction_message) + '%!</span>'
                     goblin_reduction_message = False
 
                 if goblin_stun_message:
@@ -2156,30 +2191,37 @@ def battle(dwarf, goblin):
                     goblin_mindsap_int_message = False
 
                 if goblin_soulrend_message:
-                    turn += '<br>' + goblin_name + " rends hero's very soul, damaging the opponent for " + str(soulrend) + ' damage!'
+                    turn += '<br>' + goblin_name + " rends hero's very soul, damaging the opponent for " + str(
+                        soulrend) + ' damage!'
                     goblin_soulrend_message = False
 
                 if goblin_souldrain_message:
-                    turn += '<br>' + goblin_name + " drains hero's very soul, healing himself and damaging the opponent for " + str(souldrain) + ' damage!'
+                    turn += '<br>' + goblin_name + "drains hero's very soul, healing himself and damaging the " \
+                                                   "opponent for " + str(souldrain) + ' damage!'
                     goblin_souldrain_message = False
 
                 if goblin_multitool_message:
-                    turn += "<br>" + goblin_name + " manages to briefly blind the opponent, making their next attack a sure miss!"
+                    turn += "<br>" + goblin_name + "manages to briefly blind the opponent, " \
+                                                   "making their next attack a sure miss!"
                     goblin_multitool_message = False
 
                 if dwarf_earthbound_message:
-                    turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their defences!<br>Dwarf's armor, agility and willpower is increased by 5%!"
+                    turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their " \
+                            "defences!<br>Dwarf's armor, agility and willpower is increased by 5%! "
                     dwarf_earthbound_message = False
 
                 if 'Warframe' in game.enemy[goblin].specials_list and goblin_warframe_message is not True:
                     turn += '<br><br>' + str(goblin_self_destruct) + '...'
 
                 if goblin_warframe_message:
-                    turn += '<br><br>"Beep, beep, beep!"<br>' + "Goblin's warframe explodes into million pieces, damaging the pilot for 9999 damage!"
+                    turn += '<br><br>"Beep, beep, beep!"<br>' + "Goblin's warframe explodes into million pieces, " \
+                                                                "damaging the pilot for 9999 damage! "
                     goblin_warframe_message = False
 
                 if goblin_neurotoxin_message:
-                    turn += '<br><br>' + "Powerful neurotoxin that coats goblin's weapon poisons the opponent, decreasing their agility, willpower, charisma and luck by 35% and dealing 500 extra damage!"
+                    turn += '<br><br>' + "Powerful neurotoxin that coats goblin's weapon poisons the opponent, " \
+                                         "decreasing their agility, willpower, charisma and luck by 35% " \
+                                         "and dealing 500 extra damage! "
                     goblin_neurotoxin_message = False
 
             turn += '</div>'
@@ -2187,8 +2229,9 @@ def battle(dwarf, goblin):
             attack_type.clear()
             dwarf_speed += dwarf_speed_base
             damage = 0
-            battle_log.append(turn)     # Do not move it outside of the while loop, otherwise the "at the start of the battle" effects append twice.
-
+            battle_log.append(turn)
+            # Do not move it outside the while loop,
+            # otherwise the "at the start of the battle" effects append twice.
 
         if goblin_health <= 0:
             message = '<br>' + dwarf_name + ' slays ' + goblin_name + '!<br><h2>You win the battle!</h2>'
