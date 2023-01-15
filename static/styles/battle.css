@@ -67,7 +67,19 @@ table {
     transition: 0.2s ease-in;
 }
 
-.return-back:hover {
+.return-back-small {
+    width: 200px;
+    height: 80px;
+    font-size: 1.5em;
+
+    background-color: #3b1b19;
+
+    margin-top: 50px;
+
+    transition: 0.2s ease-in;
+}
+
+.return-back:hover, .return-back-small:hover {
     background-color: #e8e2e1;
     color: #423f3e;
     text-shadow: none;
@@ -80,5 +92,11 @@ table {
 
 .hero-turn {
     background-color: rgba(50, 210, 7, 0.3);
+    padding: 10px;
+}
+
+.graveyard {
+    width: 40vw;
+    background-color: rgba(197, 197, 197, 0.3);
     padding: 10px;
 }

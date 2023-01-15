@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/styles/homepage.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/styles/special.css" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="center">
+        <div id="main-box-narrow">
+            {% if sneak %}
+                {% if game.hero[dwarf].sneak_confirmed == False %}
+                    <p>You have successfully sneaked into enemy base and poisoned their water supply!</p>
+                    <p>This might've angered the gods...</p>
+                {% else %}
+                    <p>You have already poisoned their wells. Adding any more toxin would raise suspicion.</p>
+                {% endif %}
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back {{ dwarf }}" class="return-back-small" value="Return">
+                </form>
+            {% elif spy %}
+                <div class="enemy">
+                    <div class="enemy-portrait">
+                        <img class="portrait" src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
+                        <br>
+                        <h2>{{ game.enemy[goblin].hero_name }}</h2>
+                    </div>
+                    <div class="enemy-stats">
+                        <table>
+                            <tr>
+                                <td class="stats-cell">Strength</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].str_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Intelligence</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].int_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Agility</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].agi_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Willpower</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].will_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Endurance</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].end_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Charisma</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].char_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Luck</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].lck_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="stats-cell">Speed</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].spd_total }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="enemy-equipment">
+                        <table>
+                            {% for item_slot in game.enemy[goblin].equipment.keys() %}
+                            <tr>
+                                <td class="stats-cell">{{ item_slot }}</td>
+                                <td class="stats-cell-total">
+                                    <span class="{{ game.enemy[goblin].equipment[item_slot].rarity }}">
+                                    {{ game.enemy[goblin].equipment[item_slot].item_name }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back" class="return-back-small" value="Return">
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

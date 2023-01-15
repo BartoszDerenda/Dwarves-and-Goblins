@@ -7,11 +7,14 @@
 
 <div class="center">
     <div id="battlefield">
+
+    <!-- Dwarf stat summary -->
+
         <div id="dwarf">
             <img src="{{ game.hero[dwarf].hero_portrait }}" alt="dwarf"/>
             <br>
             <h2>{{ game.hero[dwarf].hero_name }}</h2>
-            <p>HP : {{ game.hero[dwarf].end_total * 5 }}</p>
+            <p>HP : {{ game.hero[dwarf].end_total * 10 }}</p>
             <table>
                 <tr>
                     <td class="stats-cell">Strength</td>
@@ -59,7 +62,11 @@
                         Critical chance:
                     </td>
                     <td class="stats-cell-total">
-                        {{ (game.hero[dwarf].lck_total)|round|int }}%
+                        {% if (game.hero[dwarf].lck_total)|int > 100 %}
+                            100%
+                        {% else %}
+                            {{ (game.hero[dwarf].lck_total)|int }}%
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -67,7 +74,11 @@
                         Charisma effect:
                     </td>
                     <td class="stats-cell-total">
-                        {{ (game.hero[dwarf].char_total)|round|int }}%
+                        {% if (game.hero[dwarf].char_total)|int > 100 %}
+                            100%
+                        {% else %}
+                            {{ (game.hero[dwarf].char_total)|int }}%
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -96,12 +107,24 @@
                 </tr>
             </table>
         </div>
+
+    <!-- Battle log -->
+
         <div id="battle-log">
+
+        <!-- Display regular battle log -->
+        {% if game.hero[dwarf].graveyard != True %}
             <h2>Battleground</h2>
             {% for line in battlelog %}
                 <p>{{ line|safe }}</p>
             {% endfor %}
-            {% if game.hero[dwarf].win == True %}
+
+             <!-- Display corresponding buttons at the end of battle -->
+            {% if game.hero[dwarf].secret == True %}
+                <form method="POST" action="{{ url_for('ending') }}">
+                    <input type="submit" name="ending" class="return-back cursed" value="Sacrifice">
+                </form>
+            {% elif game.hero[dwarf].win == True %}
                 <form method="POST" action="{{ url_for('game') }}">
                     <input type="submit" name="back" class="return-back" value="Victory!">
                 </form>
@@ -110,12 +133,56 @@
                     <input type="submit" name="back" class="return-back" value="Retreat">
                 </form>
             {% endif %}
+
+        {% else %}
+
+            <!-- Display graveyard scene -->
+            <h2>Graveyard</h2>
+            <!-- Display goblin grave -->
+            {% if game.hero[dwarf].win == True %}
+                <div class="graveyard">
+                    You visit the grave of {{ game.enemy[goblin].hero_name }}.
+                    <br>It is barren of any flora.
+                </div>
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back" class="return-back-small" value="Return">
+                </form>
+
+            {% else %}
+
+                <!-- Display dwarf grave -->
+                <div class="graveyard">
+                    You visit the grave of {{ game.hero[dwarf].hero_name }}.
+                    {% if game.hero[dwarf].white_lotus_taken == False %}
+
+                        <!-- White Lotus random chance encounter -->
+                        {% if game.hero[dwarf].white_lotus == False %}
+                            <br>Something seems to be growing by its side - maybe if you came back later...
+                        {% else %}
+                            <br>There blooms a peculiar white flower on the grave of your comrade.
+                            <form method="POST" action="{{ url_for('battleground') }}">
+                                <input type="submit" name="white_lotus {{ dwarf }}" class="return-back-small" value="Take the flower">
+                            </form>
+                        {% endif %}
+
+                    {% else %}
+                        <br>You have already picked up the flower. May his soul rest in peace.
+                    {% endif %}
+                </div>
+                <form method="POST" action="{{ url_for('game') }}">
+                    <input type="submit" name="back" class="return-back-small" value="Return">
+                </form>
+            {% endif %}
+        {% endif %}
         </div>
+
+     <!-- Goblin stat summary -->
+
         <div id="goblin">
             <img src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
             <br>
             <h2>{{ game.enemy[goblin].hero_name }}</h2>
-            <p>HP : {{ game.enemy[goblin].end_total * 5 }}</p>
+            <p>HP : {{ game.enemy[goblin].end_total * 10 }}</p>
             <table>
                 <tr>
                     <td class="stats-cell">Strength</td>
@@ -163,7 +230,11 @@
                         Critical chance:
                     </td>
                     <td class="stats-cell-total">
-                        {{ (game.enemy[goblin].lck_total)|round|int }}%
+                        {% if (game.enemy[goblin].lck_total)|int > 100 %}
+                            100%
+                        {% else %}
+                            {{ (game.enemy[goblin].lck_total)|int }}%
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -171,7 +242,11 @@
                         Charisma effect:
                     </td>
                     <td class="stats-cell-total">
-                        {{ (game.enemy[goblin].char_total)|round|int }}%
+                        {% if (game.enemy[goblin].char_total)|int > 100 %}
+                            100%
+                        {% else %}
+                            {{ (game.enemy[goblin].char_total)|int }}%
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>

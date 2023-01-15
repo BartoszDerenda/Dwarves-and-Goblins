@@ -30,3 +30,21 @@
     height: 100vh;
     width: 75vw;
 }
+
+.return-back-small {
+    width: 200px;
+    height: 80px;
+    font-size: 1.5em;
+
+    background-color: #3b1b19;
+
+    margin-top: 50px;
+
+    transition: 0.2s ease-in;
+}
+
+.return-back-small:hover {
+    background-color: #e8e2e1;
+    color: #423f3e;
+    text-shadow: none;
+}

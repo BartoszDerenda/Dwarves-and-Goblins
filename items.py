@@ -993,7 +993,7 @@ item_217 = Item('Ceremonial Gloves', 'Gloves', 'epic',
                 None,  # Enchantment
                 None)  # Enchantment description
 
-item_218 = Item('Ceremonial Shoes', 'Gloves', 'epic',
+item_218 = Item('Ceremonial Shoes', 'Boots', 'epic',
                 "The silver-lining helps you gather mana from the ground.",
                 0.0, 0,  # Strength
                 0.25, 8,  # Intelligence
@@ -1209,10 +1209,7 @@ item_301 = Item('Crown of Will', 'Headpiece', 'legendary',
                 0.0, 0,  # Speed
                 4,  # Armor
                 "Dominion",  # Enchantment
-                "At the start of battle, empower your magical damage by 1.5x of "
-                "your charisma and willpower till the end of battle. This effect "
-                "only happens once, increasing those two stats during battle will not "
-                "provide further damage increases.")  # Enchantment description
+                "1.5x of your charisma and willpower translates into magical damage.")  # Enchantment description
 
 item_302 = Item('Heart of the Mountain', 'Artifact', 'legendary',
                 "Legends say that such a crystal lies at the very bottom of every mountain. "
@@ -1340,6 +1337,20 @@ item_777 = Item('Lucky Pebble', 'Artifact', 'common', "What is this thing..?",
                 "What is this thing...? Nevertheless, it's presence "
                 "somehow makes you feel a little bit more lucky~")  # Enchantment description
 
+item_555 = Item('White Lotus', 'Artifact', 'legendary', "Mythical flower known to spontaneously bloom on "
+                                                        "the graves of great heroes. It bolsters one's vitality.",
+                0.0, 0,  # Strength
+                0.0, 0,  # Intelligence
+                0.0, 0,  # Agility
+                0.0, 0,  # Willpower
+                0.3, 25,  # Endurance
+                0.0, 0,  # Charisma
+                0.0, 0,  # Luck
+                0.0, 0,  # Speed
+                0,  # Armor
+                None,  # Enchantment
+                None)  # Enchantment description
+
 item_999 = Item('Memento', 'Artifact', 'common',
                 "Picture of unknown family, found among stranger's possessions. "
                 "For some reason it fills you with unspeakable rage and sense of vengeance, "
@@ -1408,7 +1419,7 @@ item_list_epic = [item_201, item_202, item_203, item_204, item_205, item_206, it
                   item_221, item_250, item_251, item_252, item_253, item_254, item_255, item_299, item_298, item_297]
 item_list_legendary = [item_301, item_302, item_303, item_304, item_305, item_306, item_307, item_308]
 item_list_cursed = [item_404, item_495, item_600]
-item_list_special = [item_999, item_777]
+item_list_special = [item_999, item_777, item_555]
 
 item_list_weapon_common = [item_50, item_51, item_52]
 item_list_headpiece_common = [item_1, item_7, item_13]
@@ -1482,7 +1493,7 @@ item_dict = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jac
              "Skull of Naz'kar": item_307, item_308: "Elixir of Giants",
 
              "???": item_404, "Memento": item_999, "Warframe": item_495, "Lucky Pebble": item_777,
-             "Pipe Bomb": item_600}
+             "Pipe Bomb": item_600, "White Lotus": item_555}
 
 ability_dict = {
     "Lucky": ["What is this thing...? Nevertheless, it's presence somehow makes you feel a little bit more lucky~",
@@ -1544,10 +1555,7 @@ ability_dict = {
     "Soulrend": ["On weapon strike, deal 5% extra damage based off enemy's total health.", "legendary"],
     "Avatar": ["You assume the legendary form of Avatar of the Mountain. Take 20% less damage from all sources.",
                "legendary"],
-    "Dominion": ["At the start of battle, empower your magical damage by 1.5x of "
-                 "your charisma and willpower till the end of battle. This effect "
-                 "only happens once, increasing those two stats during battle will not "
-                 "provide further damage increases.", "legendary"],
+    "Dominion": ["1.5x of your charisma and willpower translates into magical damage.", "legendary"],
     "Aegis": ["You take 65% less damage from special attacks.", "legendary"],
     "Neurotoxin": [
         "On first weapon strike, reduce opponent's willpower, agility, charisma and luck by 35% and deal 500 extra "
