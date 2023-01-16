@@ -54,8 +54,12 @@
                                     <div class="tooltip-text">
                                         <span class="red">Strength</span>
                                         <br>Strength increases your physical damage dealt by 3 points.
-                                        <br>Physical damage has a spread of x1.0 - x1.2
-                                        <br><br>Cost of training:
+                                        <br>Physical attacks have random damage spread of x1.0 - x1.3
+                                        <br>
+                                        <br>Physical attack power
+                                        <br>{{ (game.hero[dwarf].str_total * 3)|int|round }} - {{ (game.hero[dwarf].str_total * 3 * 1.3)|int|round }} damage
+                                        <br>
+                                        <br>Cost of training:
                                         <br>1 point of Strength = 2 days
                                     </div>
                                 </th>
@@ -70,7 +74,10 @@
                                     <div class="tooltip-text">
                                         <span class="blue">Intelligence</span>
                                         <br>Intelligence increases your magical damage dealt by 4 points.
-                                        <br>Magical damage has a spread of x0.8 - x1.5
+                                        <br>Magical attacks have random damage spread of x0.8 - x1.5
+                                        <br>
+                                        <br>Magical attack power
+                                        <br>{{ (game.hero[dwarf].int_total * 4 * 0.8)|int|round }} - {{ (game.hero[dwarf].int_total * 4 * 1.5)|int|round }} damage
                                         <br>
                                         <br>Cost of training:
                                         <br>1 point of Intelligence = 2 days
@@ -144,9 +151,12 @@
                                         <br>Charisma increases your chance to activate charisma effect on your turn by 1%
                                         <br>Charisma effect can either increase the power of your next attack by 15 - 35%
                                         <br>or decrease the power of enemy's next attack by 15 - 35%.
+                                        <br>
+                                        <br>If you have managed to deal 0 or no damage in a turn,
+                                        <br>the charisma buff will transfer to your next attack.
                                         <br>Multiple attack decreases and increases in a row stack multiplicatively.
                                         <br>
-                                        <br>100 Charisma = 100% chance to proc the effect on every attack
+                                        <br>100 Charisma = 100% chance to proc the effect on every one of your turns
                                         <br>
                                         <br>Cost of training:
                                         <br>1 point of Charisma = 1 day
@@ -163,7 +173,8 @@
                                     <div class="tooltip-text">
                                         <span class="green">Luck</span>
                                         <br>Luck increases your chance to perform a critical attack by 1%
-                                        <br>Critical attack increases damage of your attack by x1.5
+                                        <br>Critical attacks deal 150% damage.
+                                        <br>Critical attacks do not increase damage done from most special abilities.
                                         <br>
                                         <br>100 Luck = 100% critical strike chance
                                         <br>
@@ -474,31 +485,46 @@
                                     <div class="tooltip-text">Tactics decide on the fighting style of the dwarf.
                                         <br>
                                         <br><span class="font-bold Frenzy">Frenzy</span>
-                                        <br>The dwarf will use only physical attacks.
-                                        <br>The special attacks occurs every 5 turns.
+                                        <br>The dwarf will only use <span class="red">physical</span> attacks.
+                                        <br>The <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
+                                                    <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
+                                        occurs every 5 turns.
                                         <br>
                                         <br><span class="font-bold Focus">Focus</span>
-                                        <br>The dwarf will use only magical attacks.
-                                        <br>The special attack occurs every 5 turns.
+                                        <br>The dwarf will only use <span class="blue">magical</span> attacks.
+                                        <br>The <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
+                                                    <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
+                                        occurs every 5 turns.
                                         <br>
                                         <br><span class="font-bold Balanced">Balanced</span>
-                                        <br>The dwarf will weave both physical attacks as well as the magical attacks into his battle style.
-                                        <br>The special attack occurs every 4 turns.
+                                        <br>The dwarf will weave both <span class="red">physical</span> and <span class="blue">magical</span> attacks into his battle style.
+                                        <br>The <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
+                                                    <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
+                                        occurs every 4 turns.
                                         <br>
                                         <br><span class="font-bold Overconfidence">Overconfidence</span>
-                                        <br>The dwarf feels to be above the enemy and wants to defeat it as spectacularly as he can.
-                                        <br>He uses both physical and magical attacks, although they both suffer x0.85 damage reduction.
-                                        <br>The special attack occurs every 3 turns.
+                                        <br>The dwarf sees himself to be above the enemy and wants to defeat them as spectacularly as he can.
+                                        <br>He uses both <span class="red">physical</span> and <span class="blue">magical</span> attacks, although they both suffer 20% damage reduction.
+                                        <br>The <span class="yellow">s</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
+                                                    <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
+                                        occurs every 3 turns.
                                         <br>
                                         <br>
-                                        <br>Special attack - deal (([physical damage] + [magic damage]) x1.2) to the enemy.
-                                        <br>This type of damage cannot be dodged by agility or absorbed by willpower.
+                                        <br><span class="yellow">S</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
+                                                    <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
+                                        - deals 120% of combined <span class="red">physical damage</span> + <span class="blue">magical damage</span> to the enemy.
+                                        <br>Special attack random damage spread is between x1.0 - x1.1
+                                        <br>
+                                        <br>Special attack power
+                                        <br>{{ (game.hero[dwarf].str_total * 3 + game.hero[dwarf].int_total * 4)|int|round }} - {{ ((game.hero[dwarf].str_total * 3 + game.hero[dwarf].int_total * 4) * 1.1)|int|round }} damage
+                                        <br>
+                                        <br>This type of damage cannot be dodged by <span class="orange">agility</span> or absorbed by <span class="purple">willpower</span>.
                                     </div>
                                 </td>
-                                <td class="tactic-cell tooltip"><input type="radio" id="frenzy_{{ dwarf }}" name="tactic" value="Frenzy"><label for="frenzy_{{ dwarf }}">Frenzy</label></td>
-                                <td class="tactic-cell"><input type="radio" id="focus_{{ dwarf }}" name="tactic" value="Focus"><label for="focus_{{ dwarf }}">Focus</label></td>
-                                <td class="tactic-cell"><input type="radio" id="balanced_{{ dwarf }}" name="tactic" value="Balanced"><label for="balanced_{{ dwarf }}">Balanced</label></td>
-                                <td class="tactic-cell"><input type="radio" id="overconfidence_{{ dwarf }}" name="tactic" value="Overconfidence"><label for="overconfidence_{{ dwarf }}">Overconfidence</label></td>
+                                <td class="tactic-cell tooltip"><input type="radio" id="frenzy_{{ dwarf }}" name="tactic" value="Frenzy"><label for="frenzy_{{ dwarf }}"><span class="red">Frenzy</span></label></td>
+                                <td class="tactic-cell"><input type="radio" id="focus_{{ dwarf }}" name="tactic" value="Focus"><label for="focus_{{ dwarf }}"><span class="blue">Focus</span></label></td>
+                                <td class="tactic-cell"><input type="radio" id="balanced_{{ dwarf }}" name="tactic" value="Balanced"><label for="balanced_{{ dwarf }}"><span class="green">Balanced</span></label></td>
+                                <td class="tactic-cell"><input type="radio" id="overconfidence_{{ dwarf }}" name="tactic" value="Overconfidence"><label for="overconfidence_{{ dwarf }}"><span class="yellow">Overconfidence</span></label></td>
                                 <td><input type="submit" name="tactics {{ dwarf }}" class="confirm-button" value="Confirm"></td>
                             </tr>
                         </table></form>
@@ -515,7 +541,7 @@
                                 Sneak to the enemy camp and poison their water supply.
                                 <br>The opponent will start the battle with -25% to all attributes.
                                 <br>
-                                <br>Requires: 100 agility
+                                <br>100 points of <span class="orange">Agility</span>
                             </div>
                         </div>
                     {% else %}
@@ -525,7 +551,8 @@
                                 Sneak to the enemy camp and poison their water supply.
                                 <br>The opponent will start the battle with -25% to all attributes.
                                 <br>
-                                <br>Requirements: 100 agility
+                                <br>Requirements:
+                                <br>100 points of <span class="orange">Agility</span>
                             </div>
                         </div>
                     {% endif %}
@@ -540,7 +567,8 @@
                             <div class="tooltip-text">
                                 Divine a premonition of your opponent, predicting his armaments and attributes.
                                 <br>
-                                <br>Requirements: 100 willpower + Scrying Orb
+                                <br>Requirements:
+                                <br>100 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
                             </div>
                         </div>
                     {% else %}
@@ -549,7 +577,8 @@
                             <div class="tooltip-text">
                                 Divine a premonition of your opponent, predicting his armaments and attributes during the day of battle.
                                 <br>
-                                <br>Requirements: 100 willpower + Scrying Orb
+                                <br>Requirements:
+                                <br>100 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
                             </div>
                         </div>
                     {% endif %}

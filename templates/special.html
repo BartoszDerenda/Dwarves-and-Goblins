@@ -8,17 +8,23 @@
 
     <div class="center">
         <div id="main-box-narrow">
+
+            <!-- Sneak action -->
             {% if sneak %}
                 {% if game.hero[dwarf].sneak_confirmed == False %}
-                    <p>You have successfully sneaked into enemy base and poisoned their water supply!</p>
-                    <p>This might've angered the gods...</p>
+                    <p>You have successfully sneaked into enemy base and poisoned your opponent family's water supply!</p>
+                    <p>The gods do not approve of this...</p>
                 {% else %}
                     <p>You have already poisoned their wells. Adding any more toxin would raise suspicion.</p>
                 {% endif %}
-                <form method="POST" action="{{ url_for('game') }}">
-                    <input type="submit" name="back {{ dwarf }}" class="return-back-small" value="Return">
+                <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
+                    <input type="submit" name="back-sneak {{ dwarf }}" class="return-back-small" value="Return">
                 </form>
+
+            <!-- Spy action -->
             {% elif spy %}
+                <h2>In a hazy vision you see...</h2>
+                <br>
                 <div class="enemy">
                     <div class="enemy-portrait">
                         <img class="portrait" src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
@@ -29,35 +35,41 @@
                         <table>
                             <tr>
                                 <td class="stats-cell">Strength</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].str_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].str_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Intelligence</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].int_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].int_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Agility</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].agi_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].agi_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Willpower</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].will_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].will_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Endurance</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].end_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].end_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Charisma</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].char_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].char_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Luck</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].lck_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].lck_total|int|round }}</td>
                             </tr>
                             <tr>
                                 <td class="stats-cell">Speed</td>
-                                <td class="stats-cell-total">{{ game.enemy[goblin].spd_total }}</td>
+                                <td class="stats-cell-total">{{ game.enemy[goblin].spd_total|int|round }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="stats-cell">Armor value</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="stats-cell-total">{{ game.enemy[goblin].armor }}</td>
                             </tr>
                         </table>
                     </div>
@@ -76,8 +88,8 @@
                         </table>
                     </div>
                 </div>
-                <form method="POST" action="{{ url_for('game') }}">
-                    <input type="submit" name="back" class="return-back-small" value="Return">
+                <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
+                    <input type="submit" name="back {{ dwarf }}" class="return-back-small" value="Return">
                 </form>
             {% endif %}
         </div>

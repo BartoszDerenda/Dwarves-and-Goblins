@@ -14,45 +14,45 @@
             <img src="{{ game.hero[dwarf].hero_portrait }}" alt="dwarf"/>
             <br>
             <h2>{{ game.hero[dwarf].hero_name }}</h2>
-            <p>HP : {{ game.hero[dwarf].end_total * 10 }}</p>
+            <p>HP : {{ (game.hero[dwarf].end_total * 10)|round|int }}</p>
             <table>
                 <tr>
                     <td class="stats-cell">Strength</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].str_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].str_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Intelligence</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].int_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].int_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Agility</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].agi_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].agi_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Willpower</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].will_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].will_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Endurance</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].end_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].end_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Charisma</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].char_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].char_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Luck</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].lck_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].lck_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Speed</td>
-                    <td class="stats-cell-total">{{ game.hero[dwarf].spd_total }}</td>
+                    <td class="stats-cell-total">{{ game.hero[dwarf].spd_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="stats-cell">Armor value</td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="stats-cell-total">{{ game.hero[dwarf].armor }}</td>
+                    <td colspan="2" class="stats-cell-total">{{ game.hero[dwarf].armor|round|int }}</td>
                 </tr>
             </table>
             <br>
@@ -65,7 +65,7 @@
                         {% if (game.hero[dwarf].lck_total)|int > 100 %}
                             100%
                         {% else %}
-                            {{ (game.hero[dwarf].lck_total)|int }}%
+                            {{ (game.hero[dwarf].lck_total)|round|int }}%
                         {% endif %}
                     </td>
                 </tr>
@@ -77,7 +77,7 @@
                         {% if (game.hero[dwarf].char_total)|int > 100 %}
                             100%
                         {% else %}
-                            {{ (game.hero[dwarf].char_total)|int }}%
+                            {{ (game.hero[dwarf].char_total)|round|int }}%
                         {% endif %}
                     </td>
                 </tr>
@@ -86,7 +86,7 @@
                         Dodge chance:
                     </td>
                     <td class="stats-cell-total">
-                        {% if ((game.hero[dwarf].agi_total / (game.enemy[goblin].str_total * 3)) * 100)|round|int >= 33 %}
+                        {% if ((game.hero[dwarf].agi_total / (game.enemy[goblin].str_total * 3)) * 100)|int >= 33 %}
                             33%
                         {% else %}
                             {{ ((game.hero[dwarf].agi_total / (game.enemy[goblin].str_total * 3)) * 100)|round|int }}%
@@ -98,7 +98,7 @@
                         Magic absorption:
                     </td>
                     <td class="stats-cell-total">
-                        {% if ((game.hero[dwarf].will_total / (game.enemy[goblin].int_total * 2)) * 100)|round|int >= 50 %}
+                        {% if ((game.hero[dwarf].will_total / (game.enemy[goblin].int_total * 2)) * 100)|int >= 50 %}
                             50%
                         {% else %}
                             {{ ((game.hero[dwarf].will_total / (game.enemy[goblin].int_total * 2)) * 100)|round|int }}%
@@ -182,45 +182,45 @@
             <img src="{{ game.enemy[goblin].hero_portrait }}" alt="goblin"/>
             <br>
             <h2>{{ game.enemy[goblin].hero_name }}</h2>
-            <p>HP : {{ game.enemy[goblin].end_total * 10 }}</p>
+            <p>HP : {{ (game.enemy[goblin].end_total * 10)|round|int }}</p>
             <table>
                 <tr>
                     <td class="stats-cell">Strength</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].str_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].str_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Intelligence</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].int_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].int_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Agility</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].agi_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].agi_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Willpower</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].will_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].will_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Endurance</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].end_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].end_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Charisma</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].char_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].char_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Luck</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].lck_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].lck_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td class="stats-cell">Speed</td>
-                    <td class="stats-cell-total">{{ game.enemy[goblin].spd_total }}</td>
+                    <td class="stats-cell-total">{{ game.enemy[goblin].spd_total|round|int }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="stats-cell">Armor value</td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="stats-cell-total">{{ game.enemy[goblin].armor }}</td>
+                    <td colspan="2" class="stats-cell-total">{{ game.enemy[goblin].armor|round|int }}</td>
                 </tr>
             </table>
             <br>
@@ -233,7 +233,7 @@
                         {% if (game.enemy[goblin].lck_total)|int > 100 %}
                             100%
                         {% else %}
-                            {{ (game.enemy[goblin].lck_total)|int }}%
+                            {{ (game.enemy[goblin].lck_total)|int|round }}%
                         {% endif %}
                     </td>
                 </tr>
@@ -245,7 +245,7 @@
                         {% if (game.enemy[goblin].char_total)|int > 100 %}
                             100%
                         {% else %}
-                            {{ (game.enemy[goblin].char_total)|int }}%
+                            {{ (game.enemy[goblin].char_total)|int|round }}%
                         {% endif %}
                     </td>
                 </tr>
@@ -266,10 +266,10 @@
                         Magic absorption:
                     </td>
                     <td class="stats-cell-total">
-                        {% if ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|round|int >= 50 %}
+                        {% if ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|int >= 50 %}
                             50%
                         {% else %}
-                            {{ ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|round|int }}%
+                            {{ ((game.enemy[goblin].will_total / (game.hero[dwarf].int_total * 2)) * 100)|int|round }}%
                         {% endif %}
                     </td>
                 </tr>

@@ -5,24 +5,27 @@
 
 {% block body %}
 
-<div class="center">
-    <div id="main-box-narrow">
-        <p>For generations, dwarves and goblins waged war across many peaks and bottomless caverns of Everlast.</p>
-        <br>
-        <p>War that brought famine, death and devastation - neither side wanted it but either lacked forbearance to seek peace through means other than extinction of the enemy.</p>
-        <br>
-        <p>Yet, after centuries of toil, a fragile treaty has been made - it stated as follows...</p>
-        <br>
-        <p>"In twelve full moons time, we shall conclude our eternal conflict. Bring forth three of your most dutiful champions among heroes. The war shall be concluded by their sword and spell. For winner, there shall be prosperity and bounty of Everlast mountain. For loser - banishment and exile."</p>
-        <br>
-        <p>You have been tasked with preparing those brave few to represent your clan in battle and bring peace to the holy mountain, the one you call your home.</p>
-        <br>
-        <br>
-        <br>
-        <form method="POST" action="{{ url_for('difficulty_setting') }}">
-            <input type="submit" name="game_start" id="button" value="Rock and Stone!">
-        </form>
+    <div class="center">
+        <div id="main-box-narrow">
+            <p>For generations, dwarves and goblins waged war across many peaks and bottomless caverns of Everlast.</p>
+            <br>
+            <p>War that brought famine, death and devastation - neither side wanted it but either lacked forbearance to seek peace through means other than extinction of the enemy.</p>
+            <br>
+            <p>Yet, after centuries of toil, a fragile treaty has been made - it stated as follows...</p>
+            <br>
+            <p>"In twelve full moons time, we shall conclude our eternal conflict. Bring forth three of your most dutiful champions among heroes. The war shall be concluded by their sword and spell. For winner, there shall be prosperity and bounty of Everlast mountain. For loser - banishment and exile."</p>
+            <br>
+            <p>You have been tasked with preparing those brave few to represent your clan in battle and bring peace to the holy mountain, the one you call your home.</p>
+            <br>
+            <br>
+            <br>
+            <form method="POST" action="{{ url_for('difficulty_setting') }}">
+                <input type="submit" name="game_start" id="button" value="Rock and Stone!">
+            </form>
+        </div>
     </div>
-</div>
+    <div id="footer">
+        <a href="https://github.com/BartoszDerenda/dwarves-and-goblins">https://github.com/BartoszDerenda/dwarves-and-goblins</a>
+    </div>
 
 {% endblock %}

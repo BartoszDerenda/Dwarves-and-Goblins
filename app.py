@@ -14,9 +14,6 @@ games = {}
 
 @app.route('/')
 def homepage():
-    if 'key' not in session:
-        session['key'] = uuid.uuid4()
-
     return render_template('homepage.html')
 
 
@@ -27,7 +24,9 @@ def difficulty_setting():
 
 @app.route('/ending', methods=['GET', 'POST'])
 def ending():
+
     if request.method == 'POST':
+
         if request.form.get('ending', False) == 'Banish the goblins':
             ending_type = 'good ending'
             return render_template('ending.html', ending_type=ending_type)
@@ -51,10 +50,15 @@ def ending():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
+
     global game
+
+    if 'key' not in session:
+        session['key'] = uuid.uuid4()
 
     if request.method == 'POST':
 
+        # Difficulty setting
         if request.form.get('game_start', False) == 'Copper Soft':
             game = Game()
             update_equipment('dwarf1')
@@ -95,21 +99,20 @@ def game():
             update_stats('dwarf3')
             game_mode_death()
 
-        elif request.form.get('back', False) == 'Victory!' or request.form.get('back', False) == 'Retreat' or \
+        # Series of return renders
+        elif request.form.get('back', False) == 'Victory!' or \
+                request.form.get('back', False) == 'Retreat' or \
                 request.form.get('back', False) == 'Return':
             return render_template('game.html', game=game)
 
-        elif request.form.get('back dwarf1', False) == 'Return':
+        elif request.form.get('back-sneak dwarf1', False) == 'Return':
             game.hero['dwarf1'].sneak_confirmed = True
-            return render_template('game.html', game=game)
 
-        elif request.form.get('back dwarf2', False) == 'Return':
+        elif request.form.get('back-sneak dwarf2', False) == 'Return':
             game.hero['dwarf2'].sneak_confirmed = True
-            return render_template('game.html', game=game)
 
-        elif request.form.get('back dwarf3', False) == 'Return':
+        elif request.form.get('back-sneak dwarf3', False) == 'Return':
             game.hero['dwarf3'].sneak_confirmed = True
-            return render_template('game.html', game=game)
 
         #   TRAIN
         #   Deadmines: Become superhuman
@@ -215,7 +218,6 @@ def game():
                 spoils += [item_777]
 
             game.days -= temp_days
-
             game.backpack += spoils
 
         elif request.form.get('adventure', False) == 'Risky adventure':
@@ -251,7 +253,6 @@ def game():
                 spoils = random.choices(item_list_legendary, k=1)
 
             game.days -= temp_days
-
             game.backpack += spoils
 
         elif request.form.get('adventure', False) == 'Legendary expedition':
@@ -273,14 +274,13 @@ def game():
                 spoils += random.choices(item_list_boots_epic, k=1)
                 spoils += random.choices(item_list_artifact_epic, k=1)
             elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_cursed, k=1)
+                spoils = random.choices(item_list_epic, k=4) + random.choices(item_list_legendary, k=1)
             elif 81 <= odds <= 95:
                 random.choices(item_list_legendary, k=3)
             else:
                 spoils = random.choices(item_list_cursed, k=1)
 
             game.days -= temp_days
-
             game.backpack += spoils
 
         #   TACTICS
@@ -466,7 +466,9 @@ def update_stats(dwarf):
 
 
 def update_stats_enemy(goblin):
-    # Updates total stats based on the bases, multipliers and bonuses
+    # Updates total stats based on the bases, multipliers and bonuses (but for goblins)
+    # "Wow having separate functions for dwarves and goblins is like racist and stuff."
+    # lole
     if game.enemy[goblin].str_mul <= 0.0:
         game.enemy[goblin].str_mul = 0.1
     game.enemy[goblin].str_total = round(
@@ -811,11 +813,11 @@ class Hero:
         self.end_mul = float(1.0)
         self.end_bonus = 0
         self.end_total = round(self.endurance * self.end_mul + self.end_bonus)
-        self.charisma = 150
+        self.charisma = random.randint(10, 20)
         self.char_mul = float(1.0)
         self.char_bonus = 0
         self.char_total = round(self.charisma * self.char_mul + self.char_bonus)
-        self.luck = 150
+        self.luck = random.randint(10, 20)
         self.lck_mul = float(1.0)
         self.lck_bonus = 0
         self.lck_total = round(self.luck * self.lck_mul + self.lck_bonus)
@@ -942,14 +944,16 @@ def battleground():
                 game.hero['dwarf3'].sneak = True
             return render_template('special.html', game=game, dwarf='dwarf3', sneak=True)
 
+        # I need dwarf=dwarf for the return button to send to the correct HTML ID element.
+        # It's the little things, you know.
         elif request.form.get('spy dwarf1', False) == 'Spy':
-            return render_template('special.html', game=game, goblin='goblin1', spy=True)
+            return render_template('special.html', game=game, dwarf='dwarf1', goblin='goblin1', spy=True)
 
         elif request.form.get('spy dwarf2', False) == 'Spy':
-            return render_template('special.html', game=game, goblin='goblin2', spy=True)
+            return render_template('special.html', game=game, dwarf='dwarf2', goblin='goblin2', spy=True)
 
         elif request.form.get('spy dwarf3', False) == 'Spy':
-            return render_template('special.html', game=game, goblin='goblin3', spy=True)
+            return render_template('special.html', game=game, dwarf='dwarf3', goblin='goblin3', spy=True)
 
 
 def battle(dwarf, goblin):
@@ -1225,8 +1229,12 @@ def battle(dwarf, goblin):
 
             if dwarf_speed >= goblin_speed and goblin_health > 0 and dwarf_health > 0:
 
+                dwarf_physical = game.hero[dwarf].str_total * 3
+
                 if 'Dominion' in game.hero[dwarf].specials_list:
-                    dwarf_magical = dwarf_magical + (dwarf_willpower + dwarf_charisma) * 1.5
+                    dwarf_magical = game.hero[dwarf].int_total * 4 + (dwarf_willpower + dwarf_charisma) * 1.5
+                else:
+                    dwarf_magical = game.hero[dwarf].int_total * 4
 
                 if dwarf_special_attack_next:
                     factor = random.randint(10, 11)
@@ -1244,7 +1252,7 @@ def battle(dwarf, goblin):
                     dwarf_special_attack_next = False
                 else:
                     if dwarf_tactic == 'Frenzy':
-                        factor = random.randint(10, 12)
+                        factor = random.randint(10, 13)
                         damage = dwarf_physical * round((factor / 10), 2)
 
                         roll = random.randint(0, 4)
@@ -1270,7 +1278,7 @@ def battle(dwarf, goblin):
                     elif dwarf_tactic == 'Balanced':
                         damage_type = random.choice([dwarf_physical, dwarf_magical])
                         if damage_type == dwarf_physical:
-                            factor = random.randint(10, 12)
+                            factor = random.randint(10, 13)
                             damage = dwarf_physical * round((factor / 10), 2)
 
                             roll = random.randint(0, 4)
@@ -1295,8 +1303,8 @@ def battle(dwarf, goblin):
                     elif dwarf_tactic == 'Overconfidence':
                         damage_type = random.choice([dwarf_physical, dwarf_magical])
                         if damage_type == dwarf_physical:
-                            factor = random.randint(10, 12)
-                            damage = round(((dwarf_physical * round((factor / 10), 2)) * 0.85), 2)
+                            factor = random.randint(10, 13)
+                            damage = round(((dwarf_physical * round((factor / 10), 2)) * 0.8), 2)
 
                             roll = random.randint(0, 4)
                             attack_message = physical_attack_strings[roll]
@@ -1306,7 +1314,7 @@ def battle(dwarf, goblin):
 
                         else:
                             factor = random.randint(8, 15)
-                            damage = round(((dwarf_magical * round((factor / 10), 2)) * 0.85), 2)
+                            damage = round(((dwarf_magical * round((factor / 10), 2)) * 0.8), 2)
 
                             roll = random.randint(0, 4)
                             attack_message = magical_attack_strings[roll]
@@ -1454,7 +1462,7 @@ def battle(dwarf, goblin):
 
                 if 'Crating' in game.enemy[goblin].specials_list:
                     if goblin_dodge_message:
-                        factor = random.randint(10, 12)
+                        factor = random.randint(10, 13)
                         counterattack = (goblin_physical * 1.3) * round((factor / 10), 2)
                         dwarf_health -= counterattack
                         counterattack = round(counterattack)
@@ -1643,7 +1651,7 @@ def battle(dwarf, goblin):
                            ' the goblin, but he manages to dodge the attack!'
                     goblin_dodge_message = False
                     if goblin_counterattack_message:
-                        turn += '<br>' + goblin_name + " manages to counterattack with a punch, dealing " + str(
+                        turn += '<br>' + goblin_name + " counterattacks with a punch, dealing " + str(
                             counterattack) + ' damage!'
                         goblin_counterattack_message = False
                     if dwarf_increase_message:
@@ -1782,8 +1790,12 @@ def battle(dwarf, goblin):
 
             elif goblin_speed > dwarf_speed and goblin_health > 0 and dwarf_health > 0:
 
+                goblin_physical = game.enemy[goblin].str_total * 3
+
                 if 'Dominion' in game.enemy[goblin].specials_list:
-                    goblin_magical = goblin_magical + (goblin_willpower + goblin_charisma) * 1.5
+                    goblin_magical = game.enemy[goblin].int_total * 4 + (goblin_willpower + goblin_charisma) * 1.5
+                else:
+                    goblin_magical = game.enemy[goblin].int_total * 4
 
                 if goblin_special_attack_next:
                     factor = random.randint(10, 11)
@@ -1800,7 +1812,7 @@ def battle(dwarf, goblin):
                     goblin_special_attack_next = False
                 else:
                     if goblin_tactic == 'Frenzy':
-                        factor = random.randint(10, 12)
+                        factor = random.randint(10, 13)
                         damage = goblin_physical * round((factor / 10), 2)
 
                         roll = random.randint(0, 4)
@@ -1826,7 +1838,7 @@ def battle(dwarf, goblin):
                     elif goblin_tactic == 'Balanced':
                         damage_type = random.choice([goblin_physical, goblin_magical])
                         if damage_type == goblin_physical:
-                            factor = random.randint(10, 12)
+                            factor = random.randint(10, 13)
                             damage = goblin_physical * round((factor / 10), 2)
 
                             roll = random.randint(0, 4)
@@ -1851,8 +1863,8 @@ def battle(dwarf, goblin):
                     elif goblin_tactic == 'Overconfidence':
                         damage_type = random.choice([goblin_physical, goblin_magical])
                         if damage_type == goblin_physical:
-                            factor = random.randint(10, 12)
-                            damage = round(((goblin_physical * round((factor / 10), 2)) * 0.85), 0)
+                            factor = random.randint(10, 13)
+                            damage = round(((goblin_physical * round((factor / 10), 2)) * 0.8), 0)
 
                             roll = random.randint(0, 4)
                             attack_message = physical_attack_strings[roll]
@@ -1861,7 +1873,7 @@ def battle(dwarf, goblin):
                             goblin_special_attack_charge += 1
                         else:
                             factor = random.randint(8, 15)
-                            damage = round(((goblin_magical * round((factor / 10), 2)) * 0.85), 0)
+                            damage = round(((goblin_magical * round((factor / 10), 2)) * 0.8), 0)
 
                             roll = random.randint(0, 4)
                             attack_message = magical_attack_strings[roll]
@@ -2009,7 +2021,7 @@ def battle(dwarf, goblin):
 
                 if 'Crating' in game.hero[dwarf].specials_list:
                     if dwarf_dodge_message:
-                        factor = random.randint(10, 12)
+                        factor = random.randint(10, 13)
                         counterattack = (dwarf_physical * 1.3) * round((factor / 10), 2)
                         goblin_health -= counterattack
                         counterattack = round(counterattack)
@@ -2192,7 +2204,7 @@ def battle(dwarf, goblin):
                            ' the dwarf, but he manages to dodge the attack!'
                     dwarf_dodge_message = False
                     if dwarf_counterattack_message:
-                        turn += '<br>' + dwarf_name + " manages to counterattack with a punch, dealing " + str(
+                        turn += '<br>' + dwarf_name + " counterattacks with a punch, dealing " + str(
                             counterattack) + ' damage!'
                         dwarf_counterattack_message = False
                     if goblin_increase_message:

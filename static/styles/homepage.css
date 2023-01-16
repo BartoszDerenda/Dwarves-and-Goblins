@@ -7,8 +7,6 @@
     color: #e8e2e1;
     text-decoration: none;
 
-    z-index: 1;
-
     background-color: #423f3e;
     border-radius: 40px;
     box-shadow: 0 7px 15px rgba(0, 0, 0, 1);
@@ -47,4 +45,19 @@
     background-color: #e8e2e1;
     color: #423f3e;
     text-shadow: none;
+}
+
+#footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    height: 10vh;
+    background-color: #4b1d1d;
+}
+
+a {
+    text-decoration: none;
+    color: #6b6b6b;
 }
