@@ -12,749 +12,6 @@ app.secret_key = '8008135'
 games = {}
 
 
-@app.route('/')
-def homepage():
-    return render_template('homepage.html')
-
-
-@app.route('/difficulty', methods=['GET', 'POST'])
-def difficulty_setting():
-    return render_template('difficulty.html')
-
-
-@app.route('/ending', methods=['GET', 'POST'])
-def ending():
-
-    if request.method == 'POST':
-
-        if request.form.get('ending', False) == 'Banish the goblins':
-            ending_type = 'good ending'
-            return render_template('ending.html', ending_type=ending_type)
-
-        elif request.form.get('ending', False) == 'The goblins grow restless...':
-            ending_type = 'normal ending plus'
-            return render_template('ending.html', ending_type=ending_type)
-
-        elif request.form.get('ending', False) == 'For this we shall not stand! To arms, brothers!':
-            ending_type = 'normal ending minus'
-            return render_template('ending.html', ending_type=ending_type)
-
-        elif request.form.get('ending', False) == '. . .':
-            ending_type = 'bad ending'
-            return render_template('ending.html', ending_type=ending_type)
-
-        elif request.form.get('ending', False) == 'Sacrifice':
-            ending_type = 'eclipse'
-            return render_template('ending.html', ending_type=ending_type)
-
-
-@app.route('/game', methods=['GET', 'POST'])
-def game():
-
-    global game
-
-    if 'key' not in session:
-        session['key'] = uuid.uuid4()
-
-    if request.method == 'POST':
-
-        # Difficulty setting
-        if request.form.get('game_start', False) == 'Copper Soft':
-            game = Game()
-            update_equipment('dwarf1')
-            update_equipment('dwarf2')
-            update_equipment('dwarf3')
-            update_stats('dwarf1')
-            update_stats('dwarf2')
-            update_stats('dwarf3')
-            game_mode_easy()
-
-        elif request.form.get('game_start', False) == 'Steel Solid':
-            game = Game()
-            update_equipment('dwarf1')
-            update_equipment('dwarf2')
-            update_equipment('dwarf3')
-            update_stats('dwarf1')
-            update_stats('dwarf2')
-            update_stats('dwarf3')
-            game_mode_normal()
-
-        elif request.form.get('game_start', False) == 'Adamantite Hard':
-            game = Game()
-            update_equipment('dwarf1')
-            update_equipment('dwarf2')
-            update_equipment('dwarf3')
-            update_stats('dwarf1')
-            update_stats('dwarf2')
-            update_stats('dwarf3')
-            game_mode_hard()
-
-        elif request.form.get('game_start', False) == 'Dwarves must perish!':
-            game = Game()
-            update_equipment('dwarf1')
-            update_equipment('dwarf2')
-            update_equipment('dwarf3')
-            update_stats('dwarf1')
-            update_stats('dwarf2')
-            update_stats('dwarf3')
-            game_mode_death()
-
-        # Series of return renders
-        elif request.form.get('back', False) == 'Victory!' or \
-                request.form.get('back', False) == 'Retreat' or \
-                request.form.get('back', False) == 'Return':
-            return render_template('game.html', game=game)
-
-        elif request.form.get('back-sneak dwarf1', False) == 'Return':
-            game.hero['dwarf1'].sneak_confirmed = True
-
-        elif request.form.get('back-sneak dwarf2', False) == 'Return':
-            game.hero['dwarf2'].sneak_confirmed = True
-
-        elif request.form.get('back-sneak dwarf3', False) == 'Return':
-            game.hero['dwarf3'].sneak_confirmed = True
-
-        #   TRAIN
-        #   Deadmines: Become superhuman
-        #
-        #   HTML form, string  ->  game.hero[dwarf].<stats>
-        #
-        # Takes an input from the HTML form, adds stats from the input into the dwarf at the cost of days. If the
-        # training is too costly (i.e. not enough days left), nothing will happen. Flash error message for this case
-        # is to be implemented in the future.
-
-        elif request.form.get('train dwarf1', False) == 'Train':
-            train('dwarf1')
-
-        elif request.form.get('train dwarf2', False) == 'Train':
-            train('dwarf2')
-
-        elif request.form.get('train dwarf3', False) == 'Train':
-            train('dwarf3')
-
-        #   EQUIP
-        #   It was a Barbie doll dress up game all along...
-        #
-        # game.backpack, array  ->  HTML form, string  ->  game.item_dict, dictionary  ->
-        # -> game.hero[dwarf].equipment, dictionary
-        #
-        # Takes a string from HTML form option field (ex. "Leather Cap"), then searches for its object in item_dict
-        # which contains reference to all items in the game. Then takes that object and slams it into the
-        # corresponding equipment slot, also there's an unequipment call somewhere in the middle. Stuff resets and
-        # recalculates at the end, as per tradition.
-
-        elif request.form.get('equipment dwarf1', False) == 'Equip':
-            equip('dwarf1')
-
-        elif request.form.get('equipment dwarf2', False) == 'Equip':
-            equip('dwarf2')
-
-        elif request.form.get('equipment dwarf3', False) == 'Equip':
-            equip('dwarf3')
-
-        #   UNEQUIP
-        #   For peeling the dwarves out of their juicy equipment.
-        #
-        #   HTML form, string  ->  game.hero[dwarf].equipment
-        #
-        # Takes a string from HTML form option field (ex. "Leather Cap") and searches for it in the corresponding
-        # dwarf's equipment. Puts it into his backpack and deletes it from the equipment. Because both objects
-        # already have the actual object of the item inside them, there's no need to cross-reference anything with
-        # the help of item_dict.
-
-        elif request.form.get('equipment dwarf1', False) == 'Unequip':
-            unequip('dwarf1')
-
-        elif request.form.get('equipment dwarf2', False) == 'Unequip':
-            unequip('dwarf2')
-
-        elif request.form.get('equipment dwarf3', False) == 'Unequip':
-            unequip('dwarf3')
-
-        #   ADVENTURE
-        #   Your only source of loot.
-        #
-        #   random.choices()  ->  game.backpack
-        #
-        #   Randomises and distributes loot from adventures depending on its scale (cost in days).
-
-        elif request.form.get('adventure', False) == 'Short venture':
-
-            odds = random.randint(1, 100)
-            temp_days = 15
-            spoils = []
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            if 1 <= odds <= 45:
-                spoils += random.choices(item_list_weapon_common, k=1)
-                spoils += random.choices(item_list_headpiece_common, k=1)
-                spoils += random.choices(item_list_shoulders_common, k=1)
-                spoils += random.choices(item_list_chest_common, k=1)
-                spoils += random.choices(item_list_pants_common, k=1)
-                spoils += random.choices(item_list_gloves_common, k=1)
-                spoils += random.choices(item_list_boots_common, k=1)
-                spoils += random.choices(item_list_artifact_common, k=1)
-            elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_common, k=4) + random.choices(item_list_rare, k=3)
-            elif 81 <= odds <= 95:
-                spoils += random.choices(item_list_weapon_rare, k=1)
-                spoils += random.choices(item_list_headpiece_rare, k=1)
-                spoils += random.choices(item_list_shoulders_rare, k=1)
-                spoils += random.choices(item_list_chest_rare, k=1)
-                spoils += random.choices(item_list_pants_rare, k=1)
-                spoils += random.choices(item_list_gloves_rare, k=1)
-                spoils += random.choices(item_list_boots_rare, k=1)
-                spoils += random.choices(item_list_artifact_rare, k=1)
-            else:
-                spoils += random.choices(item_list_weapon_common, k=1)
-                spoils += random.choices(item_list_headpiece_common, k=1)
-                spoils += random.choices(item_list_shoulders_common, k=1)
-                spoils += random.choices(item_list_chest_common, k=1)
-                spoils += random.choices(item_list_pants_common, k=1)
-                spoils += random.choices(item_list_gloves_common, k=1)
-                spoils += random.choices(item_list_boots_common, k=1)
-                spoils += [item_777]
-
-            game.days -= temp_days
-            game.backpack += spoils
-
-        elif request.form.get('adventure', False) == 'Risky adventure':
-
-            odds = random.randint(1, 100)
-            temp_days = 30
-            spoils = []
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            if 1 <= odds <= 45:
-                spoils += random.choices(item_list_weapon_rare, k=1)
-                spoils += random.choices(item_list_headpiece_rare, k=1)
-                spoils += random.choices(item_list_shoulders_rare, k=1)
-                spoils += random.choices(item_list_chest_rare, k=1)
-                spoils += random.choices(item_list_pants_rare, k=1)
-                spoils += random.choices(item_list_gloves_rare, k=1)
-                spoils += random.choices(item_list_boots_rare, k=1)
-                spoils += random.choices(item_list_artifact_rare, k=1)
-            elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_rare, k=4) + random.choices(item_list_epic, k=3)
-            elif 81 <= odds <= 95:
-                spoils += random.choices(item_list_weapon_epic, k=1)
-                spoils += random.choices(item_list_headpiece_epic, k=1)
-                spoils += random.choices(item_list_shoulders_epic, k=1)
-                spoils += random.choices(item_list_chest_epic, k=1)
-                spoils += random.choices(item_list_pants_epic, k=1)
-                spoils += random.choices(item_list_gloves_epic, k=1)
-                spoils += random.choices(item_list_boots_epic, k=1)
-                spoils += random.choices(item_list_artifact_epic, k=1)
-            else:
-                spoils = random.choices(item_list_legendary, k=1)
-
-            game.days -= temp_days
-            game.backpack += spoils
-
-        elif request.form.get('adventure', False) == 'Legendary expedition':
-
-            odds = random.randint(1, 100)
-            temp_days = 60
-            spoils = []
-
-            if game.days - temp_days <= 0:
-                return render_template('game.html', game=game)
-
-            if 1 <= odds <= 45:
-                spoils += random.choices(item_list_weapon_epic, k=1)
-                spoils += random.choices(item_list_headpiece_epic, k=1)
-                spoils += random.choices(item_list_shoulders_epic, k=1)
-                spoils += random.choices(item_list_chest_epic, k=1)
-                spoils += random.choices(item_list_pants_epic, k=1)
-                spoils += random.choices(item_list_gloves_epic, k=1)
-                spoils += random.choices(item_list_boots_epic, k=1)
-                spoils += random.choices(item_list_artifact_epic, k=1)
-            elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_epic, k=4) + random.choices(item_list_legendary, k=1)
-            elif 81 <= odds <= 95:
-                random.choices(item_list_legendary, k=3)
-            else:
-                spoils = random.choices(item_list_cursed, k=1)
-
-            game.days -= temp_days
-            game.backpack += spoils
-
-        #   TACTICS
-        #   Change the personality of your dwarf with one click of a button.
-        #
-        #   HTML form, string  ->  game.hero[dwarf].tactic
-        #
-        #   Takes the string from HTML form radio field and puts it directly into your dwarf.
-        #   If player sends an empty HTML form, tactic remains unchanged.
-
-        elif request.form.get('tactics dwarf1', False) == 'Confirm':
-            if request.form.get('tactic') is None:
-                pass
-            else:
-                game.hero['dwarf1'].tactic = request.form.get('tactic')
-
-        elif request.form.get('tactics dwarf2', False) == 'Confirm':
-            if request.form.get('tactic') is None:
-                pass
-            else:
-                game.hero['dwarf2'].tactic = request.form.get('tactic')
-
-        elif request.form.get('tactics dwarf3', False) == 'Confirm':
-            if request.form.get('tactic') is None:
-                pass
-            else:
-                game.hero['dwarf3'].tactic = request.form.get('tactic')
-
-    return render_template('game.html', game=game)
-
-
-def update_equipment(dwarf):
-    # Updates multipliers and bonuses values based on current equipment
-    for item_slot, item_name in game.hero[dwarf].equipment.items():
-        if item_name is not None:
-
-            rounded = game.hero[dwarf].str_mul + game.hero[dwarf].equipment[item_slot].str_mul
-            game.hero[dwarf].str_mul = round(rounded, 2)
-            game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[item_slot].str_bonus
-
-            rounded = game.hero[dwarf].int_mul + game.hero[dwarf].equipment[item_slot].int_mul
-            game.hero[dwarf].int_mul = round(rounded, 2)
-            game.hero[dwarf].int_bonus += game.hero[dwarf].equipment[item_slot].int_bonus
-
-            rounded = game.hero[dwarf].agi_mul + game.hero[dwarf].equipment[item_slot].agi_mul
-            game.hero[dwarf].agi_mul = round(rounded, 2)
-            game.hero[dwarf].agi_bonus += game.hero[dwarf].equipment[item_slot].agi_bonus
-
-            rounded = game.hero[dwarf].will_mul + game.hero[dwarf].equipment[item_slot].will_mul
-            game.hero[dwarf].will_mul = round(rounded, 2)
-            game.hero[dwarf].will_bonus += game.hero[dwarf].equipment[item_slot].will_bonus
-
-            rounded = game.hero[dwarf].end_mul + game.hero[dwarf].equipment[item_slot].end_mul
-            game.hero[dwarf].end_mul = round(rounded, 2)
-            game.hero[dwarf].end_bonus += game.hero[dwarf].equipment[item_slot].end_bonus
-
-            rounded = game.hero[dwarf].char_mul + game.hero[dwarf].equipment[item_slot].char_mul
-            game.hero[dwarf].char_mul = round(rounded, 2)
-            game.hero[dwarf].char_bonus += game.hero[dwarf].equipment[item_slot].char_bonus
-
-            rounded = game.hero[dwarf].lck_mul + game.hero[dwarf].equipment[item_slot].lck_mul
-            game.hero[dwarf].lck_mul = round(rounded, 2)
-            game.hero[dwarf].lck_bonus += game.hero[dwarf].equipment[item_slot].lck_bonus
-
-            rounded = game.hero[dwarf].spd_mul + game.hero[dwarf].equipment[item_slot].spd_mul
-            game.hero[dwarf].spd_mul = round(rounded, 2)
-            game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[item_slot].spd_bonus
-
-            game.hero[dwarf].armor += game.hero[dwarf].equipment[item_slot].armor
-
-            if game.hero[dwarf].equipment[item_slot].special is not None:
-                game.hero[dwarf].specials_list.append(game.hero[dwarf].equipment[item_slot].special)
-
-
-def update_equipment_enemy(goblin):
-    # Updates multipliers and bonuses values based on current equipment
-    for item_slot, item_name in game.enemy[goblin].equipment.items():
-        if item_name is not None:
-
-            rounded = game.enemy[goblin].str_mul + game.enemy[goblin].equipment[item_slot].str_mul
-            game.enemy[goblin].str_mul = round(rounded, 2)
-            game.enemy[goblin].str_bonus += game.enemy[goblin].equipment[item_slot].str_bonus
-
-            rounded = game.enemy[goblin].int_mul + game.enemy[goblin].equipment[item_slot].int_mul
-            game.enemy[goblin].int_mul = round(rounded, 2)
-            game.enemy[goblin].int_bonus += game.enemy[goblin].equipment[item_slot].int_bonus
-
-            rounded = game.enemy[goblin].agi_mul + game.enemy[goblin].equipment[item_slot].agi_mul
-            game.enemy[goblin].agi_mul = round(rounded, 2)
-            game.enemy[goblin].agi_bonus += game.enemy[goblin].equipment[item_slot].agi_bonus
-
-            rounded = game.enemy[goblin].will_mul + game.enemy[goblin].equipment[item_slot].will_mul
-            game.enemy[goblin].will_mul = round(rounded, 2)
-            game.enemy[goblin].will_bonus += game.enemy[goblin].equipment[item_slot].will_bonus
-
-            rounded = game.enemy[goblin].end_mul + game.enemy[goblin].equipment[item_slot].end_mul
-            game.enemy[goblin].end_mul = round(rounded, 2)
-            game.enemy[goblin].end_bonus += game.enemy[goblin].equipment[item_slot].end_bonus
-
-            rounded = game.enemy[goblin].char_mul + game.enemy[goblin].equipment[item_slot].char_mul
-            game.enemy[goblin].char_mul = round(rounded, 2)
-            game.enemy[goblin].char_bonus += game.enemy[goblin].equipment[item_slot].char_bonus
-
-            rounded = game.enemy[goblin].lck_mul + game.enemy[goblin].equipment[item_slot].lck_mul
-            game.enemy[goblin].lck_mul = round(rounded, 2)
-            game.enemy[goblin].lck_bonus += game.enemy[goblin].equipment[item_slot].lck_bonus
-
-            rounded = game.enemy[goblin].spd_mul + game.enemy[goblin].equipment[item_slot].spd_mul
-            game.enemy[goblin].spd_mul = round(rounded, 2)
-            game.enemy[goblin].spd_bonus += game.enemy[goblin].equipment[item_slot].spd_bonus
-
-            game.enemy[goblin].armor += game.enemy[goblin].equipment[item_slot].armor
-
-            if game.enemy[goblin].equipment[item_slot].special is not None:
-                game.enemy[goblin].specials_list.append(game.enemy[goblin].equipment[item_slot].special)
-
-
-def stat_reset(dwarf):
-    # Resets all stats before equipment update
-    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[dwarf].agi_mul = game.hero[dwarf].will_mul = 1.0
-    game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
-    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = game.hero[dwarf].agi_bonus = 0
-    game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = game.hero[dwarf].lck_bonus = 0
-    game.hero[dwarf].will_bonus = game.hero[dwarf].spd_bonus = 0
-    game.hero[dwarf].armor = 0
-    game.hero[dwarf].specials_list.clear()
-
-
-def update_stats(dwarf):
-    # Updates total stats based on the bases, multipliers and bonuses
-    if game.hero[dwarf].str_mul <= 0.0:
-        game.hero[dwarf].str_mul = 0.1
-    game.hero[dwarf].str_total = round(
-        game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
-    if game.hero[dwarf].str_total <= 0:
-        game.hero[dwarf].str_total = 1
-
-    if game.hero[dwarf].int_mul <= 0.0:
-        game.hero[dwarf].int_mul = 0.1
-    game.hero[dwarf].int_total = round(
-        game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
-    if game.hero[dwarf].int_total <= 0:
-        game.hero[dwarf].int_total = 1
-
-    if game.hero[dwarf].agi_mul <= 0.0:
-        game.hero[dwarf].agi_mul = 0.1
-    game.hero[dwarf].agi_total = round(game.hero[dwarf].agility * game.hero[dwarf].agi_mul + game.hero[dwarf].agi_bonus)
-    if game.hero[dwarf].agi_total <= 0:
-        game.hero[dwarf].agi_total = 1
-
-    if game.hero[dwarf].will_mul <= 0.0:
-        game.hero[dwarf].will_mul = 0.1
-    game.hero[dwarf].will_total = round(
-        game.hero[dwarf].willpower * game.hero[dwarf].will_mul + game.hero[dwarf].will_bonus)
-    if game.hero[dwarf].will_total <= 0:
-        game.hero[dwarf].will_total = 1
-
-    if game.hero[dwarf].end_mul <= 0.0:
-        game.hero[dwarf].end_mul = 0.1
-    game.hero[dwarf].end_total = round(
-        game.hero[dwarf].endurance * game.hero[dwarf].end_mul + game.hero[dwarf].end_bonus)
-    if game.hero[dwarf].end_total <= 0:
-        game.hero[dwarf].end_total = 1
-
-    if game.hero[dwarf].char_mul <= 0.0:
-        game.hero[dwarf].char_mul = 0.1
-    game.hero[dwarf].char_total = round(
-        game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
-    if game.hero[dwarf].char_total <= 0:
-        game.hero[dwarf].char_total = 1
-
-    if game.hero[dwarf].lck_mul <= 0.0:
-        game.hero[dwarf].lck_mul = 0.1
-    game.hero[dwarf].lck_total = round(game.hero[dwarf].luck * game.hero[dwarf].lck_mul + game.hero[dwarf].lck_bonus)
-    if game.hero[dwarf].lck_total <= 0:
-        game.hero[dwarf].lck_total = 1
-
-    if game.hero[dwarf].spd_mul <= 0.0:
-        game.hero[dwarf].spd_mul = 0.1
-    game.hero[dwarf].spd_total = round(game.hero[dwarf].speed * game.hero[dwarf].spd_mul + game.hero[dwarf].spd_bonus)
-    if game.hero[dwarf].spd_total <= 0:
-        game.hero[dwarf].spd_total = 1
-
-
-def update_stats_enemy(goblin):
-    # Updates total stats based on the bases, multipliers and bonuses (but for goblins)
-    # "Wow having separate functions for dwarves and goblins is like racist and stuff."
-    # lole
-    if game.enemy[goblin].str_mul <= 0.0:
-        game.enemy[goblin].str_mul = 0.1
-    game.enemy[goblin].str_total = round(
-        game.enemy[goblin].strength * game.enemy[goblin].str_mul + game.enemy[goblin].str_bonus)
-    if game.enemy[goblin].str_total <= 0:
-        game.enemy[goblin].str_total = 1
-
-    if game.enemy[goblin].int_mul <= 0.0:
-        game.enemy[goblin].int_mul = 0.1
-    game.enemy[goblin].int_total = round(
-        game.enemy[goblin].intelligence * game.enemy[goblin].int_mul + game.enemy[goblin].int_bonus)
-    if game.enemy[goblin].int_total <= 0:
-        game.enemy[goblin].int_total = 1
-
-    if game.enemy[goblin].agi_mul <= 0.0:
-        game.enemy[goblin].agi_mul = 0.1
-    game.enemy[goblin].agi_total = round(
-        game.enemy[goblin].agility * game.enemy[goblin].agi_mul + game.enemy[goblin].agi_bonus)
-    if game.enemy[goblin].agi_total <= 0:
-        game.enemy[goblin].agi_total = 1
-
-    if game.enemy[goblin].will_mul <= 0.0:
-        game.enemy[goblin].will_mul = 0.1
-    game.enemy[goblin].will_total = round(
-        game.enemy[goblin].willpower * game.enemy[goblin].will_mul + game.enemy[goblin].will_bonus)
-    if game.enemy[goblin].will_total <= 0:
-        game.enemy[goblin].will_total = 1
-
-    if game.enemy[goblin].end_mul <= 0.0:
-        game.enemy[goblin].end_mul = 0.1
-    game.enemy[goblin].end_total = round(
-        game.enemy[goblin].endurance * game.enemy[goblin].end_mul + game.enemy[goblin].end_bonus)
-    if game.enemy[goblin].end_total <= 0:
-        game.enemy[goblin].end_total = 1
-
-    if game.enemy[goblin].char_mul <= 0.0:
-        game.enemy[goblin].char_mul = 0.1
-    game.enemy[goblin].char_total = round(
-        game.enemy[goblin].charisma * game.enemy[goblin].char_mul + game.enemy[goblin].char_bonus)
-    if game.enemy[goblin].char_total <= 0:
-        game.enemy[goblin].char_total = 1
-
-    if game.enemy[goblin].lck_mul <= 0.0:
-        game.enemy[goblin].lck_mul = 0.1
-    game.enemy[goblin].lck_total = round(
-        game.enemy[goblin].luck * game.enemy[goblin].lck_mul + game.enemy[goblin].lck_bonus)
-    if game.enemy[goblin].lck_total <= 0:
-        game.enemy[goblin].lck_total = 1
-
-    if game.enemy[goblin].spd_mul <= 0.0:
-        game.enemy[goblin].spd_mul = 0.1
-    game.enemy[goblin].spd_total = round(
-        game.enemy[goblin].speed * game.enemy[goblin].spd_mul + game.enemy[goblin].spd_bonus)
-    if game.enemy[goblin].spd_total <= 0:
-        game.enemy[goblin].spd_total = 1
-
-
-def train(dwarf):
-    if request.form.get("str_increase") != '':
-        strength = int(request.form.get("str_increase"))
-    else:
-        strength = 0
-    if request.form.get("int_increase") != '':
-        intelligence = int(request.form.get("int_increase"))
-    else:
-        intelligence = 0
-    if request.form.get("agi_increase") != '':
-        agility = int(request.form.get("agi_increase"))
-    else:
-        agility = 0
-    if request.form.get("will_increase") != '':
-        willpower = int(request.form.get("will_increase"))
-    else:
-        willpower = 0
-    if request.form.get("end_increase") != '':
-        endurance = int(request.form.get("end_increase"))
-    else:
-        endurance = 0
-    if request.form.get("char_increase") != '':
-        charisma = int(request.form.get("char_increase"))
-    else:
-        charisma = 0
-    if request.form.get("lck_increase") != '':
-        luck = int(request.form.get("lck_increase"))
-    else:
-        luck = 0
-    if request.form.get("spd_increase") != '':
-        speed = int(request.form.get("spd_increase"))
-    else:
-        speed = 0
-
-    temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 3 + charisma + luck + speed * 3
-
-    if game.days - temp_days <= 0:
-        return render_template('game.html', game=game)
-
-    game.hero[dwarf].strength += strength
-    game.hero[dwarf].intelligence += intelligence
-    game.hero[dwarf].agility += agility
-    game.hero[dwarf].willpower += willpower
-    game.hero[dwarf].endurance += endurance
-    game.hero[dwarf].charisma += charisma
-    game.hero[dwarf].luck += luck
-    game.hero[dwarf].speed += speed
-
-    update_stats(dwarf)
-
-    game.days -= temp_days
-
-
-def unequip(dwarf):
-    for key, value in game.hero[dwarf].equipment.items():
-        if value is not None:
-            game.backpack.append(value)
-    game.hero[dwarf].equipment.update(
-        {'Weapon': None, 'Headpiece': None, 'Shoulders': None, 'Chest': None, 'Pants': None, 'Gloves': None,
-         'Boots': None, 'Artifact': None})
-
-    stat_reset(dwarf)
-    update_stats(dwarf)
-
-
-def equip(dwarf):
-    # Declaring stuff cuz otherwise PyCharm screams, even though there's no way for these to ever be unassigned I think.
-    weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
-
-    # Iterating through global item dictionary in search for objects.
-    for key, value in game.item_dict.items():
-        if key == request.form.get("Weapon"):
-            weapon = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Headpiece"):
-            headpiece = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Shoulders"):
-            shoulders = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Chest"):
-            chest = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Pants"):
-            pants = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Gloves"):
-            gloves = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Boots"):
-            boots = value
-            game.backpack.remove(value)
-        elif key == request.form.get("Artifact"):
-            artifact = value
-            game.backpack.remove(value)
-
-    # Sneaky unequipment call before we overwrite the current one.
-    # Unnecessary stat refresh as part of the package that is unequip()
-    unequip(dwarf)
-
-    # Assigning items from the library to the equipment dictionary.
-    if request.form.get("Weapon") is not None:
-        game.hero[dwarf].equipment.update({'Weapon': weapon})
-
-    if request.form.get("Headpiece") is not None:
-        game.hero[dwarf].equipment.update({'Headpiece': headpiece})
-
-    if request.form.get("Shoulders") is not None:
-        game.hero[dwarf].equipment.update({'Shoulders': shoulders})
-
-    if request.form.get("Chest") is not None:
-        game.hero[dwarf].equipment.update({'Chest': chest})
-
-    if request.form.get("Gloves") is not None:
-        game.hero[dwarf].equipment.update({'Gloves': gloves})
-
-    if request.form.get("Pants") is not None:
-        game.hero[dwarf].equipment.update({'Pants': pants})
-
-    if request.form.get("Boots") is not None:
-        game.hero[dwarf].equipment.update({'Boots': boots})
-
-    if request.form.get("Artifact") is not None:
-        game.hero[dwarf].equipment.update({'Artifact': artifact})
-
-    # Refreshing stats
-    stat_reset(dwarf)
-    update_equipment(dwarf)
-    update_stats(dwarf)
-
-
-def game_mode_easy():
-    for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(15, 25)
-        game.enemy[goblin].intelligence = random.randint(15, 25)
-        game.enemy[goblin].agility = random.randint(25, 35)
-        game.enemy[goblin].willpower = random.randint(25, 35)
-        game.enemy[goblin].endurance = 1000
-        game.enemy[goblin].charisma = random.randint(25, 35)
-        game.enemy[goblin].luck = random.randint(25, 35)
-        game.enemy[goblin].speed = random.randint(15, 25)
-
-        game.enemy[goblin].equipment["Weapon"] = item_154
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
-
-        update_equipment_enemy(goblin)
-        update_stats_enemy(goblin)
-        game.difficulty = "easy"
-
-
-def game_mode_normal():
-    for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
-
-        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_epic)
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_rare)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_rare)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_rare)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_rare)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_rare)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_rare)
-
-        update_equipment_enemy(goblin)
-        update_stats_enemy(goblin)
-        game.difficulty = "normal"
-
-
-def game_mode_hard():
-    for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
-
-        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
-
-        update_equipment_enemy(goblin)
-        update_stats_enemy(goblin)
-        game.difficulty = "hard"
-
-
-def game_mode_death():
-    # TO DO LATER
-    # I will make around 20 custom-built goblins made out of most broken builds I can think of :)
-    for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
-
-        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
-
-        update_equipment_enemy(goblin)
-        update_stats_enemy(goblin)
-        game.difficulty = "death"
-
-
 # Base hero class - for generating both dwarves and goblins
 class Hero:
     def __init__(self, token):
@@ -862,8 +119,8 @@ class Hero:
             self.tactic = 'Frenzy'
 
 
+# Class that sticks together all variables needed to run the game.
 class Game:
-
     def __init__(self):
         self.hero = {'dwarf1': Hero('dwarf'), 'dwarf2': Hero('dwarf'), 'dwarf3': Hero('dwarf')}
         self.enemy = {'goblin1': Hero('goblin'), 'goblin2': Hero('goblin'), 'goblin3': Hero('goblin')}
@@ -874,134 +131,933 @@ class Game:
         self.difficulty = None
 
 
+@app.route('/')
+def homepage():
+    if 'key' not in session:
+        session['key'] = uuid.uuid4()
+
+    return render_template('homepage.html')
+
+
+@app.route('/difficulty', methods=['GET', 'POST'])
+def difficulty_setting():
+    games[session['key']] = Game()
+    return render_template('difficulty.html')
+
+
+@app.route('/ending', methods=['GET', 'POST'])
+def ending():
+    if request.method == 'POST':
+
+        if request.form.get('ending', False) == 'Banish the goblins':
+            ending_type = 'good ending'
+            return render_template('ending.html', ending_type=ending_type)
+
+        elif request.form.get('ending', False) == 'The goblins grow restless...':
+            ending_type = 'normal ending plus'
+            return render_template('ending.html', ending_type=ending_type)
+
+        elif request.form.get('ending', False) == 'For this we shall not stand! To arms, brothers!':
+            ending_type = 'normal ending minus'
+            return render_template('ending.html', ending_type=ending_type)
+
+        elif request.form.get('ending', False) == '. . .':
+            ending_type = 'bad ending'
+            return render_template('ending.html', ending_type=ending_type)
+
+        elif request.form.get('ending', False) == 'Sacrifice':
+            ending_type = 'eclipse'
+            return render_template('ending.html', ending_type=ending_type)
+
+
+@app.route('/game', methods=['GET', 'POST'])
+def game():
+    if request.method == 'POST':
+
+        # Difficulty setting
+        if request.form.get('game_start', False) == 'Copper Soft':
+            update_equipment('dwarf1')
+            update_equipment('dwarf2')
+            update_equipment('dwarf3')
+            update_stats('dwarf1')
+            update_stats('dwarf2')
+            update_stats('dwarf3')
+            game_mode_easy()
+
+        elif request.form.get('game_start', False) == 'Steel Solid':
+            update_equipment('dwarf1')
+            update_equipment('dwarf2')
+            update_equipment('dwarf3')
+            update_stats('dwarf1')
+            update_stats('dwarf2')
+            update_stats('dwarf3')
+            game_mode_normal()
+
+        elif request.form.get('game_start', False) == 'Adamantite Hard':
+            update_equipment('dwarf1')
+            update_equipment('dwarf2')
+            update_equipment('dwarf3')
+            update_stats('dwarf1')
+            update_stats('dwarf2')
+            update_stats('dwarf3')
+            game_mode_hard()
+
+        elif request.form.get('game_start', False) == 'Dwarves must perish!':
+            update_equipment('dwarf1')
+            update_equipment('dwarf2')
+            update_equipment('dwarf3')
+            update_stats('dwarf1')
+            update_stats('dwarf2')
+            update_stats('dwarf3')
+            game_mode_death()
+
+        # Series of return renders
+        elif request.form.get('back', False) == 'Victory!' or \
+                request.form.get('back', False) == 'Retreat' or \
+                request.form.get('back', False) == 'Return':
+            return render_template('game.html', game=games[session['key']])
+
+        elif request.form.get('back-sneak dwarf1', False) == 'Return':
+            games[session['key']].hero['dwarf1'].sneak_confirmed = True
+
+        elif request.form.get('back-sneak dwarf2', False) == 'Return':
+            games[session['key']].hero['dwarf2'].sneak_confirmed = True
+
+        elif request.form.get('back-sneak dwarf3', False) == 'Return':
+            games[session['key']].hero['dwarf3'].sneak_confirmed = True
+
+        #   TRAIN
+        #   Deadmines: Become superhuman
+        #
+        #   HTML form, string  ->  games[session['key']].hero[dwarf].<stats>
+        #
+        # Takes an input from the HTML form, adds stats from the input into the dwarf at the cost of days. If the
+        # training is too costly (i.e. not enough days left), nothing will happen. Flash error message for this case
+        # is to be implemented in the future.
+
+        elif request.form.get('train dwarf1', False) == 'Train':
+            train('dwarf1')
+
+        elif request.form.get('train dwarf2', False) == 'Train':
+            train('dwarf2')
+
+        elif request.form.get('train dwarf3', False) == 'Train':
+            train('dwarf3')
+
+        #   EQUIP
+        #   It was a Barbie doll dress up game all along...
+        #
+        #   games[session['key']].backpack, array  ->  HTML form, string  ->
+        #   games[session['key']].item_dict, dictionary  ->  games[session['key']].hero[dwarf].equipment, dictionary
+        #
+        # Takes a string from HTML form option field (ex. "Leather Cap"), then searches for its object in item_dict
+        # which contains reference to all items in the game. Then takes that object and slams it into the
+        # corresponding equipment slot, also there's an unequipment call somewhere in the middle. Stuff resets and
+        # recalculates at the end, as per tradition.
+
+        elif request.form.get('equipment dwarf1', False) == 'Equip':
+            equip('dwarf1')
+
+        elif request.form.get('equipment dwarf2', False) == 'Equip':
+            equip('dwarf2')
+
+        elif request.form.get('equipment dwarf3', False) == 'Equip':
+            equip('dwarf3')
+
+        #   UNEQUIP
+        #   For peeling the dwarves out of their juicy equipment.
+        #
+        #   HTML form, string  ->  games[session['key']].hero[dwarf].equipment
+        #
+        # Takes a string from HTML form option field (ex. "Leather Cap") and searches for it in the corresponding
+        # dwarf's equipment. Puts it into his backpack and deletes it from the equipment. Because both objects
+        # already have the actual object of the item inside them, there's no need to cross-reference anything with
+        # the help of item_dict.
+
+        elif request.form.get('equipment dwarf1', False) == 'Unequip':
+            unequip('dwarf1')
+
+        elif request.form.get('equipment dwarf2', False) == 'Unequip':
+            unequip('dwarf2')
+
+        elif request.form.get('equipment dwarf3', False) == 'Unequip':
+            unequip('dwarf3')
+
+        #   ADVENTURE
+        #   Your only source of loot.
+        #
+        #   random.choices()  ->  games[session['key']].backpack
+        #
+        #   Randomises and distributes loot from adventures depending on its scale (cost in days).
+
+        elif request.form.get('adventure', False) == 'Short venture':
+
+            odds = random.randint(1, 100)
+            temp_days = 15
+            spoils = []
+
+            if games[session['key']].days - temp_days <= 0:
+                return render_template('game.html', game=games[session['key']])
+
+            if 1 <= odds <= 45:
+                spoils += random.choices(item_list_weapon_common, k=1)
+                spoils += random.choices(item_list_headpiece_common, k=1)
+                spoils += random.choices(item_list_shoulders_common, k=1)
+                spoils += random.choices(item_list_chest_common, k=1)
+                spoils += random.choices(item_list_pants_common, k=1)
+                spoils += random.choices(item_list_gloves_common, k=1)
+                spoils += random.choices(item_list_boots_common, k=1)
+                spoils += random.choices(item_list_artifact_common, k=1)
+            elif 46 <= odds <= 80:
+                spoils = random.choices(item_list_common, k=4) + random.choices(item_list_rare, k=3)
+            elif 81 <= odds <= 95:
+                spoils += random.choices(item_list_weapon_rare, k=1)
+                spoils += random.choices(item_list_headpiece_rare, k=1)
+                spoils += random.choices(item_list_shoulders_rare, k=1)
+                spoils += random.choices(item_list_chest_rare, k=1)
+                spoils += random.choices(item_list_pants_rare, k=1)
+                spoils += random.choices(item_list_gloves_rare, k=1)
+                spoils += random.choices(item_list_boots_rare, k=1)
+                spoils += random.choices(item_list_artifact_rare, k=1)
+            else:
+                spoils += random.choices(item_list_weapon_common, k=1)
+                spoils += random.choices(item_list_headpiece_common, k=1)
+                spoils += random.choices(item_list_shoulders_common, k=1)
+                spoils += random.choices(item_list_chest_common, k=1)
+                spoils += random.choices(item_list_pants_common, k=1)
+                spoils += random.choices(item_list_gloves_common, k=1)
+                spoils += random.choices(item_list_boots_common, k=1)
+                spoils += [item_777]
+
+            games[session['key']].days -= temp_days
+            games[session['key']].backpack += spoils
+
+        elif request.form.get('adventure', False) == 'Risky adventure':
+
+            odds = random.randint(1, 100)
+            temp_days = 30
+            spoils = []
+
+            if games[session['key']].days - temp_days <= 0:
+                return render_template('game.html', game=games[session['key']])
+
+            if 1 <= odds <= 45:
+                spoils += random.choices(item_list_weapon_rare, k=1)
+                spoils += random.choices(item_list_headpiece_rare, k=1)
+                spoils += random.choices(item_list_shoulders_rare, k=1)
+                spoils += random.choices(item_list_chest_rare, k=1)
+                spoils += random.choices(item_list_pants_rare, k=1)
+                spoils += random.choices(item_list_gloves_rare, k=1)
+                spoils += random.choices(item_list_boots_rare, k=1)
+                spoils += random.choices(item_list_artifact_rare, k=1)
+            elif 46 <= odds <= 80:
+                spoils = random.choices(item_list_rare, k=4) + random.choices(item_list_epic, k=3)
+            elif 81 <= odds <= 95:
+                spoils += random.choices(item_list_weapon_epic, k=1)
+                spoils += random.choices(item_list_headpiece_epic, k=1)
+                spoils += random.choices(item_list_shoulders_epic, k=1)
+                spoils += random.choices(item_list_chest_epic, k=1)
+                spoils += random.choices(item_list_pants_epic, k=1)
+                spoils += random.choices(item_list_gloves_epic, k=1)
+                spoils += random.choices(item_list_boots_epic, k=1)
+                spoils += random.choices(item_list_artifact_epic, k=1)
+            else:
+                spoils = random.choices(item_list_legendary, k=1)
+
+            games[session['key']].days -= temp_days
+            games[session['key']].backpack += spoils
+
+        elif request.form.get('adventure', False) == 'Legendary expedition':
+
+            odds = random.randint(1, 100)
+            temp_days = 60
+            spoils = []
+
+            if games[session['key']].days - temp_days <= 0:
+                return render_template('game.html', game=games[session['key']])
+
+            if 1 <= odds <= 45:
+                spoils += random.choices(item_list_weapon_epic, k=1)
+                spoils += random.choices(item_list_headpiece_epic, k=1)
+                spoils += random.choices(item_list_shoulders_epic, k=1)
+                spoils += random.choices(item_list_chest_epic, k=1)
+                spoils += random.choices(item_list_pants_epic, k=1)
+                spoils += random.choices(item_list_gloves_epic, k=1)
+                spoils += random.choices(item_list_boots_epic, k=1)
+                spoils += random.choices(item_list_artifact_epic, k=1)
+            elif 46 <= odds <= 80:
+                spoils = random.choices(item_list_epic, k=4) + random.choices(item_list_legendary, k=1)
+            elif 81 <= odds <= 95:
+                random.choices(item_list_legendary, k=3)
+            else:
+                spoils = random.choices(item_list_cursed, k=1)
+
+            games[session['key']].days -= temp_days
+            games[session['key']].backpack += spoils
+
+        #   TACTICS
+        #   Change the personality of your dwarf with one click of a button.
+        #
+        #   HTML form, string  ->  games[session['key']].hero[dwarf].tactic
+        #
+        #   Takes the string from HTML form radio field and puts it directly into your dwarf.
+        #   If player sends an empty HTML form, tactic remains unchanged.
+
+        elif request.form.get('tactics dwarf1', False) == 'Confirm':
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                games[session['key']].hero['dwarf1'].tactic = request.form.get('tactic')
+
+        elif request.form.get('tactics dwarf2', False) == 'Confirm':
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                games[session['key']].hero['dwarf2'].tactic = request.form.get('tactic')
+
+        elif request.form.get('tactics dwarf3', False) == 'Confirm':
+            if request.form.get('tactic') is None:
+                pass
+            else:
+                games[session['key']].hero['dwarf3'].tactic = request.form.get('tactic')
+
+    return render_template('game.html', game=games[session['key']])
+
+
+def update_equipment(dwarf):
+    # Updates multipliers and bonuses values based on current equipment
+    for item_slot, item_name in games[session['key']].hero[dwarf].equipment.items():
+        if item_name is not None:
+
+            rounded = games[session['key']].hero[dwarf].str_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].str_mul
+            games[session['key']].hero[dwarf].str_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].str_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].str_bonus
+
+            rounded = games[session['key']].hero[dwarf].int_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].int_mul
+            games[session['key']].hero[dwarf].int_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].int_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].int_bonus
+
+            rounded = games[session['key']].hero[dwarf].agi_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].agi_mul
+            games[session['key']].hero[dwarf].agi_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].agi_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].agi_bonus
+
+            rounded = games[session['key']].hero[dwarf].will_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].will_mul
+            games[session['key']].hero[dwarf].will_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].will_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].will_bonus
+
+            rounded = games[session['key']].hero[dwarf].end_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].end_mul
+            games[session['key']].hero[dwarf].end_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].end_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].end_bonus
+
+            rounded = games[session['key']].hero[dwarf].char_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].char_mul
+            games[session['key']].hero[dwarf].char_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].char_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].char_bonus
+
+            rounded = games[session['key']].hero[dwarf].lck_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].lck_mul
+            games[session['key']].hero[dwarf].lck_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].lck_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].lck_bonus
+
+            rounded = games[session['key']].hero[dwarf].spd_mul + games[session['key']].hero[dwarf].equipment[
+                item_slot].spd_mul
+            games[session['key']].hero[dwarf].spd_mul = round(rounded, 2)
+            games[session['key']].hero[dwarf].spd_bonus += games[session['key']].hero[dwarf].equipment[
+                item_slot].spd_bonus
+
+            games[session['key']].hero[dwarf].armor += games[session['key']].hero[dwarf].equipment[item_slot].armor
+
+            if games[session['key']].hero[dwarf].equipment[item_slot].special is not None:
+                games[session['key']].hero[dwarf].specials_list.append(
+                    games[session['key']].hero[dwarf].equipment[item_slot].special)
+
+
+def update_equipment_enemy(goblin):
+    # Updates multipliers and bonuses values based on current equipment
+    for item_slot, item_name in games[session['key']].enemy[goblin].equipment.items():
+        if item_name is not None:
+
+            rounded = games[session['key']].enemy[goblin].str_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].str_mul
+            games[session['key']].enemy[goblin].str_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].str_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].str_bonus
+
+            rounded = games[session['key']].enemy[goblin].int_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].int_mul
+            games[session['key']].enemy[goblin].int_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].int_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].int_bonus
+
+            rounded = games[session['key']].enemy[goblin].agi_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].agi_mul
+            games[session['key']].enemy[goblin].agi_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].agi_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].agi_bonus
+
+            rounded = games[session['key']].enemy[goblin].will_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].will_mul
+            games[session['key']].enemy[goblin].will_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].will_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].will_bonus
+
+            rounded = games[session['key']].enemy[goblin].end_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].end_mul
+            games[session['key']].enemy[goblin].end_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].end_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].end_bonus
+
+            rounded = games[session['key']].enemy[goblin].char_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].char_mul
+            games[session['key']].enemy[goblin].char_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].char_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].char_bonus
+
+            rounded = games[session['key']].enemy[goblin].lck_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].lck_mul
+            games[session['key']].enemy[goblin].lck_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].lck_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].lck_bonus
+
+            rounded = games[session['key']].enemy[goblin].spd_mul + games[session['key']].enemy[goblin].equipment[
+                item_slot].spd_mul
+            games[session['key']].enemy[goblin].spd_mul = round(rounded, 2)
+            games[session['key']].enemy[goblin].spd_bonus += games[session['key']].enemy[goblin].equipment[
+                item_slot].spd_bonus
+
+            games[session['key']].enemy[goblin].armor += games[session['key']].enemy[goblin].equipment[item_slot].armor
+
+            if games[session['key']].enemy[goblin].equipment[item_slot].special is not None:
+                games[session['key']].enemy[goblin].specials_list.append(
+                    games[session['key']].enemy[goblin].equipment[item_slot].special)
+
+
+def stat_reset(dwarf):
+    # Resets all stats before equipment update
+    games[session['key']].hero[dwarf].str_mul = games[session['key']].hero[dwarf].int_mul = games[session['key']].hero[
+        dwarf].agi_mul = games[session['key']].hero[dwarf].will_mul = 1.0
+    games[session['key']].hero[dwarf].end_mul = games[session['key']].hero[dwarf].char_mul = games[session['key']].hero[
+        dwarf].lck_mul = games[session['key']].hero[dwarf].spd_mul = 1.0
+    games[session['key']].hero[dwarf].str_bonus = games[session['key']].hero[dwarf].int_bonus = \
+        games[session['key']].hero[dwarf].agi_bonus = 0
+    games[session['key']].hero[dwarf].end_bonus = games[session['key']].hero[dwarf].char_bonus = \
+        games[session['key']].hero[dwarf].lck_bonus = 0
+    games[session['key']].hero[dwarf].will_bonus = games[session['key']].hero[dwarf].spd_bonus = 0
+    games[session['key']].hero[dwarf].armor = 0
+    games[session['key']].hero[dwarf].specials_list.clear()
+
+
+def update_stats(dwarf):
+    # Updates total stats based on the bases, multipliers and bonuses
+    if games[session['key']].hero[dwarf].str_mul <= 0.0:
+        games[session['key']].hero[dwarf].str_mul = 0.1
+    games[session['key']].hero[dwarf].str_total = round(
+        games[session['key']].hero[dwarf].strength * games[session['key']].hero[dwarf].str_mul +
+        games[session['key']].hero[dwarf].str_bonus)
+    if games[session['key']].hero[dwarf].str_total <= 0:
+        games[session['key']].hero[dwarf].str_total = 1
+
+    if games[session['key']].hero[dwarf].int_mul <= 0.0:
+        games[session['key']].hero[dwarf].int_mul = 0.1
+    games[session['key']].hero[dwarf].int_total = round(
+        games[session['key']].hero[dwarf].intelligence * games[session['key']].hero[dwarf].int_mul +
+        games[session['key']].hero[dwarf].int_bonus)
+    if games[session['key']].hero[dwarf].int_total <= 0:
+        games[session['key']].hero[dwarf].int_total = 1
+
+    if games[session['key']].hero[dwarf].agi_mul <= 0.0:
+        games[session['key']].hero[dwarf].agi_mul = 0.1
+    games[session['key']].hero[dwarf].agi_total = round(
+        games[session['key']].hero[dwarf].agility * games[session['key']].hero[dwarf].agi_mul +
+        games[session['key']].hero[dwarf].agi_bonus)
+    if games[session['key']].hero[dwarf].agi_total <= 0:
+        games[session['key']].hero[dwarf].agi_total = 1
+
+    if games[session['key']].hero[dwarf].will_mul <= 0.0:
+        games[session['key']].hero[dwarf].will_mul = 0.1
+    games[session['key']].hero[dwarf].will_total = round(
+        games[session['key']].hero[dwarf].willpower * games[session['key']].hero[dwarf].will_mul +
+        games[session['key']].hero[dwarf].will_bonus)
+    if games[session['key']].hero[dwarf].will_total <= 0:
+        games[session['key']].hero[dwarf].will_total = 1
+
+    if games[session['key']].hero[dwarf].end_mul <= 0.0:
+        games[session['key']].hero[dwarf].end_mul = 0.1
+    games[session['key']].hero[dwarf].end_total = round(
+        games[session['key']].hero[dwarf].endurance * games[session['key']].hero[dwarf].end_mul +
+        games[session['key']].hero[dwarf].end_bonus)
+    if games[session['key']].hero[dwarf].end_total <= 0:
+        games[session['key']].hero[dwarf].end_total = 1
+
+    if games[session['key']].hero[dwarf].char_mul <= 0.0:
+        games[session['key']].hero[dwarf].char_mul = 0.1
+    games[session['key']].hero[dwarf].char_total = round(
+        games[session['key']].hero[dwarf].charisma * games[session['key']].hero[dwarf].char_mul +
+        games[session['key']].hero[dwarf].char_bonus)
+    if games[session['key']].hero[dwarf].char_total <= 0:
+        games[session['key']].hero[dwarf].char_total = 1
+
+    if games[session['key']].hero[dwarf].lck_mul <= 0.0:
+        games[session['key']].hero[dwarf].lck_mul = 0.1
+    games[session['key']].hero[dwarf].lck_total = round(
+        games[session['key']].hero[dwarf].luck * games[session['key']].hero[dwarf].lck_mul + games[session['key']].hero[
+            dwarf].lck_bonus)
+    if games[session['key']].hero[dwarf].lck_total <= 0:
+        games[session['key']].hero[dwarf].lck_total = 1
+
+    if games[session['key']].hero[dwarf].spd_mul <= 0.0:
+        games[session['key']].hero[dwarf].spd_mul = 0.1
+    games[session['key']].hero[dwarf].spd_total = round(
+        games[session['key']].hero[dwarf].speed * games[session['key']].hero[dwarf].spd_mul +
+        games[session['key']].hero[dwarf].spd_bonus)
+    if games[session['key']].hero[dwarf].spd_total <= 0:
+        games[session['key']].hero[dwarf].spd_total = 1
+
+
+def update_stats_enemy(goblin):
+    # Updates total stats based on the bases, multipliers and bonuses (but for goblins)
+    # "Wow having separate functions for dwarves and goblins is like racist and stuff."
+    # lole
+    if games[session['key']].enemy[goblin].str_mul <= 0.0:
+        games[session['key']].enemy[goblin].str_mul = 0.1
+    games[session['key']].enemy[goblin].str_total = round(
+        games[session['key']].enemy[goblin].strength * games[session['key']].enemy[goblin].str_mul +
+        games[session['key']].enemy[goblin].str_bonus)
+    if games[session['key']].enemy[goblin].str_total <= 0:
+        games[session['key']].enemy[goblin].str_total = 1
+
+    if games[session['key']].enemy[goblin].int_mul <= 0.0:
+        games[session['key']].enemy[goblin].int_mul = 0.1
+    games[session['key']].enemy[goblin].int_total = round(
+        games[session['key']].enemy[goblin].intelligence * games[session['key']].enemy[goblin].int_mul +
+        games[session['key']].enemy[goblin].int_bonus)
+    if games[session['key']].enemy[goblin].int_total <= 0:
+        games[session['key']].enemy[goblin].int_total = 1
+
+    if games[session['key']].enemy[goblin].agi_mul <= 0.0:
+        games[session['key']].enemy[goblin].agi_mul = 0.1
+    games[session['key']].enemy[goblin].agi_total = round(
+        games[session['key']].enemy[goblin].agility * games[session['key']].enemy[goblin].agi_mul +
+        games[session['key']].enemy[goblin].agi_bonus)
+    if games[session['key']].enemy[goblin].agi_total <= 0:
+        games[session['key']].enemy[goblin].agi_total = 1
+
+    if games[session['key']].enemy[goblin].will_mul <= 0.0:
+        games[session['key']].enemy[goblin].will_mul = 0.1
+    games[session['key']].enemy[goblin].will_total = round(
+        games[session['key']].enemy[goblin].willpower * games[session['key']].enemy[goblin].will_mul +
+        games[session['key']].enemy[goblin].will_bonus)
+    if games[session['key']].enemy[goblin].will_total <= 0:
+        games[session['key']].enemy[goblin].will_total = 1
+
+    if games[session['key']].enemy[goblin].end_mul <= 0.0:
+        games[session['key']].enemy[goblin].end_mul = 0.1
+    games[session['key']].enemy[goblin].end_total = round(
+        games[session['key']].enemy[goblin].endurance * games[session['key']].enemy[goblin].end_mul +
+        games[session['key']].enemy[goblin].end_bonus)
+    if games[session['key']].enemy[goblin].end_total <= 0:
+        games[session['key']].enemy[goblin].end_total = 1
+
+    if games[session['key']].enemy[goblin].char_mul <= 0.0:
+        games[session['key']].enemy[goblin].char_mul = 0.1
+    games[session['key']].enemy[goblin].char_total = round(
+        games[session['key']].enemy[goblin].charisma * games[session['key']].enemy[goblin].char_mul +
+        games[session['key']].enemy[goblin].char_bonus)
+    if games[session['key']].enemy[goblin].char_total <= 0:
+        games[session['key']].enemy[goblin].char_total = 1
+
+    if games[session['key']].enemy[goblin].lck_mul <= 0.0:
+        games[session['key']].enemy[goblin].lck_mul = 0.1
+    games[session['key']].enemy[goblin].lck_total = round(
+        games[session['key']].enemy[goblin].luck * games[session['key']].enemy[goblin].lck_mul +
+        games[session['key']].enemy[goblin].lck_bonus)
+    if games[session['key']].enemy[goblin].lck_total <= 0:
+        games[session['key']].enemy[goblin].lck_total = 1
+
+    if games[session['key']].enemy[goblin].spd_mul <= 0.0:
+        games[session['key']].enemy[goblin].spd_mul = 0.1
+    games[session['key']].enemy[goblin].spd_total = round(
+        games[session['key']].enemy[goblin].speed * games[session['key']].enemy[goblin].spd_mul +
+        games[session['key']].enemy[goblin].spd_bonus)
+    if games[session['key']].enemy[goblin].spd_total <= 0:
+        games[session['key']].enemy[goblin].spd_total = 1
+
+
+def train(dwarf):
+    if request.form.get("str_increase") != '':
+        strength = int(request.form.get("str_increase"))
+    else:
+        strength = 0
+    if request.form.get("int_increase") != '':
+        intelligence = int(request.form.get("int_increase"))
+    else:
+        intelligence = 0
+    if request.form.get("agi_increase") != '':
+        agility = int(request.form.get("agi_increase"))
+    else:
+        agility = 0
+    if request.form.get("will_increase") != '':
+        willpower = int(request.form.get("will_increase"))
+    else:
+        willpower = 0
+    if request.form.get("end_increase") != '':
+        endurance = int(request.form.get("end_increase"))
+    else:
+        endurance = 0
+    if request.form.get("char_increase") != '':
+        charisma = int(request.form.get("char_increase"))
+    else:
+        charisma = 0
+    if request.form.get("lck_increase") != '':
+        luck = int(request.form.get("lck_increase"))
+    else:
+        luck = 0
+    if request.form.get("spd_increase") != '':
+        speed = int(request.form.get("spd_increase"))
+    else:
+        speed = 0
+
+    temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 3 + charisma + luck + speed * 3
+
+    if games[session['key']].days - temp_days <= 0:
+        return render_template('game.html', game=games[session['key']])
+
+    games[session['key']].hero[dwarf].strength += strength
+    games[session['key']].hero[dwarf].intelligence += intelligence
+    games[session['key']].hero[dwarf].agility += agility
+    games[session['key']].hero[dwarf].willpower += willpower
+    games[session['key']].hero[dwarf].endurance += endurance
+    games[session['key']].hero[dwarf].charisma += charisma
+    games[session['key']].hero[dwarf].luck += luck
+    games[session['key']].hero[dwarf].speed += speed
+
+    update_stats(dwarf)
+
+    games[session['key']].days -= temp_days
+
+
+def unequip(dwarf):
+    for key, value in games[session['key']].hero[dwarf].equipment.items():
+        if value is not None:
+            games[session['key']].backpack.append(value)
+    games[session['key']].hero[dwarf].equipment.update(
+        {'Weapon': None, 'Headpiece': None, 'Shoulders': None, 'Chest': None, 'Pants': None, 'Gloves': None,
+         'Boots': None, 'Artifact': None})
+
+    stat_reset(dwarf)
+    update_stats(dwarf)
+
+
+def equip(dwarf):
+    # Declaring stuff cuz otherwise PyCharm screams, even though there's no way for these to ever be unassigned I think.
+    weapon = headpiece = shoulders = chest = pants = gloves = boots = artifact = None
+
+    # Iterating through global item dictionary in search for objects.
+    for key, value in games[session['key']].item_dict.items():
+        if key == request.form.get("Weapon"):
+            weapon = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Headpiece"):
+            headpiece = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Shoulders"):
+            shoulders = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Chest"):
+            chest = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Pants"):
+            pants = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Gloves"):
+            gloves = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Boots"):
+            boots = value
+            games[session['key']].backpack.remove(value)
+        elif key == request.form.get("Artifact"):
+            artifact = value
+            games[session['key']].backpack.remove(value)
+
+    # Sneaky unequipment call before we overwrite the current one.
+    # Unnecessary stat refresh as part of the package that is unequip()
+    unequip(dwarf)
+
+    # Assigning items from the library to the equipment dictionary.
+    if request.form.get("Weapon") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Weapon': weapon})
+
+    if request.form.get("Headpiece") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Headpiece': headpiece})
+
+    if request.form.get("Shoulders") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Shoulders': shoulders})
+
+    if request.form.get("Chest") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Chest': chest})
+
+    if request.form.get("Gloves") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Gloves': gloves})
+
+    if request.form.get("Pants") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Pants': pants})
+
+    if request.form.get("Boots") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Boots': boots})
+
+    if request.form.get("Artifact") is not None:
+        games[session['key']].hero[dwarf].equipment.update({'Artifact': artifact})
+
+    # Refreshing stats
+    stat_reset(dwarf)
+    update_equipment(dwarf)
+    update_stats(dwarf)
+
+
+def game_mode_easy():
+    for goblin in games[session['key']].enemy:
+        games[session['key']].enemy[goblin].strength = random.randint(15, 25)
+        games[session['key']].enemy[goblin].intelligence = random.randint(15, 25)
+        games[session['key']].enemy[goblin].agility = random.randint(25, 35)
+        games[session['key']].enemy[goblin].willpower = random.randint(25, 35)
+        games[session['key']].enemy[goblin].endurance = 1000
+        games[session['key']].enemy[goblin].charisma = random.randint(25, 35)
+        games[session['key']].enemy[goblin].luck = random.randint(25, 35)
+        games[session['key']].enemy[goblin].speed = random.randint(15, 25)
+
+        games[session['key']].enemy[goblin].equipment["Weapon"] = item_154
+        games[session['key']].enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
+        games[session['key']].enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
+        games[session['key']].enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
+        games[session['key']].enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
+        games[session['key']].enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
+        games[session['key']].enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
+
+        update_equipment_enemy(goblin)
+        update_stats_enemy(goblin)
+        games[session['key']].difficulty = "easy"
+
+
+def game_mode_normal():
+    for goblin in games[session['key']].enemy:
+        games[session['key']].enemy[goblin].strength = random.randint(25, 40)
+        games[session['key']].enemy[goblin].intelligence = random.randint(25, 40)
+        games[session['key']].enemy[goblin].agility = random.randint(35, 50)
+        games[session['key']].enemy[goblin].willpower = random.randint(35, 50)
+        games[session['key']].enemy[goblin].endurance = random.randint(45, 70)
+        games[session['key']].enemy[goblin].charisma = random.randint(50, 75)
+        games[session['key']].enemy[goblin].luck = random.randint(50, 75)
+        games[session['key']].enemy[goblin].speed = random.randint(25, 35)
+
+        games[session['key']].enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_epic)
+        games[session['key']].enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_rare)
+        games[session['key']].enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_rare)
+        games[session['key']].enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_rare)
+        games[session['key']].enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_rare)
+        games[session['key']].enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_rare)
+        games[session['key']].enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_rare)
+
+        update_equipment_enemy(goblin)
+        update_stats_enemy(goblin)
+        games[session['key']].difficulty = "normal"
+
+
+def game_mode_hard():
+    for goblin in games[session['key']].enemy:
+        games[session['key']].enemy[goblin].strength = random.randint(25, 40)
+        games[session['key']].enemy[goblin].intelligence = random.randint(25, 40)
+        games[session['key']].enemy[goblin].agility = random.randint(35, 50)
+        games[session['key']].enemy[goblin].willpower = random.randint(35, 50)
+        games[session['key']].enemy[goblin].endurance = random.randint(45, 70)
+        games[session['key']].enemy[goblin].charisma = random.randint(50, 75)
+        games[session['key']].enemy[goblin].luck = random.randint(50, 75)
+        games[session['key']].enemy[goblin].speed = random.randint(25, 35)
+
+        games[session['key']].enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
+        games[session['key']].enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
+        games[session['key']].enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
+        games[session['key']].enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
+        games[session['key']].enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
+        games[session['key']].enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
+        games[session['key']].enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
+
+        update_equipment_enemy(goblin)
+        update_stats_enemy(goblin)
+        games[session['key']].difficulty = "hard"
+
+
+def game_mode_death():
+    # TO DO LATER
+    # I will make around 20 custom-built goblins made out of most broken builds I can think of :)
+    for goblin in games[session['key']].enemy:
+        games[session['key']].enemy[goblin].strength = random.randint(25, 40)
+        games[session['key']].enemy[goblin].intelligence = random.randint(25, 40)
+        games[session['key']].enemy[goblin].agility = random.randint(35, 50)
+        games[session['key']].enemy[goblin].willpower = random.randint(35, 50)
+        games[session['key']].enemy[goblin].endurance = random.randint(45, 70)
+        games[session['key']].enemy[goblin].charisma = random.randint(50, 75)
+        games[session['key']].enemy[goblin].luck = random.randint(50, 75)
+        games[session['key']].enemy[goblin].speed = random.randint(25, 35)
+
+        games[session['key']].enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
+        games[session['key']].enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
+        games[session['key']].enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
+        games[session['key']].enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
+        games[session['key']].enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
+        games[session['key']].enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
+        games[session['key']].enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
+
+        update_equipment_enemy(goblin)
+        update_stats_enemy(goblin)
+        games[session['key']].difficulty = "death"
+
+
 @app.route('/battleground', methods=['GET', 'POST'])
 def battleground():
     if request.method == 'POST':
 
         if request.form.get('battle dwarf1', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf1', goblin='goblin1',
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf1', goblin='goblin1',
                                    battlelog=battle('dwarf1', 'goblin1'))
 
         elif request.form.get('battle dwarf2', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf2', goblin='goblin2',
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf2', goblin='goblin2',
                                    battlelog=battle('dwarf2', 'goblin2'))
 
         elif request.form.get('battle dwarf3', False) == 'Fight!':
-            return render_template('battle.html', game=game, dwarf='dwarf3', goblin='goblin3',
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf3', goblin='goblin3',
                                    battlelog=battle('dwarf3', 'goblin3'))
 
         elif request.form.get('white_lotus dwarf1', False) == 'Take the flower':
-            game.backpack += [item_555]
-            game.hero['dwarf1'].white_lotus_taken = True
-            return render_template('battle.html', game=game, dwarf='dwarf1', goblin='goblin1')
+            if games[session['key']].hero['dwarf1'].white_lotus_taken is not True:
+                games[session['key']].backpack += [item_555]
+                games[session['key']].hero['dwarf1'].white_lotus_taken = True
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf1', goblin='goblin1')
 
         elif request.form.get('white_lotus dwarf2', False) == 'Take the flower':
-            game.backpack += [item_555]
-            game.hero['dwarf2'].white_lotus_taken = True
-            return render_template('battle.html', game=game, dwarf='dwarf2', goblin='goblin2')
+            if games[session['key']].hero['dwarf2'].white_lotus_taken is not True:
+                games[session['key']].backpack += [item_555]
+                games[session['key']].hero['dwarf2'].white_lotus_taken = True
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf2', goblin='goblin2')
 
         elif request.form.get('white_lotus dwarf3', False) == 'Take the flower':
-            game.backpack += [item_555]
-            game.hero['dwarf3'].white_lotus_taken = True
-            return render_template('battle.html', game=game, dwarf='dwarf3', goblin='goblin3')
+            if games[session['key']].hero['dwarf3'].white_lotus_taken is not True:
+                games[session['key']].backpack += [item_555]
+                games[session['key']].hero['dwarf3'].white_lotus_taken = True
+            return render_template('battle.html', game=games[session['key']], dwarf='dwarf3', goblin='goblin3')
 
         elif request.form.get('sneak dwarf1', False) == 'Sneak':
-            if game.hero['dwarf1'].sneak is False:
-                game.enemy["goblin1"].str_total *= 0.75
-                game.enemy["goblin1"].int_total *= 0.75
-                game.enemy["goblin1"].agi_total *= 0.75
-                game.enemy["goblin1"].will_total *= 0.75
-                game.enemy["goblin1"].end_total *= 0.75
-                game.enemy["goblin1"].char_total *= 0.75
-                game.enemy["goblin1"].lck_total *= 0.75
-                game.enemy["goblin1"].spd_total *= 0.75
-                game.hero['dwarf1'].sneak = True
-            return render_template('special.html', game=game, dwarf='dwarf1', sneak=True)
+            if games[session['key']].hero['dwarf1'].sneak is False:
+                games[session['key']].enemy["goblin1"].str_total *= 0.75
+                games[session['key']].enemy["goblin1"].int_total *= 0.75
+                games[session['key']].enemy["goblin1"].agi_total *= 0.75
+                games[session['key']].enemy["goblin1"].will_total *= 0.75
+                games[session['key']].enemy["goblin1"].end_total *= 0.75
+                games[session['key']].enemy["goblin1"].char_total *= 0.75
+                games[session['key']].enemy["goblin1"].lck_total *= 0.75
+                games[session['key']].enemy["goblin1"].spd_total *= 0.75
+                games[session['key']].hero['dwarf1'].sneak = True
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf1', sneak=True)
 
         elif request.form.get('sneak dwarf2', False) == 'Sneak':
-            if game.hero['dwarf2'].sneak is False:
-                game.enemy["goblin2"].str_total *= 0.75
-                game.enemy["goblin2"].int_total *= 0.75
-                game.enemy["goblin2"].agi_total *= 0.75
-                game.enemy["goblin2"].will_total *= 0.75
-                game.enemy["goblin2"].end_total *= 0.75
-                game.enemy["goblin2"].char_total *= 0.75
-                game.enemy["goblin2"].lck_total *= 0.75
-                game.enemy["goblin2"].spd_total *= 0.75
-                game.hero['dwarf2'].sneak = True
-            return render_template('special.html', game=game, dwarf='dwarf2', sneak=True)
+            if games[session['key']].hero['dwarf2'].sneak is False:
+                games[session['key']].enemy["goblin2"].str_total *= 0.75
+                games[session['key']].enemy["goblin2"].int_total *= 0.75
+                games[session['key']].enemy["goblin2"].agi_total *= 0.75
+                games[session['key']].enemy["goblin2"].will_total *= 0.75
+                games[session['key']].enemy["goblin2"].end_total *= 0.75
+                games[session['key']].enemy["goblin2"].char_total *= 0.75
+                games[session['key']].enemy["goblin2"].lck_total *= 0.75
+                games[session['key']].enemy["goblin2"].spd_total *= 0.75
+                games[session['key']].hero['dwarf2'].sneak = True
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf2', sneak=True)
 
         elif request.form.get('sneak dwarf3', False) == 'Sneak':
-            if game.hero['dwarf3'].sneak is False:
-                game.enemy["goblin3"].str_total *= 0.75
-                game.enemy["goblin3"].int_total *= 0.75
-                game.enemy["goblin3"].agi_total *= 0.75
-                game.enemy["goblin3"].will_total *= 0.75
-                game.enemy["goblin3"].end_total *= 0.75
-                game.enemy["goblin3"].char_total *= 0.75
-                game.enemy["goblin3"].lck_total *= 0.75
-                game.enemy["goblin3"].spd_total *= 0.75
-                game.hero['dwarf3'].sneak = True
-            return render_template('special.html', game=game, dwarf='dwarf3', sneak=True)
+            if games[session['key']].hero['dwarf3'].sneak is False:
+                games[session['key']].enemy["goblin3"].str_total *= 0.75
+                games[session['key']].enemy["goblin3"].int_total *= 0.75
+                games[session['key']].enemy["goblin3"].agi_total *= 0.75
+                games[session['key']].enemy["goblin3"].will_total *= 0.75
+                games[session['key']].enemy["goblin3"].end_total *= 0.75
+                games[session['key']].enemy["goblin3"].char_total *= 0.75
+                games[session['key']].enemy["goblin3"].lck_total *= 0.75
+                games[session['key']].enemy["goblin3"].spd_total *= 0.75
+                games[session['key']].hero['dwarf3'].sneak = True
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf3', sneak=True)
 
         # I need dwarf=dwarf for the return button to send to the correct HTML ID element.
         # It's the little things, you know.
         elif request.form.get('spy dwarf1', False) == 'Spy':
-            return render_template('special.html', game=game, dwarf='dwarf1', goblin='goblin1', spy=True)
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf1', goblin='goblin1',
+                                   spy=True)
 
         elif request.form.get('spy dwarf2', False) == 'Spy':
-            return render_template('special.html', game=game, dwarf='dwarf2', goblin='goblin2', spy=True)
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf2', goblin='goblin2',
+                                   spy=True)
 
         elif request.form.get('spy dwarf3', False) == 'Spy':
-            return render_template('special.html', game=game, dwarf='dwarf3', goblin='goblin3', spy=True)
+            return render_template('special.html', game=games[session['key']], dwarf='dwarf3', goblin='goblin3',
+                                   spy=True)
 
 
 def battle(dwarf, goblin):
     battle_log = []
     win_condition = False
 
-    dwarf_name = game.hero[dwarf].hero_name
+    dwarf_name = games[session['key']].hero[dwarf].hero_name
 
-    dwarf_physical = game.hero[dwarf].str_total * 3
-    dwarf_magical = game.hero[dwarf].int_total * 4
+    dwarf_physical = games[session['key']].hero[dwarf].str_total * 3
+    dwarf_magical = games[session['key']].hero[dwarf].int_total * 4
 
-    dwarf_speed = game.hero[dwarf].spd_total
-    dwarf_speed_base = game.hero[dwarf].spd_total
-    dwarf_charisma = game.hero[dwarf].char_total
-    dwarf_luck = game.hero[dwarf].lck_total
-    dwarf_willpower = game.hero[dwarf].will_total
-    dwarf_agility = game.hero[dwarf].agi_total
-    dwarf_strength = game.hero[dwarf].str_total
-    dwarf_intelligence = game.hero[dwarf].int_total
+    dwarf_speed = games[session['key']].hero[dwarf].spd_total
+    dwarf_speed_base = games[session['key']].hero[dwarf].spd_total
+    dwarf_charisma = games[session['key']].hero[dwarf].char_total
+    dwarf_luck = games[session['key']].hero[dwarf].lck_total
+    dwarf_willpower = games[session['key']].hero[dwarf].will_total
+    dwarf_agility = games[session['key']].hero[dwarf].agi_total
+    dwarf_strength = games[session['key']].hero[dwarf].str_total
+    dwarf_intelligence = games[session['key']].hero[dwarf].int_total
 
-    dwarf_armor = game.hero[dwarf].armor
-    dwarf_health = game.hero[dwarf].end_total * 10
-    dwarf_max_health = game.hero[dwarf].end_total * 10
+    dwarf_armor = games[session['key']].hero[dwarf].armor
+    dwarf_health = games[session['key']].hero[dwarf].end_total * 10
+    dwarf_max_health = games[session['key']].hero[dwarf].end_total * 10
 
-    dwarf_tactic = game.hero[dwarf].tactic
+    dwarf_tactic = games[session['key']].hero[dwarf].tactic
 
     dwarf_special_attack_charge = 1
     dwarf_special_attack_next = False
 
-    goblin_name = game.enemy[goblin].hero_name
+    goblin_name = games[session['key']].enemy[goblin].hero_name
 
-    goblin_physical = game.enemy[goblin].str_total * 3
-    goblin_magical = game.enemy[goblin].int_total * 4
+    goblin_physical = games[session['key']].enemy[goblin].str_total * 3
+    goblin_magical = games[session['key']].enemy[goblin].int_total * 4
 
-    goblin_speed = game.enemy[goblin].spd_total
-    goblin_speed_base = game.enemy[goblin].spd_total
-    goblin_charisma = game.enemy[goblin].char_total
-    goblin_luck = game.enemy[goblin].lck_total
-    goblin_willpower = game.enemy[goblin].will_total
-    goblin_agility = game.enemy[goblin].agi_total
-    goblin_strength = game.enemy[goblin].str_total
-    goblin_intelligence = game.enemy[goblin].int_total
+    goblin_speed = games[session['key']].enemy[goblin].spd_total
+    goblin_speed_base = games[session['key']].enemy[goblin].spd_total
+    goblin_charisma = games[session['key']].enemy[goblin].char_total
+    goblin_luck = games[session['key']].enemy[goblin].lck_total
+    goblin_willpower = games[session['key']].enemy[goblin].will_total
+    goblin_agility = games[session['key']].enemy[goblin].agi_total
+    goblin_strength = games[session['key']].enemy[goblin].str_total
+    goblin_intelligence = games[session['key']].enemy[goblin].int_total
 
-    goblin_armor = game.enemy[goblin].armor
-    goblin_health = game.enemy[goblin].end_total * 10
-    goblin_max_health = game.enemy[goblin].end_total * 10
+    goblin_armor = games[session['key']].enemy[goblin].armor
+    goblin_health = games[session['key']].enemy[goblin].end_total * 10
+    goblin_max_health = games[session['key']].enemy[goblin].end_total * 10
 
-    goblin_tactic = game.enemy[goblin].tactic
+    goblin_tactic = games[session['key']].enemy[goblin].tactic
 
     goblin_special_attack_charge = 1
     goblin_special_attack_next = False
@@ -1112,59 +1168,59 @@ def battle(dwarf, goblin):
 
     # SPECIAL ABILITIES
     # The ones that do something at the start of the encounter or need to be set up at the start of the encounter.
-    if 'Adrenaline' in game.hero[dwarf].specials_list:
+    if 'Adrenaline' in games[session['key']].hero[dwarf].specials_list:
         dwarf_speed_base = dwarf_speed_base * 4
         turn = '<div class="hero-turn">' + dwarf_name + ' injects himself with Adrenalinium, ' \
                                                         'increasing his speed tremendously!</div>'
         battle_log.append(turn)
 
-    if 'Adrenaline' in game.enemy[goblin].specials_list:
+    if 'Adrenaline' in games[session['key']].enemy[goblin].specials_list:
         goblin_speed_base = goblin_speed_base * 4
         turn = '<div class="enemy-turn">' + goblin_name + ' injects himself with Adrenalinium, ' \
                                                           'increasing his speed tremendously!</div>'
         battle_log.append(turn)
 
-    if 'Mist' in game.hero[dwarf].specials_list:
+    if 'Mist' in games[session['key']].hero[dwarf].specials_list:
         dwarf_avoidance_stacks = 4
 
-    if 'Mist' in game.enemy[goblin].specials_list:
+    if 'Mist' in games[session['key']].enemy[goblin].specials_list:
         goblin_avoidance_stacks = 4
 
-    if 'Neurotoxin' in game.hero[dwarf].specials_list:
+    if 'Neurotoxin' in games[session['key']].hero[dwarf].specials_list:
         dwarf_neurotoxin_payload = True
 
-    if 'Neurotoxin' in game.enemy[goblin].specials_list:
+    if 'Neurotoxin' in games[session['key']].enemy[goblin].specials_list:
         goblin_neurotoxin_payload = True
 
-    if 'Armor Up!' in game.hero[dwarf].specials_list:
+    if 'Armor Up!' in games[session['key']].hero[dwarf].specials_list:
         dwarf_armor *= 1.25
 
-    if 'Armor Up!' in game.enemy[goblin].specials_list:
+    if 'Armor Up!' in games[session['key']].enemy[goblin].specials_list:
         goblin_armor *= 1.25
 
     # I put goblin's Authority first, so that if both player and the
     # computer has it, the player will gain more charisma as a recompensation.
-    if 'Authority' in game.enemy[goblin].specials_list:
+    if 'Authority' in games[session['key']].enemy[goblin].specials_list:
         steal = dwarf_charisma * 0.65
         goblin_charisma += steal
 
-    if 'Authority' in game.hero[dwarf].specials_list:
+    if 'Authority' in games[session['key']].hero[dwarf].specials_list:
         steal = goblin_charisma * 0.65
         dwarf_charisma += steal
 
-    if 'Dominion' in game.hero[dwarf].specials_list:
+    if 'Dominion' in games[session['key']].hero[dwarf].specials_list:
         dwarf_magical += (goblin_willpower + goblin_charisma) * 1.5
         turn = '<div class="hero-turn">' + dwarf_name + "'s magical powers are " \
                                                         "empowered by the Crown of Will!</div>"
         battle_log.append(turn)
 
-    if 'Dominion' in game.enemy[goblin].specials_list:
+    if 'Dominion' in games[session['key']].enemy[goblin].specials_list:
         goblin_magical += (goblin_willpower + goblin_charisma) * 1.5
         turn = '<div class="goblin-turn">' + goblin_name + "'s magical powers are " \
                                                            "empowered by the Crown of Will!</div>"
         battle_log.append(turn)
 
-    if 'Unstable Concoction' in game.hero[dwarf].specials_list and dwarf_health > 0:
+    if 'Unstable Concoction' in games[session['key']].hero[dwarf].specials_list and dwarf_health > 0:
         roll = random.randint(0, 1)
         if roll == 0:
             turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>' \
@@ -1179,7 +1235,7 @@ def battle(dwarf, goblin):
             goblin_health -= 250
             battle_log.append(turn)
 
-    if 'Unstable Concoction' in game.enemy[goblin].specials_list and goblin_health > 0:
+    if 'Unstable Concoction' in games[session['key']].enemy[goblin].specials_list and goblin_health > 0:
         roll = random.randint(0, 1)
         if roll == 0:
             turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
@@ -1194,7 +1250,7 @@ def battle(dwarf, goblin):
             dwarf_health -= 250
             battle_log.append(turn)
 
-    if 'Pipe Bomb' in game.hero[dwarf].specials_list and dwarf_health > 0:
+    if 'Pipe Bomb' in games[session['key']].hero[dwarf].specials_list and dwarf_health > 0:
         roll = random.randint(0, 1)
         if roll == 0:
             turn = '<div class="hero-turn">' + dwarf_name + ' throws a Pipe Bomb at the enemy...!<br>' \
@@ -1209,7 +1265,7 @@ def battle(dwarf, goblin):
             goblin_health -= 2500
             battle_log.append(turn)
 
-    if 'Pipe Bomb' in game.enemy[goblin].specials_list and goblin_health > 0:
+    if 'Pipe Bomb' in games[session['key']].enemy[goblin].specials_list and goblin_health > 0:
         roll = random.randint(0, 1)
         if roll == 0:
             turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
@@ -1224,17 +1280,18 @@ def battle(dwarf, goblin):
             dwarf_health -= 2500
             battle_log.append(turn)
 
-    if game.hero[dwarf].battle is not True:
+    if games[session['key']].hero[dwarf].battle is not True:
         while not win_condition:
 
             if dwarf_speed >= goblin_speed and goblin_health > 0 and dwarf_health > 0:
 
-                dwarf_physical = game.hero[dwarf].str_total * 3
+                dwarf_physical = games[session['key']].hero[dwarf].str_total * 3
 
-                if 'Dominion' in game.hero[dwarf].specials_list:
-                    dwarf_magical = game.hero[dwarf].int_total * 4 + (dwarf_willpower + dwarf_charisma) * 1.5
+                if 'Dominion' in games[session['key']].hero[dwarf].specials_list:
+                    dwarf_magical = games[session['key']].hero[dwarf].int_total * 4 + (
+                            dwarf_willpower + dwarf_charisma) * 1.5
                 else:
-                    dwarf_magical = game.hero[dwarf].int_total * 4
+                    dwarf_magical = games[session['key']].hero[dwarf].int_total * 4
 
                 if dwarf_special_attack_next:
                     factor = random.randint(10, 11)
@@ -1325,12 +1382,12 @@ def battle(dwarf, goblin):
                         if dwarf_special_attack_charge % 3 == 0:
                             dwarf_special_attack_next = True
 
-                if 'Spiked Boots' in game.hero[dwarf].specials_list:
+                if 'Spiked Boots' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "kick"):
                         damage *= 1.5
                         critical_message = True
 
-                if 'Barbed Fists' in game.hero[dwarf].specials_list:
+                if 'Barbed Fists' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "punch"):
                         damage *= 1.5
                         critical_message = True
@@ -1342,7 +1399,7 @@ def battle(dwarf, goblin):
                     critical_message = True
 
                 # Reload mechanic has to happen before charisma effect for the stacking to occur.
-                if 'Reload' in game.hero[dwarf].specials_list:
+                if 'Reload' in games[session['key']].hero[dwarf].specials_list:
                     if dwarf_reload:
                         damage = 0
                         dwarf_special_attack_charge -= 1
@@ -1377,8 +1434,9 @@ def battle(dwarf, goblin):
                 if damage > 0:
                     if (damage - goblin_armor) <= 0:
                         damage = 0
-                    elif 'Armor Penetration' in game.hero[dwarf].specials_list:
-                        if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
+                    elif 'Armor Penetration' in games[session['key']].hero[dwarf].specials_list:
+                        if (attack_type[0] == "physical") and (
+                                (attack_type[1] != "kick") and (attack_type[1] != "punch")):
                             damage -= goblin_armor * 0.5
                     elif attack_type[0] == "special":
                         damage -= (goblin_armor * 1.5)
@@ -1386,12 +1444,12 @@ def battle(dwarf, goblin):
                         damage -= goblin_armor
 
                 # Special abilities that modify damage type
-                if 'Dark Arts' in game.hero[dwarf].specials_list:
+                if 'Dark Arts' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "magical":
                         attack_type[1] = "shadow bolt"
                         attack_message = better_magical_attack_strings
 
-                if 'Combat 101' in game.hero[dwarf].specials_list:
+                if 'Combat 101' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "physical":
                         roll = random.randint(0, 2)
                         attack_message = better_physical_attack_strings[roll]
@@ -1439,7 +1497,7 @@ def battle(dwarf, goblin):
                         goblin_absorb_message = True
 
                 # Avoidance effect chance
-                if 'Avoidance' in game.enemy[goblin].specials_list and attack_type[0] != "dodged":
+                if 'Avoidance' in games[session['key']].enemy[goblin].specials_list and attack_type[0] != "dodged":
                     roll = random.randint(1, 100)
                     if roll <= 20:
                         damage = 0
@@ -1460,7 +1518,7 @@ def battle(dwarf, goblin):
                     # I've got to put absorb message as false so that we don't end up "absorbing" next physical attack
                     # accidentally.
 
-                if 'Crating' in game.enemy[goblin].specials_list:
+                if 'Crating' in games[session['key']].enemy[goblin].specials_list:
                     if goblin_dodge_message:
                         factor = random.randint(10, 13)
                         counterattack = (goblin_physical * 1.3) * round((factor / 10), 2)
@@ -1470,81 +1528,81 @@ def battle(dwarf, goblin):
 
                 # Specific damage type reduction special abilities that reduce damage after armor and willpower
                 # calculation, but don't reduce damage of other special abilities.
-                if 'Aegis' in game.enemy[goblin].specials_list:
+                if 'Aegis' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "special":
                         damage *= 0.35
 
-                if 'Fireproof' in game.enemy[goblin].specials_list:
+                if 'Fireproof' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[1] == "aflame" or attack_type[1] == "fireball":
                         damage *= 0.5
 
-                if 'Anti-magic Zone' in game.enemy[goblin].specials_list:
+                if 'Anti-magic Zone' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "magical":
                         damage *= 0.8
 
                 # Special abilities that modify the damage...
                 # ...but do not increase or modify the damage of other special abilities
-                if 'Ouch!' in game.hero[dwarf].specials_list:
+                if 'Ouch!' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "physical" and attack_type[1] == "kick":
                         damage *= 1.2
 
-                if 'Static' in game.hero[dwarf].specials_list:
+                if 'Static' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "magical" and attack_type[1] == "electrocute":
                         damage *= 1.5
 
-                if 'Crating' in game.hero[dwarf].specials_list:
+                if 'Crating' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "physical" and attack_type[1] == "punch":
                         damage *= 1.3
 
                 # Since Goblinbane increases damage against goblins, this ability does not
                 # work against dwarves even if they somehow manage to put their grubby hands on this special.
-                if 'Goblinbane' in game.hero[dwarf].specials_list:
+                if 'Goblinbane' in games[session['key']].hero[dwarf].specials_list:
                     damage *= 1.15
 
                 # General special abilities
                 # Deal more damage, add more damage, on hit effects, update on enemy and/or friendly turn, etc.
 
                 # Lucky effect is meant to be updated on every turn in case of agility and luck debuffs.
-                if 'Lucky' in game.hero[dwarf].specials_list:
+                if 'Lucky' in games[session['key']].hero[dwarf].specials_list:
                     if dwarf_agility < (goblin_strength * 2):
                         dwarf_agility = goblin_strength * 2
                     if dwarf_luck < 50:
                         dwarf_luck = 50
 
-                if 'Stun chance' in game.hero[dwarf].specials_list:
+                if 'Stun chance' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         roll = random.randint(1, 100)
                         if roll <= 15:
                             goblin_speed -= goblin_speed_base
                             dwarf_stun_message = True
 
-                if 'Adrenaline' in game.hero[dwarf].specials_list:
+                if 'Adrenaline' in games[session['key']].hero[dwarf].specials_list:
                     dwarf_speed_base *= 0.85
 
-                if 'Momentum' in game.hero[dwarf].specials_list:
+                if 'Momentum' in games[session['key']].hero[dwarf].specials_list:
                     dwarf_speed_base *= 1.01
 
-                if 'Energize' in game.hero[dwarf].specials_list:
+                if 'Energize' in games[session['key']].hero[dwarf].specials_list:
                     dwarf_speed_base *= 1.03
 
-                if 'Firebrand' in game.hero[dwarf].specials_list:
+                if 'Firebrand' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         damage += 45
                         dwarf_firebrand_message = True
 
-                if 'Hawkeye' in game.hero[dwarf].specials_list:
+                if 'Hawkeye' in games[session['key']].hero[dwarf].specials_list:
                     if critical_message:
                         damage += 50
                         dwarf_hawkeye_message = True
 
-                if 'Multi-tool' in game.hero[dwarf].specials_list:
+                if 'Multi-tool' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] != "dodged" or attack_type[0] != "avoided":
                         roll = random.randint(1, 100)
                         if roll <= 15:
                             dwarf_avoidance_stacks += 1
                             dwarf_multitool_message = True
 
-                if 'Mind Sap' in game.hero[dwarf].specials_list:
+                if 'Mind Sap' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "magical":
                         roll = random.randint(0, 1)
                         if roll == 0:
@@ -1554,14 +1612,14 @@ def battle(dwarf, goblin):
                             goblin_intelligence *= 0.95
                             dwarf_mindsap_int_message = True
 
-                if 'Soulrend' in game.hero[dwarf].specials_list:
+                if 'Soulrend' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         soulrend = goblin_max_health * 0.05
                         damage += soulrend
                         soulrend = round(soulrend)
                         dwarf_soulrend_message = True
 
-                if 'Soul Drain' in game.hero[dwarf].specials_list:
+                if 'Soul Drain' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "magical":
                         souldrain = goblin_max_health * 0.03
                         dwarf_health += souldrain
@@ -1569,13 +1627,13 @@ def battle(dwarf, goblin):
                         souldrain = round(souldrain)
                         dwarf_souldrain_message = True
 
-                if 'Warframe' in game.hero[dwarf].specials_list:
+                if 'Warframe' in games[session['key']].hero[dwarf].specials_list:
                     dwarf_self_destruct -= 1
                     if dwarf_self_destruct <= 0:
                         dwarf_health -= 9999
                         dwarf_warframe_message = True
 
-                if 'Mageslayer' in game.hero[dwarf].specials_list:
+                if 'Mageslayer' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         mageslayer = (goblin_intelligence * 1.5)
                         damage += mageslayer
@@ -1584,10 +1642,10 @@ def battle(dwarf, goblin):
 
                 # Defensive special abilities...
                 # ...that either react to damage or can reduce most sources of damage.
-                if 'Avatar' in game.enemy[goblin].specials_list:
+                if 'Avatar' in games[session['key']].enemy[goblin].specials_list:
                     damage *= 0.8
 
-                if 'Earthbound' in game.enemy[goblin].specials_list:
+                if 'Earthbound' in games[session['key']].enemy[goblin].specials_list:
                     if damage > 0:
                         goblin_armor *= 1.05
                         goblin_agility *= 1.05
@@ -1595,7 +1653,7 @@ def battle(dwarf, goblin):
                         goblin_earthbound_message = True
 
                 # Lifesteal at the end of everything
-                if 'Lifesteal' in game.hero[dwarf].specials_list:
+                if 'Lifesteal' in games[session['key']].hero[dwarf].specials_list:
                     lifesteal = damage * 0.2
                     damage -= lifesteal
                     lifesteal = round(lifesteal)
@@ -1603,7 +1661,7 @@ def battle(dwarf, goblin):
 
                 # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already
                 # happened.
-                if 'Neurotoxin' in game.hero[dwarf].specials_list:
+                if 'Neurotoxin' in games[session['key']].hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and (
                             (attack_type[1] != "kick") and (attack_type[1] != "punch")) and dwarf_neurotoxin_payload:
                         goblin_willpower *= 0.65
@@ -1706,7 +1764,8 @@ def battle(dwarf, goblin):
 
                     # In case of willpower absorption...
                     if goblin_absorb_message:
-                        turn += " damage! (Opponent's willpower mitigates +" + str(absorb_message) + " points of damage.)"
+                        turn += " damage! (Opponent's willpower mitigates +" + str(
+                            absorb_message) + " points of damage.)"
                     else:
                         turn += ' damage!'
                     goblin_absorb_message = False
@@ -1765,17 +1824,20 @@ def battle(dwarf, goblin):
                                 "defences!<br>Goblin's armor, agility and willpower is increased by 5%!"
                         goblin_earthbound_message = False
 
-                    if 'Warframe' in game.hero[dwarf].specials_list and dwarf_warframe_message is not True:
+                    if 'Warframe' in games[session['key']].hero[dwarf].specials_list \
+                            and dwarf_warframe_message is not True:
                         turn += '<br><br>' + str(dwarf_self_destruct) + '...'
 
                     if dwarf_warframe_message:
                         turn += '<br><br>"Beep, beep, beep!"<br>' + "Dwarf's warframe explodes into " \
-                                                                    "million pieces, damaging the pilot for 9999 damage!"
+                                                                    "million pieces, damaging the pilot " \
+                                                                    "for 9999 damage!"
                         dwarf_warframe_message = False
 
                     if dwarf_neurotoxin_message:
                         turn += '<br><br>' + "Powerful neurotoxin that coats dwarf's weapon poisons " \
-                                             "the enemy, decreasing their agility, willpower, charisma and luck by 35% " \
+                                             "the enemy, decreasing their agility, willpower, " \
+                                             "charisma and luck by 35% " \
                                              "and dealing 500 extra damage!"
                         dwarf_neurotoxin_message = False
 
@@ -1790,12 +1852,13 @@ def battle(dwarf, goblin):
 
             elif goblin_speed > dwarf_speed and goblin_health > 0 and dwarf_health > 0:
 
-                goblin_physical = game.enemy[goblin].str_total * 3
+                goblin_physical = games[session['key']].enemy[goblin].str_total * 3
 
-                if 'Dominion' in game.enemy[goblin].specials_list:
-                    goblin_magical = game.enemy[goblin].int_total * 4 + (goblin_willpower + goblin_charisma) * 1.5
+                if 'Dominion' in games[session['key']].enemy[goblin].specials_list:
+                    goblin_magical = games[session['key']].enemy[goblin].int_total * 4 + (
+                            goblin_willpower + goblin_charisma) * 1.5
                 else:
-                    goblin_magical = game.enemy[goblin].int_total * 4
+                    goblin_magical = games[session['key']].enemy[goblin].int_total * 4
 
                 if goblin_special_attack_next:
                     factor = random.randint(10, 11)
@@ -1884,12 +1947,12 @@ def battle(dwarf, goblin):
                         if goblin_special_attack_charge % 3 == 0:
                             goblin_special_attack_next = True
 
-                if 'Spiked Boots' in game.enemy[goblin].specials_list:
+                if 'Spiked Boots' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "kick"):
                         damage = damage * 1.5
                         critical_message = True
 
-                if 'Barbed Fists' in game.enemy[goblin].specials_list:
+                if 'Barbed Fists' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "punch"):
                         damage = damage * 1.5
                         critical_message = True
@@ -1901,7 +1964,7 @@ def battle(dwarf, goblin):
                     critical_message = True
 
                 # Reload mechanic has to happen before charisma effect for the stacking to occur.
-                if 'Reload' in game.enemy[goblin].specials_list:
+                if 'Reload' in games[session['key']].enemy[goblin].specials_list:
                     if goblin_reload:
                         damage = 0
                         goblin_special_attack_charge -= 1
@@ -1936,8 +1999,9 @@ def battle(dwarf, goblin):
                 if damage > 0:
                     if (damage - dwarf_armor) <= 0:
                         damage = 0
-                    elif 'Armor Penetration' in game.enemy[goblin].specials_list:
-                        if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
+                    elif 'Armor Penetration' in games[session['key']].enemy[goblin].specials_list:
+                        if (attack_type[0] == "physical") and (
+                                (attack_type[1] != "kick") and (attack_type[1] != "punch")):
                             damage -= dwarf_armor * 0.5
                     elif attack_type[0] == "special":
                         damage -= (dwarf_armor * 1.5)
@@ -1945,12 +2009,12 @@ def battle(dwarf, goblin):
                         damage -= dwarf_armor
 
                 # Special abilities that modify damage type
-                if 'Dark Arts' in game.enemy[goblin].specials_list:
+                if 'Dark Arts' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "magical":
                         attack_type[1] = "shadow bolt"
                         attack_message = better_magical_attack_strings
 
-                if 'Combat 101' in game.enemy[goblin].specials_list:
+                if 'Combat 101' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "physical":
                         roll = random.randint(0, 2)
                         attack_message = better_physical_attack_strings[roll]
@@ -1998,7 +2062,7 @@ def battle(dwarf, goblin):
                         dwarf_absorb_message = True
 
                 # Avoidance effect chance
-                if 'Avoidance' in game.hero[dwarf].specials_list and attack_type[0] != "dodged":
+                if 'Avoidance' in games[session['key']].hero[dwarf].specials_list and attack_type[0] != "dodged":
                     roll = random.randint(1, 100)
                     if roll <= 20:
                         damage = 0
@@ -2019,7 +2083,7 @@ def battle(dwarf, goblin):
                     # I've got to put absorb message as false so that we don't end up "absorbing" next physical attack
                     # accidentally.
 
-                if 'Crating' in game.hero[dwarf].specials_list:
+                if 'Crating' in games[session['key']].hero[dwarf].specials_list:
                     if dwarf_dodge_message:
                         factor = random.randint(10, 13)
                         counterattack = (dwarf_physical * 1.3) * round((factor / 10), 2)
@@ -2029,29 +2093,29 @@ def battle(dwarf, goblin):
 
                 # Specific defensive special abilities that reduce damage after armor and willpower calculation,
                 # but don't reduce damage of other special abilities.
-                if 'Aegis' in game.hero[dwarf].specials_list:
+                if 'Aegis' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "special":
                         damage *= 0.35
 
-                if 'Fireproof' in game.hero[dwarf].specials_list:
+                if 'Fireproof' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[1] == "aflame" or attack_type[1] == "fireball":
                         damage *= 0.5
 
-                if 'Anti-magic Zone' in game.hero[dwarf].specials_list:
+                if 'Anti-magic Zone' in games[session['key']].hero[dwarf].specials_list:
                     if attack_type[0] == "magical":
                         damage *= 0.8
 
                 # Special abilities that modify the damage...
                 # ...but do not increase or modify the damage of other special abilities
-                if 'Ouch!' in game.enemy[goblin].specials_list:
+                if 'Ouch!' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "physical" and attack_type[1] == "kick":
                         damage *= 1.2
 
-                if 'Static' in game.enemy[goblin].specials_list:
+                if 'Static' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "magical" and attack_type[1] == "electrocute":
                         damage *= 1.5
 
-                if 'Crating' in game.enemy[goblin].specials_list:
+                if 'Crating' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "physical" and attack_type[1] == "punch":
                         damage *= 1.3
 
@@ -2059,45 +2123,45 @@ def battle(dwarf, goblin):
                 # Deal more damage, add more damage, on hit effects, update on enemy and/or friendly turn, etc.
 
                 # Lucky effect is meant to be updated on every turn in case of agility and luck debuffs.
-                if 'Lucky' in game.enemy[goblin].specials_list:
+                if 'Lucky' in games[session['key']].enemy[goblin].specials_list:
                     if goblin_agility < (dwarf_strength * 2):
                         goblin_agility = dwarf_strength * 2
                     if goblin_luck < 50:
                         goblin_luck = 50
 
-                if 'Stun chance' in game.enemy[goblin].specials_list:
+                if 'Stun chance' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         roll = random.randint(1, 100)
                         if roll <= 15:
                             dwarf_speed -= dwarf_speed_base
                             goblin_stun_message = True
 
-                if 'Adrenaline' in game.enemy[goblin].specials_list:
+                if 'Adrenaline' in games[session['key']].enemy[goblin].specials_list:
                     goblin_speed_base *= 0.85
 
-                if 'Momentum' in game.enemy[goblin].specials_list:
+                if 'Momentum' in games[session['key']].enemy[goblin].specials_list:
                     goblin_speed_base *= 1.01
 
-                if 'Energize' in game.enemy[goblin].specials_list:
+                if 'Energize' in games[session['key']].enemy[goblin].specials_list:
                     goblin_speed_base *= 1.03
 
-                if 'Firebrand' in game.enemy[goblin].specials_list:
+                if 'Firebrand' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         damage += 45
                         goblin_firebrand_message = True
 
-                if 'Hawkeye' in game.enemy[goblin].specials_list:
+                if 'Hawkeye' in games[session['key']].enemy[goblin].specials_list:
                     if critical_message:
                         damage += 50
                         goblin_hawkeye_message = True
 
-                if 'Multi-tool' in game.enemy[goblin].specials_list:
+                if 'Multi-tool' in games[session['key']].enemy[goblin].specials_list:
                     roll = random.randint(1, 100)
                     if roll <= 15:
                         goblin_avoidance_stacks += 1
                         goblin_multitool_message = True
 
-                if 'Mind Sap' in game.enemy[goblin].specials_list:
+                if 'Mind Sap' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "magical":
                         roll = random.randint(0, 1)
                         if roll == 0:
@@ -2107,14 +2171,14 @@ def battle(dwarf, goblin):
                             dwarf_intelligence *= 0.95
                             goblin_mindsap_int_message = True
 
-                if 'Soulrend' in game.enemy[goblin].specials_list:
+                if 'Soulrend' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") or (attack_type[1] != "punch")):
                         soulrend = dwarf_max_health * 0.05
                         damage += soulrend
                         soulrend = round(soulrend)
                         goblin_soulrend_message = True
 
-                if 'Soul Drain' in game.enemy[goblin].specials_list:
+                if 'Soul Drain' in games[session['key']].enemy[goblin].specials_list:
                     if attack_type[0] == "magical":
                         souldrain = dwarf_max_health * 0.03
                         goblin_health += souldrain
@@ -2122,13 +2186,13 @@ def battle(dwarf, goblin):
                         souldrain = round(souldrain)
                         goblin_souldrain_message = True
 
-                if 'Warframe' in game.enemy[goblin].specials_list:
+                if 'Warframe' in games[session['key']].enemy[goblin].specials_list:
                     goblin_self_destruct -= 1
                     if goblin_self_destruct <= 0:
                         goblin_health -= 9999
                         goblin_warframe_message = True
 
-                if 'Mageslayer' in game.enemy[goblin].specials_list:
+                if 'Mageslayer' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         mageslayer = (dwarf_intelligence * 1.5)
                         damage += mageslayer
@@ -2137,10 +2201,10 @@ def battle(dwarf, goblin):
 
                 # Defensive special abilities...
                 # ...that react to damage or can reduce most sources of damage.
-                if 'Avatar' in game.hero[dwarf].specials_list:
+                if 'Avatar' in games[session['key']].hero[dwarf].specials_list:
                     damage *= 0.8
 
-                if 'Earthbound' in game.hero[dwarf].specials_list:
+                if 'Earthbound' in games[session['key']].hero[dwarf].specials_list:
                     if damage > 0:
                         dwarf_armor *= 1.05
                         dwarf_agility *= 1.05
@@ -2148,7 +2212,7 @@ def battle(dwarf, goblin):
                         dwarf_earthbound_message = True
 
                 # Lifesteal at the end of everything
-                if 'Lifesteal' in game.enemy[goblin].specials_list:
+                if 'Lifesteal' in games[session['key']].enemy[goblin].specials_list:
                     lifesteal = damage * 0.2
                     damage -= lifesteal
                     lifesteal = round(lifesteal)
@@ -2156,7 +2220,7 @@ def battle(dwarf, goblin):
 
                 # Neurotoxin is an exception and needs to be checked after all avoidance and dodge rolls have already
                 # happened.
-                if 'Neurotoxin' in game.enemy[goblin].specials_list:
+                if 'Neurotoxin' in games[session['key']].enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and (
                             (attack_type[1] != "kick") and (attack_type[1] != "punch")) and goblin_neurotoxin_payload:
                         dwarf_willpower *= 0.65
@@ -2231,8 +2295,8 @@ def battle(dwarf, goblin):
                         increase = 1 + (roll_increase / 100)
                         increase_message = roll_increase
                         goblin_increase.append(increase)
-                        turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of ' \
-                                'his next attack by ' + str(increase_message) + '%!</span>'
+                        turn += '<br><span class="italic">His inspiring shriek invigorates him, ' \
+                                'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                         goblin_increase_message = False
                     elif goblin_reduction_message:
                         turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
@@ -2259,7 +2323,8 @@ def battle(dwarf, goblin):
 
                     # In case of willpower absorption...
                     if dwarf_absorb_message:
-                        turn += " damage! (Opponent's willpower mitigates +" + str(absorb_message) + " points of damage.)"
+                        turn += " damage! (Opponent's willpower mitigates +" + str(
+                            absorb_message) + " points of damage.)"
                     else:
                         turn += ' damage'
                     dwarf_absorb_message = False
@@ -2274,8 +2339,8 @@ def battle(dwarf, goblin):
                         increase = 1 + (roll_increase / 100)
                         increase_message = roll_increase
                         goblin_increase.append(increase)
-                        turn += '<br><span class="italic">His inspiring shriek invigorates him, increasing the power of ' \
-                                'his next attack by ' + str(increase_message) + '%!</span>'
+                        turn += '<br><span class="italic">His inspiring shriek invigorates him, ' \
+                                'increasing the power of his next attack by ' + str(increase_message) + '%!</span>'
                         goblin_increase_message = False
                     elif goblin_reduction_message:
                         turn += '<br><span class="italic">His horrifying screech intimidates the opponent, ' \
@@ -2318,7 +2383,8 @@ def battle(dwarf, goblin):
                                 "defences!<br>Dwarf's armor, agility and willpower is increased by 5%! "
                         dwarf_earthbound_message = False
 
-                    if 'Warframe' in game.enemy[goblin].specials_list and goblin_warframe_message is not True:
+                    if 'Warframe' in games[session['key']].enemy[goblin].specials_list and \
+                            goblin_warframe_message is not True:
                         turn += '<br><br>' + str(goblin_self_destruct) + '...'
 
                     if goblin_warframe_message:
@@ -2344,26 +2410,26 @@ def battle(dwarf, goblin):
             if goblin_health <= 0:
                 message = '<br>' + dwarf_name + ' slays ' + goblin_name + '!<br><h2>You win the battle!</h2>'
                 win_condition = True
-                if 'Cursed' in game.hero[dwarf].specials_list and game.difficulty == "death":
-                    game.hero[dwarf].secret = True
+                if 'Cursed' in games[session['key']].hero[dwarf].specials_list and \
+                        games[session['key']].difficulty == "death":
+                    games[session['key']].hero[dwarf].secret = True
                 else:
-                    game.hero[dwarf].win = True
+                    games[session['key']].hero[dwarf].win = True
                 battle_log.append(message)
             elif dwarf_health <= 0:
                 message = '<br>' + goblin_name + ' slays ' + dwarf_name + '!<br><h2>You lost the battle.</h2>'
                 win_condition = True
-                game.hero[dwarf].win = False
+                games[session['key']].hero[dwarf].win = False
                 battle_log.append(message)
 
-        game.hero[dwarf].battle = True
+        games[session['key']].hero[dwarf].battle = True
         return battle_log
     else:
-        game.hero[dwarf].graveyard = True
-        game.hero[dwarf].white_lotus = False
-        if game.hero[dwarf].white_lotus_taken is False:
+        games[session['key']].hero[dwarf].graveyard = True
+        if games[session['key']].hero[dwarf].white_lotus_taken is False:
             roll = random.randint(1, 4)
             if roll == 1:
-                game.hero[dwarf].white_lotus = True
+                games[session['key']].hero[dwarf].white_lotus = True
 
 
 if __name__ == '__main__':
