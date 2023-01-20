@@ -121,9 +121,15 @@
 
              <!-- Display corresponding buttons at the end of battle -->
             {% if game.hero[dwarf].secret == True %}
-                <form method="POST" action="{{ url_for('ending') }}">
-                    <input type="submit" name="ending" class="return-back cursed" value="Sacrifice">
-                </form>
+                {% if game.difficulty == 'death' %}
+                    <form method="POST" action="{{ url_for('ending') }}">
+                        <input type="submit" name="secret ending" class="return-back cursed" value="Sacrifice">
+                    </form>
+                {% else %}
+                    <form method="POST" action="{{ url_for('ending') }}">
+                        <input type="submit" name="secret ending fail" class="return-back cursed" value="Sacrifice">
+                    </form>
+                {% endif %}
             {% elif game.hero[dwarf].win == True %}
                 <form method="POST" action="{{ url_for('game') }}">
                     <input type="submit" name="back" class="return-back" value="Victory!">
@@ -144,9 +150,15 @@
                     You visit the grave of {{ game.enemy[goblin].hero_name }}.
                     <br>It is barren of any flora.
                 </div>
-                <form method="POST" action="{{ url_for('game') }}">
-                    <input type="submit" name="back" class="return-back-small" value="Return">
-                </form>
+                {% if game.hero[dwarf].cursed_amulet == False %}
+                    <form method="POST" action="{{ url_for('battleground') }}">
+                        <input type="submit" name="go_to_cursed_amulet {{ dwarf }}" class="return-back" value="Return">
+                    </form>
+                {% else %}
+                    <form method="POST" action="{{ url_for('game') }}">
+                        <input type="submit" name="back" class="return-back" value="Return">
+                    </form>
+                {% endif %}
 
             {% else %}
 
@@ -161,7 +173,7 @@
                         {% else %}
                             <br>There blooms a peculiar white flower on the grave of your comrade.
                             <form method="POST" action="{{ url_for('battleground') }}">
-                                <input type="submit" name="white_lotus {{ dwarf }}" class="return-back-small" value="Take the flower">
+                                <input type="submit" name="white_lotus {{ dwarf }}" class="return-back" value="Take the flower">
                             </form>
                         {% endif %}
 
@@ -170,7 +182,7 @@
                     {% endif %}
                 </div>
                 <form method="POST" action="{{ url_for('game') }}">
-                    <input type="submit" name="back" class="return-back-small" value="Return">
+                    <input type="submit" name="back" class="return-back" value="Return">
                 </form>
             {% endif %}
         {% endif %}

@@ -20,6 +20,7 @@
 
     position: fixed;
     text-align: center;
+    z-index: 99;
 
     background-color: #96241f;
 }
@@ -242,12 +243,16 @@ tr {
     text-align: center;
     padding: 20px;
 
+    transition: 0.1s ease-in;
+    opacity: 0;
+
     position: absolute;
     z-index: 10;
 }
 
 .tooltip:hover .tooltip-text {
     visibility: visible;
+    opacity: 1;
 }
 
 .font-small {

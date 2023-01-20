@@ -1367,7 +1367,7 @@ item_999 = Item('Memento', 'Artifact', 'common',
                 "Goblinbane",
                 "Deal 15% more damage to the goblins.")  # Enchantment
 
-item_404 = Item('???', 'Artifact', 'cursed',
+item_404 = Item('Cursed Amulet', 'Artifact', 'cursed',
                 "An egg-shaped amulet made out of lips and closed eyes. It gives off a sinister aura.",
                 -0.33, -20,  # Strength
                 -0.33, -20,  # Intelligence
@@ -1379,8 +1379,7 @@ item_404 = Item('???', 'Artifact', 'cursed',
                 -0.33, -20,  # Speed
                 -20,  # Armor
                 "Cursed",  # Enchantment
-                "You feel dreadfully compelled to drench it in the blood of your enemies... "
-                "(but for an even weirder reason only on the highest difficulty)")  # Enchantment description
+                "You feel dreadfully compelled to drench it in the blood of your enemies...")  # Enchantment description
 
 item_495 = Item('Warframe', 'Artifact', 'cursed', "Some Gundam or Grendel, idk.",
                 1.5, 32,  # Strength
@@ -1418,8 +1417,8 @@ item_list_epic = [item_201, item_202, item_203, item_204, item_205, item_206, it
                   item_211, item_212, item_213, item_214, item_215, item_216, item_217, item_218, item_219, item_220,
                   item_221, item_250, item_251, item_252, item_253, item_254, item_255, item_299, item_298, item_297]
 item_list_legendary = [item_301, item_302, item_303, item_304, item_305, item_306, item_307, item_308]
-item_list_cursed = [item_404, item_495, item_600]
-item_list_special = [item_999, item_777, item_555]
+item_list_cursed = [item_495, item_600]
+item_list_special = [item_999, item_777, item_555, item_404]
 
 item_list_weapon_common = [item_50, item_51, item_52]
 item_list_headpiece_common = [item_1, item_7, item_13]
@@ -1492,7 +1491,7 @@ item_dict = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jac
              "Blessed Aegis": item_304, "Suspicious Weapon Oil": item_305, "Runeblade of Rivendare": item_306,
              "Skull of Naz'kar": item_307, item_308: "Elixir of Giants",
 
-             "???": item_404, "Memento": item_999, "Warframe": item_495, "Lucky Pebble": item_777,
+             "Cursed Amulet": item_404, "Memento": item_999, "Warframe": item_495, "Lucky Pebble": item_777,
              "Pipe Bomb": item_600, "White Lotus": item_555}
 
 ability_dict = {

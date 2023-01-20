@@ -18,7 +18,7 @@
                     <p>You have already poisoned their wells. Adding any more toxin would raise suspicion.</p>
                 {% endif %}
                 <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
-                    <input type="submit" name="back-sneak {{ dwarf }}" class="return-back-small" value="Return">
+                    <input type="submit" name="back-sneak {{ dwarf }}" class="return-back" value="Return">
                 </form>
 
             <!-- Spy action -->
@@ -89,8 +89,20 @@
                     </div>
                 </div>
                 <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
-                    <input type="submit" name="back {{ dwarf }}" class="return-back-small" value="Return">
+                    <input type="submit" name="back" class="return-back" value="Return">
                 </form>
+
+            {% elif cursed_amulet %}
+                <p>On the way back, you notice a peculiar trinket wedged in between stones.</p>
+                <p>It seems to vibrate, trying to tumble its way towards the grave you just visited.</p>
+                <p>Despite its horrific appearance, you feel an urge to pick it up and take it home.</p>
+                <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
+                    <input type="submit" name="cursed_amulet {{ dwarf }}" class="return-back" value="Take the amulet">
+                </form>
+                <form method="POST" action="{{ url_for('game') }}#{{ dwarf }}">
+                    <input type="submit" name="back" class="return-back" value="Return back home">
+                </form>
+
             {% endif %}
         </div>
     </div>
