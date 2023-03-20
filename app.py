@@ -66,7 +66,7 @@ class Hero:
         self.will_mul = float(1.0)
         self.will_bonus = 0
         self.will_total = round(self.willpower * self.will_mul + self.will_bonus)
-        self.endurance = 1000
+        self.endurance = random.randint(10, 20)
         self.end_mul = float(1.0)
         self.end_bonus = 0
         self.end_total = round(self.endurance * self.end_mul + self.end_bonus)
@@ -129,7 +129,7 @@ class Game:
         self.backpack = []
         self.item_dict = item_dict
         self.ability_dict = ability_dict
-        self.days = 10000
+        self.days = 365
         self.difficulty = None
 
 
@@ -325,7 +325,7 @@ def game():
             temp_days = 15
             spoils = []
 
-            if game.days - temp_days <= 0:
+            if game.days - temp_days < 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
@@ -338,7 +338,7 @@ def game():
                 spoils += random.choices(item_list_boots_common, k=1)
                 spoils += random.choices(item_list_artifact_common, k=1)
             elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_common, k=4) + random.choices(item_list_rare, k=3)
+                spoils += random.choices(item_list_common, k=4) + random.choices(item_list_rare, k=4)
             elif 81 <= odds <= 95:
                 spoils += random.choices(item_list_weapon_rare, k=1)
                 spoils += random.choices(item_list_headpiece_rare, k=1)
@@ -360,6 +360,7 @@ def game():
 
             game.days -= temp_days
             game.backpack += spoils
+            return render_template('game.html', game=game, spoils=spoils)
 
         elif request.form.get('adventure', False) == 'Risky adventure':
 
@@ -367,7 +368,7 @@ def game():
             temp_days = 30
             spoils = []
 
-            if game.days - temp_days <= 0:
+            if game.days - temp_days < 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
@@ -380,7 +381,7 @@ def game():
                 spoils += random.choices(item_list_boots_rare, k=1)
                 spoils += random.choices(item_list_artifact_rare, k=1)
             elif 46 <= odds <= 80:
-                spoils = random.choices(item_list_rare, k=4) + random.choices(item_list_epic, k=3)
+                spoils += random.choices(item_list_rare, k=4) + random.choices(item_list_epic, k=4)
             elif 81 <= odds <= 95:
                 spoils += random.choices(item_list_weapon_epic, k=1)
                 spoils += random.choices(item_list_headpiece_epic, k=1)
@@ -391,10 +392,11 @@ def game():
                 spoils += random.choices(item_list_boots_epic, k=1)
                 spoils += random.choices(item_list_artifact_epic, k=1)
             else:
-                spoils = random.choices(item_list_legendary, k=1)
+                spoils += random.choices(item_list_legendary, k=1)
 
             game.days -= temp_days
             game.backpack += spoils
+            return render_template('game.html', game=game, spoils=spoils)
 
         elif request.form.get('adventure', False) == 'Legendary expedition':
 
@@ -402,7 +404,7 @@ def game():
             temp_days = 60
             spoils = []
 
-            if game.days - temp_days <= 0:
+            if game.days - temp_days < 0:
                 return render_template('game.html', game=game)
 
             if 1 <= odds <= 45:
@@ -417,12 +419,13 @@ def game():
             elif 46 <= odds <= 80:
                 spoils = random.choices(item_list_epic, k=4) + random.choices(item_list_legendary, k=1)
             elif 81 <= odds <= 95:
-                random.choices(item_list_legendary, k=3)
+                spoils += random.choices(item_list_legendary, k=3)
             else:
-                spoils = random.choices(item_list_cursed, k=1)
+                spoils += random.choices(item_list_cursed, k=1)
 
             game.days -= temp_days
             game.backpack += spoils
+            return render_template('game.html', game=game, spoils=spoils)
 
         #   TACTICS
         #   Change the personality of your dwarf with one click of a button.
@@ -460,53 +463,37 @@ def update_equipment(dwarf):
     for item_slot, item_name in game.hero[dwarf].equipment.items():
         if item_name is not None:
 
-            rounded = game.hero[dwarf].str_mul + game.hero[dwarf].equipment[
-                item_slot].str_mul
+            rounded = game.hero[dwarf].str_mul + game.hero[dwarf].equipment[item_slot].str_mul
             game.hero[dwarf].str_mul = round(rounded, 2)
-            game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[
-                item_slot].str_bonus
+            game.hero[dwarf].str_bonus += game.hero[dwarf].equipment[item_slot].str_bonus
 
-            rounded = game.hero[dwarf].int_mul + game.hero[dwarf].equipment[
-                item_slot].int_mul
+            rounded = game.hero[dwarf].int_mul + game.hero[dwarf].equipment[item_slot].int_mul
             game.hero[dwarf].int_mul = round(rounded, 2)
-            game.hero[dwarf].int_bonus += game.hero[dwarf].equipment[
-                item_slot].int_bonus
+            game.hero[dwarf].int_bonus += game.hero[dwarf].equipment[item_slot].int_bonus
 
-            rounded = game.hero[dwarf].agi_mul + game.hero[dwarf].equipment[
-                item_slot].agi_mul
+            rounded = game.hero[dwarf].agi_mul + game.hero[dwarf].equipment[item_slot].agi_mul
             game.hero[dwarf].agi_mul = round(rounded, 2)
-            game.hero[dwarf].agi_bonus += game.hero[dwarf].equipment[
-                item_slot].agi_bonus
+            game.hero[dwarf].agi_bonus += game.hero[dwarf].equipment[item_slot].agi_bonus
 
-            rounded = game.hero[dwarf].will_mul + game.hero[dwarf].equipment[
-                item_slot].will_mul
+            rounded = game.hero[dwarf].will_mul + game.hero[dwarf].equipment[item_slot].will_mul
             game.hero[dwarf].will_mul = round(rounded, 2)
-            game.hero[dwarf].will_bonus += game.hero[dwarf].equipment[
-                item_slot].will_bonus
+            game.hero[dwarf].will_bonus += game.hero[dwarf].equipment[item_slot].will_bonus
 
-            rounded = game.hero[dwarf].end_mul + game.hero[dwarf].equipment[
-                item_slot].end_mul
+            rounded = game.hero[dwarf].end_mul + game.hero[dwarf].equipment[item_slot].end_mul
             game.hero[dwarf].end_mul = round(rounded, 2)
-            game.hero[dwarf].end_bonus += game.hero[dwarf].equipment[
-                item_slot].end_bonus
+            game.hero[dwarf].end_bonus += game.hero[dwarf].equipment[item_slot].end_bonus
 
-            rounded = game.hero[dwarf].char_mul + game.hero[dwarf].equipment[
-                item_slot].char_mul
+            rounded = game.hero[dwarf].char_mul + game.hero[dwarf].equipment[item_slot].char_mul
             game.hero[dwarf].char_mul = round(rounded, 2)
-            game.hero[dwarf].char_bonus += game.hero[dwarf].equipment[
-                item_slot].char_bonus
+            game.hero[dwarf].char_bonus += game.hero[dwarf].equipment[item_slot].char_bonus
 
-            rounded = game.hero[dwarf].lck_mul + game.hero[dwarf].equipment[
-                item_slot].lck_mul
+            rounded = game.hero[dwarf].lck_mul + game.hero[dwarf].equipment[item_slot].lck_mul
             game.hero[dwarf].lck_mul = round(rounded, 2)
-            game.hero[dwarf].lck_bonus += game.hero[dwarf].equipment[
-                item_slot].lck_bonus
+            game.hero[dwarf].lck_bonus += game.hero[dwarf].equipment[item_slot].lck_bonus
 
-            rounded = game.hero[dwarf].spd_mul + game.hero[dwarf].equipment[
-                item_slot].spd_mul
+            rounded = game.hero[dwarf].spd_mul + game.hero[dwarf].equipment[item_slot].spd_mul
             game.hero[dwarf].spd_mul = round(rounded, 2)
-            game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[
-                item_slot].spd_bonus
+            game.hero[dwarf].spd_bonus += game.hero[dwarf].equipment[item_slot].spd_bonus
 
             game.hero[dwarf].armor += game.hero[dwarf].equipment[item_slot].armor
 
@@ -522,53 +509,37 @@ def update_equipment_enemy(goblin):
     for item_slot, item_name in game.enemy[goblin].equipment.items():
         if item_name is not None:
 
-            rounded = game.enemy[goblin].str_mul + game.enemy[goblin].equipment[
-                item_slot].str_mul
+            rounded = game.enemy[goblin].str_mul + game.enemy[goblin].equipment[item_slot].str_mul
             game.enemy[goblin].str_mul = round(rounded, 2)
-            game.enemy[goblin].str_bonus += game.enemy[goblin].equipment[
-                item_slot].str_bonus
+            game.enemy[goblin].str_bonus += game.enemy[goblin].equipment[item_slot].str_bonus
 
-            rounded = game.enemy[goblin].int_mul + game.enemy[goblin].equipment[
-                item_slot].int_mul
+            rounded = game.enemy[goblin].int_mul + game.enemy[goblin].equipment[item_slot].int_mul
             game.enemy[goblin].int_mul = round(rounded, 2)
-            game.enemy[goblin].int_bonus += game.enemy[goblin].equipment[
-                item_slot].int_bonus
+            game.enemy[goblin].int_bonus += game.enemy[goblin].equipment[item_slot].int_bonus
 
-            rounded = game.enemy[goblin].agi_mul + game.enemy[goblin].equipment[
-                item_slot].agi_mul
+            rounded = game.enemy[goblin].agi_mul + game.enemy[goblin].equipment[item_slot].agi_mul
             game.enemy[goblin].agi_mul = round(rounded, 2)
-            game.enemy[goblin].agi_bonus += game.enemy[goblin].equipment[
-                item_slot].agi_bonus
+            game.enemy[goblin].agi_bonus += game.enemy[goblin].equipment[item_slot].agi_bonus
 
-            rounded = game.enemy[goblin].will_mul + game.enemy[goblin].equipment[
-                item_slot].will_mul
+            rounded = game.enemy[goblin].will_mul + game.enemy[goblin].equipment[item_slot].will_mul
             game.enemy[goblin].will_mul = round(rounded, 2)
-            game.enemy[goblin].will_bonus += game.enemy[goblin].equipment[
-                item_slot].will_bonus
+            game.enemy[goblin].will_bonus += game.enemy[goblin].equipment[item_slot].will_bonus
 
-            rounded = game.enemy[goblin].end_mul + game.enemy[goblin].equipment[
-                item_slot].end_mul
+            rounded = game.enemy[goblin].end_mul + game.enemy[goblin].equipment[item_slot].end_mul
             game.enemy[goblin].end_mul = round(rounded, 2)
-            game.enemy[goblin].end_bonus += game.enemy[goblin].equipment[
-                item_slot].end_bonus
+            game.enemy[goblin].end_bonus += game.enemy[goblin].equipment[item_slot].end_bonus
 
-            rounded = game.enemy[goblin].char_mul + game.enemy[goblin].equipment[
-                item_slot].char_mul
+            rounded = game.enemy[goblin].char_mul + game.enemy[goblin].equipment[item_slot].char_mul
             game.enemy[goblin].char_mul = round(rounded, 2)
-            game.enemy[goblin].char_bonus += game.enemy[goblin].equipment[
-                item_slot].char_bonus
+            game.enemy[goblin].char_bonus += game.enemy[goblin].equipment[item_slot].char_bonus
 
-            rounded = game.enemy[goblin].lck_mul + game.enemy[goblin].equipment[
-                item_slot].lck_mul
+            rounded = game.enemy[goblin].lck_mul + game.enemy[goblin].equipment[item_slot].lck_mul
             game.enemy[goblin].lck_mul = round(rounded, 2)
-            game.enemy[goblin].lck_bonus += game.enemy[goblin].equipment[
-                item_slot].lck_bonus
+            game.enemy[goblin].lck_bonus += game.enemy[goblin].equipment[item_slot].lck_bonus
 
-            rounded = game.enemy[goblin].spd_mul + game.enemy[goblin].equipment[
-                item_slot].spd_mul
+            rounded = game.enemy[goblin].spd_mul + game.enemy[goblin].equipment[item_slot].spd_mul
             game.enemy[goblin].spd_mul = round(rounded, 2)
-            game.enemy[goblin].spd_bonus += game.enemy[goblin].equipment[
-                item_slot].spd_bonus
+            game.enemy[goblin].spd_bonus += game.enemy[goblin].equipment[item_slot].spd_bonus
 
             game.enemy[goblin].armor += game.enemy[goblin].equipment[item_slot].armor
 
@@ -581,14 +552,10 @@ def stat_reset(dwarf):
     game = games[session['key']]
 
     # Resets all stats before equipment update
-    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[
-        dwarf].agi_mul = game.hero[dwarf].will_mul = 1.0
-    game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[
-        dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
-    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = \
-        game.hero[dwarf].agi_bonus = 0
-    game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = \
-        game.hero[dwarf].lck_bonus = 0
+    game.hero[dwarf].str_mul = game.hero[dwarf].int_mul = game.hero[dwarf].agi_mul = game.hero[dwarf].will_mul = 1.0
+    game.hero[dwarf].end_mul = game.hero[dwarf].char_mul = game.hero[dwarf].lck_mul = game.hero[dwarf].spd_mul = 1.0
+    game.hero[dwarf].str_bonus = game.hero[dwarf].int_bonus = game.hero[dwarf].agi_bonus = 0
+    game.hero[dwarf].end_bonus = game.hero[dwarf].char_bonus = game.hero[dwarf].lck_bonus = 0
     game.hero[dwarf].will_bonus = game.hero[dwarf].spd_bonus = 0
     game.hero[dwarf].armor = 0
     game.hero[dwarf].specials_list.clear()
@@ -601,64 +568,56 @@ def update_stats(dwarf):
     if game.hero[dwarf].str_mul <= 0.0:
         game.hero[dwarf].str_mul = 0.1
     game.hero[dwarf].str_total = round(
-        game.hero[dwarf].strength * game.hero[dwarf].str_mul +
-        game.hero[dwarf].str_bonus)
+        game.hero[dwarf].strength * game.hero[dwarf].str_mul + game.hero[dwarf].str_bonus)
     if game.hero[dwarf].str_total <= 0:
         game.hero[dwarf].str_total = 1
 
     if game.hero[dwarf].int_mul <= 0.0:
         game.hero[dwarf].int_mul = 0.1
     game.hero[dwarf].int_total = round(
-        game.hero[dwarf].intelligence * game.hero[dwarf].int_mul +
-        game.hero[dwarf].int_bonus)
+        game.hero[dwarf].intelligence * game.hero[dwarf].int_mul + game.hero[dwarf].int_bonus)
     if game.hero[dwarf].int_total <= 0:
         game.hero[dwarf].int_total = 1
 
     if game.hero[dwarf].agi_mul <= 0.0:
         game.hero[dwarf].agi_mul = 0.1
     game.hero[dwarf].agi_total = round(
-        game.hero[dwarf].agility * game.hero[dwarf].agi_mul +
-        game.hero[dwarf].agi_bonus)
+        game.hero[dwarf].agility * game.hero[dwarf].agi_mul + game.hero[dwarf].agi_bonus)
     if game.hero[dwarf].agi_total <= 0:
         game.hero[dwarf].agi_total = 1
 
     if game.hero[dwarf].will_mul <= 0.0:
         game.hero[dwarf].will_mul = 0.1
     game.hero[dwarf].will_total = round(
-        game.hero[dwarf].willpower * game.hero[dwarf].will_mul +
-        game.hero[dwarf].will_bonus)
+        game.hero[dwarf].willpower * game.hero[dwarf].will_mul + game.hero[dwarf].will_bonus)
     if game.hero[dwarf].will_total <= 0:
         game.hero[dwarf].will_total = 1
 
     if game.hero[dwarf].end_mul <= 0.0:
         game.hero[dwarf].end_mul = 0.1
     game.hero[dwarf].end_total = round(
-        game.hero[dwarf].endurance * game.hero[dwarf].end_mul +
-        game.hero[dwarf].end_bonus)
+        game.hero[dwarf].endurance * game.hero[dwarf].end_mul + game.hero[dwarf].end_bonus)
     if game.hero[dwarf].end_total <= 0:
         game.hero[dwarf].end_total = 1
 
     if game.hero[dwarf].char_mul <= 0.0:
         game.hero[dwarf].char_mul = 0.1
     game.hero[dwarf].char_total = round(
-        game.hero[dwarf].charisma * game.hero[dwarf].char_mul +
-        game.hero[dwarf].char_bonus)
+        game.hero[dwarf].charisma * game.hero[dwarf].char_mul + game.hero[dwarf].char_bonus)
     if game.hero[dwarf].char_total <= 0:
         game.hero[dwarf].char_total = 1
 
     if game.hero[dwarf].lck_mul <= 0.0:
         game.hero[dwarf].lck_mul = 0.1
     game.hero[dwarf].lck_total = round(
-        game.hero[dwarf].luck * game.hero[dwarf].lck_mul + game.hero[
-            dwarf].lck_bonus)
+        game.hero[dwarf].luck * game.hero[dwarf].lck_mul + game.hero[dwarf].lck_bonus)
     if game.hero[dwarf].lck_total <= 0:
         game.hero[dwarf].lck_total = 1
 
     if game.hero[dwarf].spd_mul <= 0.0:
         game.hero[dwarf].spd_mul = 0.1
     game.hero[dwarf].spd_total = round(
-        game.hero[dwarf].speed * game.hero[dwarf].spd_mul +
-        game.hero[dwarf].spd_bonus)
+        game.hero[dwarf].speed * game.hero[dwarf].spd_mul + game.hero[dwarf].spd_bonus)
     if game.hero[dwarf].spd_total <= 0:
         game.hero[dwarf].spd_total = 1
 
@@ -740,30 +699,37 @@ def train(dwarf):
         strength = int(request.form.get("str_increase"))
     else:
         strength = 0
+
     if request.form.get("int_increase") != '':
         intelligence = int(request.form.get("int_increase"))
     else:
         intelligence = 0
+
     if request.form.get("agi_increase") != '':
         agility = int(request.form.get("agi_increase"))
     else:
         agility = 0
+
     if request.form.get("will_increase") != '':
         willpower = int(request.form.get("will_increase"))
     else:
         willpower = 0
+
     if request.form.get("end_increase") != '':
         endurance = int(request.form.get("end_increase"))
     else:
         endurance = 0
+
     if request.form.get("char_increase") != '':
         charisma = int(request.form.get("char_increase"))
     else:
         charisma = 0
+
     if request.form.get("lck_increase") != '':
         luck = int(request.form.get("lck_increase"))
     else:
         luck = 0
+
     if request.form.get("spd_increase") != '':
         speed = int(request.form.get("spd_increase"))
     else:
@@ -771,7 +737,7 @@ def train(dwarf):
 
     temp_days = strength * 2 + intelligence * 2 + agility + willpower + endurance * 3 + charisma + luck + speed * 3
 
-    if game.days - temp_days <= 0:
+    if game.days - temp_days < 0:
         return render_template('game.html', game=game)
 
     game.hero[dwarf].strength += strength
@@ -874,16 +840,16 @@ def game_mode_easy():
     game = games[session['key']]
 
     for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(15, 25)
-        game.enemy[goblin].intelligence = random.randint(15, 25)
-        game.enemy[goblin].agility = random.randint(25, 35)
-        game.enemy[goblin].willpower = random.randint(25, 35)
-        game.enemy[goblin].endurance = 1000
-        game.enemy[goblin].charisma = random.randint(25, 35)
-        game.enemy[goblin].luck = random.randint(25, 35)
-        game.enemy[goblin].speed = random.randint(15, 25)
+        game.enemy[goblin].strength = random.randint(20, 25)
+        game.enemy[goblin].intelligence = random.randint(20, 25)
+        game.enemy[goblin].agility = random.randint(15, 20)
+        game.enemy[goblin].willpower = random.randint(15, 20)
+        game.enemy[goblin].endurance = random.randint(20, 25)
+        game.enemy[goblin].charisma = random.randint(10, 15)
+        game.enemy[goblin].luck = random.randint(10, 15)
+        game.enemy[goblin].speed = random.randint(10, 15)
 
-        game.enemy[goblin].equipment["Weapon"] = item_154
+        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
         game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
         game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
         game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
@@ -900,14 +866,14 @@ def game_mode_normal():
     game = games[session['key']]
 
     for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
+        game.enemy[goblin].strength = random.randint(20, 25)
+        game.enemy[goblin].intelligence = random.randint(20, 25)
+        game.enemy[goblin].agility = random.randint(15, 20)
+        game.enemy[goblin].willpower = random.randint(15, 20)
+        game.enemy[goblin].endurance = random.randint(25, 30)
+        game.enemy[goblin].charisma = random.randint(15, 20)
+        game.enemy[goblin].luck = random.randint(15, 20)
+        game.enemy[goblin].speed = random.randint(15, 20)
 
         game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_epic)
         game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_rare)
@@ -916,6 +882,18 @@ def game_mode_normal():
         game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_rare)
         game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_rare)
         game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_rare)
+
+        if game.enemy[goblin].tactic == 'Frenzy':
+            game.enemy[goblin].strength += 10
+            game.enemy[goblin].agility += 10
+        if game.enemy[goblin].tactic == 'Focus':
+            game.enemy[goblin].intelligence += 10
+            game.enemy[goblin].willpower += 10
+        if game.enemy[goblin].tactic == 'Balanced' or 'Overconfidence':
+            game.enemy[goblin].strength += 5
+            game.enemy[goblin].agility += 5
+            game.enemy[goblin].intelligence += 5
+            game.enemy[goblin].willpower += 5
 
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
@@ -926,22 +904,36 @@ def game_mode_hard():
     game = games[session['key']]
 
     for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
+        game.enemy[goblin].strength = random.randint(20, 25)
+        game.enemy[goblin].intelligence = random.randint(20, 25)
+        game.enemy[goblin].agility = random.randint(15, 20)
+        game.enemy[goblin].willpower = random.randint(15, 20)
+        game.enemy[goblin].endurance = random.randint(30, 35)
+        game.enemy[goblin].charisma = random.randint(20, 25)
+        game.enemy[goblin].luck = random.randint(20, 25)
+        game.enemy[goblin].speed = random.randint(20, 25)
 
-        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
+        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_epic)
+        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_epic)
+        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_epic)
+        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_epic)
+        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_epic)
+        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_epic)
+        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_epic)
+
+        if game.enemy[goblin].tactic == 'Frenzy':
+            game.enemy[goblin].strength += 15
+            game.enemy[goblin].agility += 15
+            game.enemy[goblin].equipment["Weapon"] = random.choice([item_250, item_251, item_253, item_255])
+        if game.enemy[goblin].tactic == 'Focus':
+            game.enemy[goblin].intelligence += 15
+            game.enemy[goblin].willpower += 15
+            game.enemy[goblin].equipment["Weapon"] = random.choice([item_252, item_254])
+        if game.enemy[goblin].tactic == 'Balanced' or 'Overconfidence':
+            game.enemy[goblin].strength += 7
+            game.enemy[goblin].agility += 7
+            game.enemy[goblin].intelligence += 7
+            game.enemy[goblin].willpower += 7
 
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
@@ -954,22 +946,49 @@ def game_mode_death():
     # TO DO LATER
     # I will make around 20 custom-built goblins made out of most broken builds I can think of :)
     for goblin in game.enemy:
-        game.enemy[goblin].strength = random.randint(25, 40)
-        game.enemy[goblin].intelligence = random.randint(25, 40)
-        game.enemy[goblin].agility = random.randint(35, 50)
-        game.enemy[goblin].willpower = random.randint(35, 50)
-        game.enemy[goblin].endurance = random.randint(45, 70)
-        game.enemy[goblin].charisma = random.randint(50, 75)
-        game.enemy[goblin].luck = random.randint(50, 75)
-        game.enemy[goblin].speed = random.randint(25, 35)
+        game.enemy[goblin].strength = random.randint(20, 25)
+        game.enemy[goblin].intelligence = random.randint(20, 25)
+        game.enemy[goblin].agility = random.randint(15, 20)
+        game.enemy[goblin].willpower = random.randint(15, 20)
+        game.enemy[goblin].endurance = random.randint(35, 40)
+        game.enemy[goblin].charisma = random.randint(25, 30)
+        game.enemy[goblin].luck = random.randint(25, 30)
+        game.enemy[goblin].speed = random.randint(25, 30)
 
-        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_rare)
-        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_common)
-        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_common)
-        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_common)
-        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_common)
-        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_common)
-        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_common)
+        game.enemy[goblin].equipment["Weapon"] = random.choice(item_list_weapon_epic)
+        game.enemy[goblin].equipment["Headpiece"] = random.choice(item_list_headpiece_epic)
+        game.enemy[goblin].equipment["Shoulders"] = random.choice(item_list_shoulders_epic)
+        game.enemy[goblin].equipment["Chest"] = random.choice(item_list_chest_epic)
+        game.enemy[goblin].equipment["Pants"] = random.choice(item_list_pants_epic)
+        game.enemy[goblin].equipment["Gloves"] = random.choice(item_list_gloves_epic)
+        game.enemy[goblin].equipment["Boots"] = random.choice(item_list_boots_epic)
+
+        if game.enemy[goblin].tactic == 'Frenzy':
+            game.enemy[goblin].strength += 20
+            game.enemy[goblin].agility += 20
+            roll = random.randint(1, 100)
+            if 0 < roll < 50:
+                game.enemy[goblin].equipment["Weapon"] = random.choice([item_303, item_306])
+            else:
+                game.enemy[goblin].equipment["Weapon"] = random.choice([item_250, item_251, item_253, item_255])
+                game.enemy[goblin].equipment["Artifact"] = random.choice([item_305, item_308])
+
+        if game.enemy[goblin].tactic == 'Focus':
+            game.enemy[goblin].intelligence += 20
+            game.enemy[goblin].willpower += 20
+            roll = random.randint(1, 100)
+            if 0 < roll < 50:
+                game.enemy[goblin].equipment["Weapon"] = item_307
+            else:
+                game.enemy[goblin].equipment["Weapon"] = random.choice([item_252, item_254])
+                game.enemy[goblin].equipment["Headpiece"] = item_301
+
+        if game.enemy[goblin].tactic == 'Balanced' or 'Overconfidence':
+            game.enemy[goblin].strength += 10
+            game.enemy[goblin].agility += 10
+            game.enemy[goblin].intelligence += 10
+            game.enemy[goblin].willpower += 10
+            game.enemy[goblin].equipment["Artifact"] = random.choice([item_302, item_304])
 
         update_equipment_enemy(goblin)
         update_stats_enemy(goblin)
@@ -1099,8 +1118,8 @@ def battle(dwarf, goblin):
     dwarf_intelligence = game.hero[dwarf].int_total
 
     dwarf_armor = game.hero[dwarf].armor
-    dwarf_health = game.hero[dwarf].end_total * 10
-    dwarf_max_health = game.hero[dwarf].end_total * 10
+    dwarf_health = game.hero[dwarf].end_total * 10 + 1000
+    dwarf_max_health = game.hero[dwarf].end_total * 10 + 1000
 
     dwarf_tactic = game.hero[dwarf].tactic
 
@@ -1122,8 +1141,8 @@ def battle(dwarf, goblin):
     goblin_intelligence = game.enemy[goblin].int_total
 
     goblin_armor = game.enemy[goblin].armor
-    goblin_health = game.enemy[goblin].end_total * 10
-    goblin_max_health = game.enemy[goblin].end_total * 10
+    goblin_health = game.enemy[goblin].end_total * 10 + 1000
+    goblin_max_health = game.enemy[goblin].end_total * 10 + 1000
 
     goblin_tactic = game.enemy[goblin].tactic
 
@@ -1237,12 +1256,14 @@ def battle(dwarf, goblin):
     # SPECIAL ABILITIES
     # The ones that do something at the start of the encounter or need to be set up at the start of the encounter.
     if 'Adrenaline' in game.hero[dwarf].specials_list:
+        dwarf_speed *= 4
         dwarf_speed_base = dwarf_speed_base * 4
         turn = '<div class="hero-turn">' + dwarf_name + ' injects himself with Adrenalinium, ' \
                                                         'increasing his speed tremendously!</div>'
         battle_log.append(turn)
 
     if 'Adrenaline' in game.enemy[goblin].specials_list:
+        goblin_speed *= 4
         goblin_speed_base = goblin_speed_base * 4
         turn = '<div class="enemy-turn">' + goblin_name + ' injects himself with Adrenalinium, ' \
                                                           'increasing his speed tremendously!</div>'
@@ -1267,7 +1288,7 @@ def battle(dwarf, goblin):
         goblin_armor *= 1.25
 
     # I put goblin's Authority first, so that if both player and the
-    # computer has it, the player will gain more charisma as a recompensation.
+    # computer has it, the player will gain more charisma as a compensation.
     if 'Authority' in game.enemy[goblin].specials_list:
         steal = dwarf_charisma * 0.65
         goblin_charisma += steal
@@ -1294,13 +1315,13 @@ def battle(dwarf, goblin):
             turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>' \
                                                             '...unfortunately, in a freak accident, it splashes ' \
                                                             'right on his face, dealing 250 damage!</div>'
-            dwarf_health -= 250
+            dwarf_health -= 200
             battle_log.append(turn)
         else:
             turn = '<div class="hero-turn">' + dwarf_name + ' throws the concoction at the enemy...!<br>' \
                                                             '...it hits the opponent, splashing all over him, ' \
                                                             'dealing 250 damage!</div>'
-            goblin_health -= 250
+            goblin_health -= 200
             battle_log.append(turn)
 
     if 'Unstable Concoction' in game.enemy[goblin].specials_list and goblin_health > 0:
@@ -1309,13 +1330,13 @@ def battle(dwarf, goblin):
             turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
                                                               '...fortunately, in a freak accident, it splashes ' \
                                                               'right on his face, dealing 250 damage!</div>'
-            goblin_health -= 250
+            goblin_health -= 200
             battle_log.append(turn)
         else:
             turn = '<div class="enemy-turn">' + goblin_name + ' throws a Pipe Bomb at the enemy...!<br>' \
                                                               '...it hits the opponent, splashing all over him, ' \
                                                               'dealing 250 damage!</div>'
-            dwarf_health -= 250
+            dwarf_health -= 200
             battle_log.append(turn)
 
     if 'Pipe Bomb' in game.hero[dwarf].specials_list and dwarf_health > 0:
@@ -1356,8 +1377,7 @@ def battle(dwarf, goblin):
                 dwarf_physical = game.hero[dwarf].str_total * 3
 
                 if 'Dominion' in game.hero[dwarf].specials_list:
-                    dwarf_magical = game.hero[dwarf].int_total * 4 + (
-                            dwarf_willpower + dwarf_charisma) * 1.5
+                    dwarf_magical = game.hero[dwarf].int_total * 4 + (dwarf_willpower + dwarf_charisma) * 1.5
                 else:
                     dwarf_magical = game.hero[dwarf].int_total * 4
 
@@ -1452,18 +1472,27 @@ def battle(dwarf, goblin):
 
                 if 'Spiked Boots' in game.hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "kick"):
-                        damage *= 1.5
+                        if 'Critical Boost' in game.hero[dwarf].specials_list:
+                            damage *= 2
+                        else:
+                            damage *= 1.5
                         critical_message = True
 
                 if 'Barbed Fists' in game.hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "punch"):
-                        damage *= 1.5
+                        if 'Critical Boost' in game.hero[dwarf].specials_list:
+                            damage *= 2
+                        else:
+                            damage *= 1.5
                         critical_message = True
 
                 # Luck effect chance
                 roll_crit = random.randint(1, 100)
                 if (dwarf_luck >= roll_crit) and (critical_message is not True):
-                    damage *= 1.5
+                    if 'Critical Boost' in game.hero[dwarf].specials_list:
+                        damage *= 2
+                    else:
+                        damage *= 1.5
                     critical_message = True
 
                 # Reload mechanic has to happen before charisma effect for the stacking to occur.
@@ -1640,7 +1669,7 @@ def battle(dwarf, goblin):
                 if 'Stun chance' in game.hero[dwarf].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         roll = random.randint(1, 100)
-                        if roll <= 15:
+                        if roll <= 20:
                             goblin_speed -= goblin_speed_base
                             dwarf_stun_message = True
 
@@ -1736,6 +1765,7 @@ def battle(dwarf, goblin):
                         goblin_agility *= 0.65
                         goblin_charisma *= 0.65
                         goblin_luck *= 0.65
+                        goblin_health -= 300
                         dwarf_neurotoxin_payload = False
                         dwarf_neurotoxin_message = True
 
@@ -1777,8 +1807,8 @@ def battle(dwarf, goblin):
                            ' the goblin, but he manages to dodge the attack!'
                     goblin_dodge_message = False
                     if goblin_counterattack_message:
-                        turn += '<br>' + goblin_name + " counterattacks with a punch, dealing " + str(
-                            counterattack) + ' damage!'
+                        turn += '<br><span class="red">' + goblin_name + " counterattacks with a punch, dealing " + str(
+                            counterattack) + ' damage!</span>'
                         goblin_counterattack_message = False
                     if dwarf_increase_message:
                         roll_increase = random.randint(15, 35)
@@ -1888,8 +1918,9 @@ def battle(dwarf, goblin):
                         dwarf_multitool_message = False
 
                     if goblin_earthbound_message:
-                        turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their " \
-                                "defences!<br>Goblin's armor, agility and willpower is increased by 5%!"
+                        turn += "<br><span class='red'>Tel'lar reacts to it's owner taking damage," \
+                                " bolstering up their defences!<br>Goblin's armor, agility and willpower " \
+                                "is increased by 5%!</span>"
                         goblin_earthbound_message = False
 
                     if 'Warframe' in game.hero[dwarf].specials_list \
@@ -1906,7 +1937,7 @@ def battle(dwarf, goblin):
                         turn += '<br><br>' + "Powerful neurotoxin that coats dwarf's weapon poisons " \
                                              "the enemy, decreasing their agility, willpower, " \
                                              "charisma and luck by 35% " \
-                                             "and dealing 500 extra damage!"
+                                             "and dealing 300 extra damage!"
                         dwarf_neurotoxin_message = False
 
                 turn += '</div>'
@@ -1923,8 +1954,7 @@ def battle(dwarf, goblin):
                 goblin_physical = game.enemy[goblin].str_total * 3
 
                 if 'Dominion' in game.enemy[goblin].specials_list:
-                    goblin_magical = game.enemy[goblin].int_total * 4 + (
-                            goblin_willpower + goblin_charisma) * 1.5
+                    goblin_magical = game.enemy[goblin].int_total * 4 + (goblin_willpower + goblin_charisma) * 1.5
                 else:
                     goblin_magical = game.enemy[goblin].int_total * 4
 
@@ -2017,18 +2047,27 @@ def battle(dwarf, goblin):
 
                 if 'Spiked Boots' in game.enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "kick"):
-                        damage = damage * 1.5
+                        if 'Critical Boost' in game.enemy[goblin].specials_list:
+                            damage *= 2
+                        else:
+                            damage = damage * 1.5
                         critical_message = True
 
                 if 'Barbed Fists' in game.enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and (attack_type[1] == "punch"):
-                        damage = damage * 1.5
+                        if 'Critical Boost' in game.enemy[goblin].specials_list:
+                            damage *= 2
+                        else:
+                            damage = damage * 1.5
                         critical_message = True
 
                 # Luck effect chance
                 roll_crit = random.randint(1, 100)
                 if (goblin_luck >= roll_crit) and (critical_message is not True):
-                    damage = damage * 1.5
+                    if 'Critical Boost' in game.enemy[goblin].specials_list:
+                        damage *= 2
+                    else:
+                        damage = damage * 1.5
                     critical_message = True
 
                 # Reload mechanic has to happen before charisma effect for the stacking to occur.
@@ -2200,7 +2239,7 @@ def battle(dwarf, goblin):
                 if 'Stun chance' in game.enemy[goblin].specials_list:
                     if (attack_type[0] == "physical") and ((attack_type[1] != "kick") and (attack_type[1] != "punch")):
                         roll = random.randint(1, 100)
-                        if roll <= 15:
+                        if roll <= 20:
                             dwarf_speed -= dwarf_speed_base
                             goblin_stun_message = True
 
@@ -2295,6 +2334,7 @@ def battle(dwarf, goblin):
                         dwarf_agility *= 0.65
                         dwarf_charisma *= 0.65
                         dwarf_luck *= 0.65
+                        dwarf_health -= 300
                         goblin_neurotoxin_payload = False
                         goblin_neurotoxin_message = True
 
@@ -2336,8 +2376,8 @@ def battle(dwarf, goblin):
                            ' the dwarf, but he manages to dodge the attack!'
                     dwarf_dodge_message = False
                     if dwarf_counterattack_message:
-                        turn += '<br>' + dwarf_name + " counterattacks with a punch, dealing " + str(
-                            counterattack) + ' damage!'
+                        turn += '<br><span class="green">' + dwarf_name + " counterattacks with a punch, dealing " + str(
+                            counterattack) + ' damage!</span>'
                         dwarf_counterattack_message = False
                     if goblin_increase_message:
                         roll_increase = random.randint(15, 35)
@@ -2447,8 +2487,9 @@ def battle(dwarf, goblin):
                         goblin_multitool_message = False
 
                     if dwarf_earthbound_message:
-                        turn += "<br><br>Tel'lar reacts to it's owner taking damage, bolstering up their " \
-                                "defences!<br>Dwarf's armor, agility and willpower is increased by 5%! "
+                        turn += "<br><span class='green'>Tel'lar reacts to it's owner taking damage, " \
+                                "bolstering up their defences!<br>Dwarf's armor, agility and willpower is " \
+                                "increased by 5%!</span>"
                         dwarf_earthbound_message = False
 
                     if 'Warframe' in game.enemy[goblin].specials_list and \
@@ -2463,7 +2504,7 @@ def battle(dwarf, goblin):
                     if goblin_neurotoxin_message:
                         turn += '<br><br>' + "Powerful neurotoxin that coats goblin's weapon poisons the opponent, " \
                                              "decreasing their agility, willpower, charisma and luck by 35% " \
-                                             "and dealing 500 extra damage! "
+                                             "and dealing 300 extra damage! "
                         goblin_neurotoxin_message = False
 
                 turn += '</div>'

@@ -6,8 +6,27 @@
 {% block body %}
     <div id="fixed-counter">Days left: {{ game.days }}</div>
     <div class="center">
-        <div id="main-box-game">
 
+    <!-- Script for spoils fade-out -->
+    <!-- It gives the loot summary a nice bezier curve fade-out animation and hides the element completely after 5s -->
+    <script>
+        window.onclick = function() {
+            document.getElementById('fixed-loot').className = 'fade-out';
+            setTimeout(() => {document.getElementById('fixed-loot').style.visibility = 'hidden';}, 5000);
+        };
+    </script>
+
+        <!-- Spoils -->
+        {% if spoils %}
+            <div id="fixed-loot" class="loaded">
+            <h2>Spoils:</h2>
+            {% for loot in spoils %}
+                    <p class="loot"><span class="{{ loot.rarity }}">{{ loot.item_name }}</span></p>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div id="main-box-game">
         <!-- Main dwarf iterator -->
         {% for dwarf in game.hero %}
             {% if game.hero[dwarf].battle == False %}
@@ -133,6 +152,10 @@
                                         <span class="gray">Endurance</span>
                                         <br>Endurance increases your health by 10 points.
                                         <br>You need health points to survive.
+                                        <br>Every dwarf and goblin has an innate base health pool of 1000.
+                                        <br>
+                                        <br>Your current health pool is:
+                                        <br>{{ (game.hero[dwarf].end_total * 10 + 1000)|int|round }} HP
                                         <br>
                                         <br>Cost of training:
                                         <br>1 point of Endurance = 3 days
@@ -512,7 +535,7 @@
                                         <br>
                                         <br><span class="yellow">S</span><span class="orange">p</span><span class="red">e</span><span class="purple">c</span><span class="deep_blue">i</span><span class="blue">a</span><span class="green">l</span>
                                                     <span class="yellow">a</span><span class="orange">t</span><span class="red">t</span><span class="purple">a</span><span class="deep_blue">c</span><span class="blue">k</span>
-                                        - deals 120% of combined <span class="red">physical damage</span> + <span class="blue">magical damage</span> to the enemy.
+                                        - deals combined <span class="red">physical damage</span> + <span class="blue">magical damage</span> to the enemy.
                                         <br>Special attack random damage spread is between x1.0 - x1.1
                                         <br>
                                         <br>Special attack power
@@ -534,14 +557,14 @@
                 <form class="actions" method="POST" action="{{ url_for('battleground') }}">
 
                     <!-- Sneak action -->
-                    {% if game.hero[dwarf].agi_total > 100 %}
+                    {% if game.hero[dwarf].agi_total > 75 %}
                         <div class="tooltip">
                             <input type="submit" name="sneak {{ dwarf }}" class="confirm-battle tooltip" value="Sneak">
                             <div class="tooltip-text">
                                 Sneak to the enemy camp and poison their water supply.
                                 <br>The opponent will start the battle with -25% to all attributes.
                                 <br>
-                                <br>100 points of <span class="orange">Agility</span>
+                                <br>75 points of <span class="orange">Agility</span>
                             </div>
                         </div>
                     {% else %}
@@ -552,7 +575,7 @@
                                 <br>The opponent will start the battle with -25% to all attributes.
                                 <br>
                                 <br>Requirements:
-                                <br>100 points of <span class="orange">Agility</span>
+                                <br>75 points of <span class="orange">Agility</span>
                             </div>
                         </div>
                     {% endif %}
@@ -561,14 +584,14 @@
                     <input type="submit" name="battle {{ dwarf }}" class="confirm-battle" value="Fight!">
 
                     <!-- Scry action -->
-                    {% if game.hero[dwarf].will_total > 100 and game.hero[dwarf].equipment["Weapon"].item_name == "Scrying Orb" %}
+                    {% if game.hero[dwarf].will_total > 50 and game.hero[dwarf].equipment["Weapon"].item_name == "Scrying Orb" %}
                         <div class="tooltip">
                             <input type="submit" name="spy {{ dwarf }}" class="confirm-battle" value="Spy">
                             <div class="tooltip-text">
                                 Divine a premonition of your opponent, predicting his armaments and attributes.
                                 <br>
                                 <br>Requirements:
-                                <br>100 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
+                                <br>50 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
                             </div>
                         </div>
                     {% else %}
@@ -578,7 +601,7 @@
                                 Divine a premonition of your opponent, predicting his armaments and attributes during the day of battle.
                                 <br>
                                 <br>Requirements:
-                                <br>100 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
+                                <br>50 points of <span class="purple">Willpower</span> + equipped <span class="rare">Scrying Orb</span>
                             </div>
                         </div>
                     {% endif %}
@@ -627,27 +650,28 @@
 
         </div>
     </div>
+
     <form id="fixed-adventure" method="POST" action="{{ url_for('game') }}">
         <div class="adventure-loot-chances">
             <h3>Cost: 15 days</h3>
             <input type="submit" id="venture" name="adventure" class="adventure-button" value="Short venture">
-            <p>45% - 7x Common</p>
-            <p>35% - 4x Common, 3x Rare</p>
-            <p>15% - 7x Rare</p>
+            <p>45% - 8x Common</p>
+            <p>35% - 4x Common, 4x Rare</p>
+            <p>15% - 8x Rare</p>
             <p>5% - 6x Common + Special</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 30 days</h3>
             <input type="submit" id="adventure" name="adventure" class="adventure-button" value="Risky adventure">
-            <p>45% - 7x Rare</p>
-            <p>35% - 4x Rare, 3x Epic</p>
-            <p>15% - 7x Epic</p>
+            <p>45% - 8x Rare</p>
+            <p>35% - 4x Rare, 4x Epic</p>
+            <p>15% - 8x Epic</p>
             <p>5% - 1x Legendary</p>
         </div>
         <div class="adventure-loot-chances">
             <h3>Cost: 60 days</h3>
             <input type="submit" id="expedition" name="adventure" class="adventure-button" value="Legendary expedition">
-            <p>45% - 7x Epic</p>
+            <p>45% - 8x Epic</p>
             <p>35% - 4x Epic, 1x Legendary</p>
             <p>15% - 3x Legendary</p>
             <p>5% - 1x Cursed</p>

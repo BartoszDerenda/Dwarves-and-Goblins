@@ -25,6 +25,44 @@
     background-color: #96241f;
 }
 
+#fixed-loot {
+    width: 30%;
+    font-size: 1.2em;
+    margin-top: 7vh;
+    padding-bottom: 3vh;
+
+    background-color: #3b1b19;
+    border: 5px ridge #e8e2e1;
+    column-gap: 1px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: fixed;
+    text-align: center;
+    z-index: 99;
+}
+
+.loot {
+    width: 90%;
+    padding: 15px 0 15px 0;
+    margin: 5px 0 5px 0;
+
+    background-color: #96241f;
+}
+
+.fade-out {
+    animation-name: fade-out;
+    animation-duration: 5s;
+    animation-timing-function: cubic-bezier(1,.01,.78,.22);
+}
+
+@keyframes fade-out {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
 #fixed-adventure {
     display: flex;
     flex-direction: column;
@@ -176,6 +214,7 @@
     border: 5px ridge #e8e2e1;
 
     margin-top: 50px;
+    cursor: default;
 
     transition: 0.2s ease-in;
 }
@@ -184,7 +223,6 @@
     font-size: 1.5em;
 
     padding: 20px 30px 20px 30px;
-
     background-color: #3b1b19;
 
     transition: 0.2s ease-in;

@@ -362,7 +362,7 @@ item_98 = Item('Volatile Flask', 'Artifact', 'common',
                0.0, 0,  # Speed
                0,  # Armor
                "Unstable Concoction",  # Enchantment
-               "At the start of the battle either you or the enemy takes 250 extra damage.")  # Enchantment description
+               "At the start of the battle either you or the enemy takes 200 extra damage.")  # Enchantment description
 
 # RARE ITEMS
 # Rare - Medium armor set
@@ -715,7 +715,7 @@ item_154 = Item('Iron-clad Gauntlets', 'Weapon', 'rare',
                 0,  # Armor
                 "Crating",  # Enchantment
                 "Your punches deal 30% more damage. On top of that, everytime "
-                "you dodge an attack, you counterattack with a punch.")  # Enchantment description
+                "you dodge an enemy attack, you counterattack with a punch.")  # Enchantment description
 
 # Rare - Artifacts
 
@@ -1274,7 +1274,7 @@ item_305 = Item("Suspicious Weapon Oil", 'Artifact', 'legendary',
                 0,  # Armor
                 "Neurotoxin",  # Enchantment
                 "On first weapon strike, reduce opponent's willpower, agility, "
-                "charisma and luck by 35% and deal 500 extra damage.")  # Enchantment description
+                "charisma and luck by 35% and deal 300 extra damage.")  # Enchantment description
 
 item_306 = Item("Runeblade of Rivendare", 'Weapon', 'legendary',
                 "This dreadful blade cuts not only the body but soul as well.",
@@ -1306,7 +1306,7 @@ item_307 = Item("Skull of Naz'kar", 'Weapon', 'legendary',
                 "Soul Drain",  # Enchantment
                 "On magical hit, steal 3% total health from the enemy.")  # Enchantment description
 
-item_308 = Item("Elixir of Giants", 'Artefact', 'legendary',
+item_308 = Item("Elixir of Giants", 'Artifact', 'legendary',
                 "It's better not to dwell on the ingredients "
                 "that are needed to brew one.",
                 1.0, 32,  # Strength
@@ -1316,8 +1316,8 @@ item_308 = Item("Elixir of Giants", 'Artefact', 'legendary',
                 0.5, 24,  # Endurance
                 0.0, 0,  # Charisma
                 0.0, 0,  # Luck
-                -0.75, -18,  # Speed
-                30,  # Armor
+                -0.3, -8,  # Speed
+                45,  # Armor
                 None,  # Enchantment
                 None)  # Enchantment description
 
@@ -1440,7 +1440,7 @@ item_list_artifact_rare = [item_199, item_198]
 
 item_list_weapon_epic = [item_250, item_251, item_252, item_253, item_254, item_255]
 item_list_headpiece_epic = [item_201, item_207, item_213, item_221]
-item_list_shoulders_epic = [item_102, item_108, item_214]
+item_list_shoulders_epic = [item_202, item_208, item_214]
 item_list_chest_epic = [item_203, item_209, item_215]
 item_list_pants_epic = [item_204, item_210, item_216]
 item_list_gloves_epic = [item_205, item_211, item_217, item_220]
@@ -1489,7 +1489,7 @@ item_dict = {"Leather Cap": item_1, "Leather Shoulderpads": item_2, "Leather Jac
 
              "Crown of Will": item_301, "Heart of the Mountain": item_302, "Tel'lar": item_303,
              "Blessed Aegis": item_304, "Suspicious Weapon Oil": item_305, "Runeblade of Rivendare": item_306,
-             "Skull of Naz'kar": item_307, item_308: "Elixir of Giants",
+             "Skull of Naz'kar": item_307, "Elixir of Giants": item_308,
 
              "Cursed Amulet": item_404, "Memento": item_999, "Warframe": item_495, "Lucky Pebble": item_777,
              "Pipe Bomb": item_600, "White Lotus": item_555}
@@ -1500,19 +1500,19 @@ ability_dict = {
     "Combat 101": [
         "Dwarf will no longer punch or kick in melee combat during battle but instead opt to strike with his weapon.",
         "common"],
-    "Unstable Concoction": ["At the start of the battle either you or the enemy takes 250 extra damage.", "common"],
+    "Unstable Concoction": ["At the start of the battle either you or the enemy takes 200 extra damage.", "common"],
     "Goblinbane": ["Deal 15% more damage to the goblins.", "common"],
     "Ouch!": ["Your kicks deal 20% more damage.", "common"],
 
-    "Stun Chance": ["On weapon strike, 15% chance to stun the enemy for a turn.", "rare"],
+    "Stun Chance": ["On weapon strike, 20% chance to stun the enemy for a turn.", "rare"],
     "Momentum": ["Gain 1% speed every time you take a turn.", "rare"],
     "Hawkeye": ["Your critical attacks deal extra 50 damage.", "rare"],
     "Spiked Boots": ["Your kicks always crit.", "rare"],
     "Armor Penetration": ["Your physical attacks with a weapon ignore 50% of enemy's armor.", "rare"],
     "Static": ["Your electrocute spell deals 50% more damage.", "rare"],
     "Crating": ["Your punches deal 30% more damage. On top of that, everytime "
-                "you dodge an attack, you counterattack with a punch.", "rare"],
-    "Critical Boost": ["Your critical attacks now deal x2.0 damage instead of x1.5", "rare"],
+                "you dodge an enemy attack, you counterattack with a punch.", "rare"],
+    "Critical Boost": ["Your critical attacks now deal x2.0 damage instead of x1.5.", "rare"],
     "Armor Up!": ["Increase your total armor value by 25%.", "rare"],
     "Mind Sap": ["On magical attack hit, decrease opponent's willpower or intelligence by 5%.", "rare"],
 
@@ -1527,29 +1527,19 @@ ability_dict = {
     "Anti-magic Zone": ["You take 20% less damage from magical attacks.", "epic"],
     "Authority": ["Steal 35% of your opponent's charisma.", "epic"],
     "Mist": ["First four of enemy attacks will be avoided.", "epic"],
-    "Multi-tool": [
-        "After a bit of testing, your dwarf managed to figure out their true functionality - on successful attack, "
-        "15% chance to blind the enemy. Their next attack will be avoided.",
-        "epic"],
-    "Reload": [
-        "It takes two turns to fire this weapon. This also means that special attacks will happen much less "
-        "frequently, although thanks to your over-preparing nature, first one happens a turn quicker.",
-        "epic"],
+    "Multi-tool": ["After a bit of testing, your dwarf managed to figure out their true functionality - "
+                   "on successful attack, 15% chance to blind the enemy. Their next attack will be avoided.", "epic"],
+    "Reload": ["It takes two turns to fire this weapon. This also means that special attacks will happen much less "
+               "frequently, although thanks to your over-preparing nature, first one happens a turn quicker.", "epic"],
     "Avoidance": ["20% chance to avoid enemy attack.", "epic"],
-    "Dark Arts": [
-        "All of your magic spells are replaced with Shadow Bolt. This forbidden spell penetrates enemy's defences, "
-        "ignoring their willpower absorption.",
-        "epic"],
-    "Adrenaline": [
-        "You start off with a massive 400% speed boost, but every turn, you lose 15% of your speed till the end of "
-        "battle.",
-        "epic"],
+    "Dark Arts": ["All of your magic spells are replaced with Shadow Bolt. This forbidden spell penetrates enemy's "
+                  "defences ignoring their willpower absorption.", "epic"],
+    "Adrenaline": ["You start off with a massive 400% speed boost, but every turn, you lose 15% of your speed "
+                   "till the end of battle.", "epic"],
     "Barbed Fists": ["Your punches always crit.", "epic"],
 
-    "Earthbound": [
-        "The legendary shield-sword Tel'lar protects you from harm. Every time you are struck in combat, "
-        "gain 5% armor, agility and willpower.",
-        "legendary"],
+    "Earthbound": ["The legendary shield-sword Tel'lar protects you from harm. Every time you are struck in combat, "
+                   "gain 5% armor, agility and willpower.", "legendary"],
     "Soul Drain": ["On magical hit, steal 3% total health from the enemy.", "legendary"],
     "Soulrend": ["On weapon strike, deal 5% extra damage based off enemy's total health.", "legendary"],
     "Avatar": ["You assume the legendary form of Avatar of the Mountain. Take 20% less damage from all sources.",
@@ -1557,16 +1547,14 @@ ability_dict = {
     "Dominion": ["1.5x of your charisma and willpower translates into magical damage.", "legendary"],
     "Aegis": ["You take 65% less damage from special attacks.", "legendary"],
     "Neurotoxin": [
-        "On first weapon strike, reduce opponent's willpower, agility, charisma and luck by 35% and deal 500 extra "
-        "damage.",
-        "legendary"],
+        "On first weapon strike, reduce opponent's willpower, agility, charisma and luck by 35% and deal 300 extra "
+        "damage.", "legendary"],
 
     "Cursed": ["Perhaps it would be wiser not to bring it into battle...", "cursed"],
     "Pipe Bomb": ["At the start of the battle either you or the enemy takes 2500 extra damage.", "cursed"],
     "Warframe": [
         "You somehow managed to fit inside... Strength and speed is tremendously increased but you will self-destruct "
-        "in 10 turns - may your ashes scatter among the stars well, soldier.",
-        "cursed"],
+        "in 10 turns - may your ashes scatter among the stars well, soldier.", "cursed"],
     "Nanomachines": ["You take 50% less damage from physical and magical attacks but 300% more from special attacks.",
                      "cursed"]
 }
